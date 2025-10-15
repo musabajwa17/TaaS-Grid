@@ -30,7 +30,7 @@ const Footer = () => {
   ];
 
   return (
-    <footer className="bg-black text-white py-16 px-8">
+    <footer className="bg-black text-white py-20 px-8">
       <div className="max-w-7xl mx-auto">
         {/* Header Section */}
         <div className="mb-16">
