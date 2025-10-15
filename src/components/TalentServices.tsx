@@ -1,12 +1,23 @@
 'use client'
 
 import { useState, useEffect, MouseEvent } from 'react'
-import { 
-  Tractor, DollarSign, Wheat, Package, Handshake, Truck,
-  Settings, Users, BarChart3, ClipboardCheck, CreditCard, TrendingUp,
-  Receipt, FileText, Sprout, Search, Zap, Satellite, TestTube,
-  Wrench, Bell, Briefcase, UserCheck, Coins, PackageOpen,
-  MapPin, Clock, Sparkles, ArrowRight
+import {
+  Users,
+  Briefcase,
+  GraduationCap,
+  FolderGit2,
+  FileText,
+  Rocket,
+  Sparkles,
+  ArrowRight,
+  Search,
+  ClipboardCheck,
+  Network,
+  Lightbulb,
+  Brain,
+  TrendingUp,
+  CheckCircle2,
+  Settings
 } from 'lucide-react'
 
 // ---------- Type Definitions ----------
@@ -48,89 +59,76 @@ const TalentServices: React.FC = () => {
     return () => window.removeEventListener('mousemove', handleMouseMove)
   }, [isHovering])
 
-  // ---------- Tab Content ----------
+  // ---------- Tab Content (5 tabs: 0..4) ----------
   const tabContent: Record<number, TabContent> = {
     0: {
-      title: "Planning & Preparation",
-      description: "Manage everything planning, scheduling and work order management.",
-      image: "https://images.pexels.com/photos/2889442/pexels-photo-2889442.jpeg",
+      title: "Hire Connect",
+      description: "AI-driven employer-candidate matching that surfaces relevant talent based on skills, culture-fit, and role requirements.",
+      image: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=1400&q=80",
       gradient: "from-emerald-500/20 to-teal-500/20",
       features: [
-        { icon: Settings, text: "Resource Management", color: "emerald" },
-        { icon: Users, text: "Labor Management", color: "teal" },
-        { icon: BarChart3, text: "Marketing and Sales", color: "cyan" },
-        { icon: ClipboardCheck, text: "Regulatory Compliance", color: "green" }
+        { icon: Users, text: "AI Candidate Matching", color: "emerald" },
+        { icon: Search, text: "Smart Talent Search", color: "teal" },
+        { icon: ClipboardCheck, text: "Interview Automation", color: "cyan" },
+        { icon: Briefcase, text: "Verified Employers", color: "green" }
       ]
     },
     1: {
-      title: "Operations & Monitoring",
-      description: "Farmers must balance irrigation, labor, inventory, pest control, and weather risks with precision.",
-      image: "https://images.unsplash.com/photo-1554224155-6726b3ff858f?auto=format&fit=crop&w=1000&q=80",
+      title: "FYP Bridge",
+      description: "Bridge final-year projects with companies: mentorship, real datasets, and pathways to internships and hiring.",
+      image: "https://images.pexels.com/photos/577585/pexels-photo-577585.jpeg",
       gradient: "from-blue-500/20 to-indigo-500/20",
       features: [
-        { icon: CreditCard, text: "Budget Planning", color: "blue" },
-        { icon: TrendingUp, text: "Profit Analysis", color: "indigo" },
-        { icon: Receipt, text: "Expense Tracking", color: "violet" },
-        { icon: FileText, text: "Financial Reports", color: "purple" }
+        { icon: GraduationCap, text: "Industry Mentors", color: "blue" },
+        { icon: Network, text: "Company Projects", color: "indigo" },
+        { icon: Lightbulb, text: "Research & Innovation", color: "violet" },
+        { icon: TrendingUp, text: "Placement Pathways", color: "purple" }
       ]
     },
     2: {
-      title: "Inventory Management",
-      description: "Purchases and usage are directly linked to crop operations, ensuring zero wastage and complete traceability.",
-      image: "https://images.unsplash.com/photo-1625246333195-78d9c38ad449?auto=format&fit=crop&w=1000&q=80",
+      title: "ProjectHub",
+      description: "A collaboration hub for short-term projects, freelance teams, and company sprints — manage, deliver and get rated.",
+      image: "https://media.istockphoto.com/id/1434212178/photo/middle-eastern-lady-using-laptop-working-online-sitting-in-office.jpg?b=1&s=612x612&w=0&k=20&c=-a7kN9ndCDdQEvklOFxJbmcvWOJ9sQQ8ZxvE64AsDEE=",
       gradient: "from-amber-500/20 to-orange-500/20",
       features: [
-        { icon: Sprout, text: "Crop Planning", color: "amber" },
-        { icon: Search, text: "Growth Monitoring", color: "orange" },
-        { icon: Zap, text: "Yield Optimization", color: "yellow" },
-        { icon: Satellite, text: "Precision Agriculture", color: "lime" }
+        { icon: FolderGit2, text: "Collaborative Workspaces", color: "amber" },
+        { icon: Rocket, text: "Rapid Delivery", color: "orange" },
+        { icon: Users, text: "Team Matchmaking", color: "yellow" },
+        { icon: Settings, text: "Project Analytics", color: "lime" }
       ]
     },
     3: {
-      title: "Weather Forecasting",
-      description: "Accurate weather insights are critical for protecting crops and planning operations.",
-      image: "https://images.unsplash.com/photo-1586771107445-d3ca888129ff?auto=format&fit=crop&w=1000&q=80",
+      title: "CV Forge",
+      description: "AI-powered resume & portfolio creation that optimizes content for recruiters and Applicant Tracking Systems (ATS).",
+      image: "https://images.pexels.com/photos/5989925/pexels-photo-5989925.jpeg",
       gradient: "from-sky-500/20 to-blue-500/20",
       features: [
-        { icon: Sprout, text: "Seed Tracking", color: "sky" },
-        { icon: TestTube, text: "Fertilizer Management", color: "blue" },
-        { icon: Wrench, text: "Equipment Tracking", color: "cyan" },
-        { icon: Bell, text: "Automated Alerts", color: "teal" }
+        { icon: FileText, text: "AI Resume Builder", color: "sky" },
+        { icon: Brain, text: "Skill Gap Analysis", color: "blue" },
+        { icon: CheckCircle2, text: "ATS Optimization", color: "cyan" },
+        { icon: Rocket, text: "One-click Export", color: "teal" }
       ]
     },
     4: {
-      title: "Contract Farming & Agreements",
-      description: "Contract farming connects growers with buyers under clear terms of price, quantity, and quality.",
-      image: "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?auto=format&fit=crop&w=1000&q=80",
+      title: "SkillBoast Pro",
+      description: "Upskilling platform with curated learning paths, hands-on labs, assessments and verifiable certificates.",
+      image: "https://images.pexels.com/photos/546819/pexels-photo-546819.jpeg",
       gradient: "from-rose-500/20 to-pink-500/20",
       features: [
-        { icon: Briefcase, text: "Sales Pipeline", color: "rose" },
-        { icon: Zap, text: "Contract Management", color: "pink" },
-        { icon: UserCheck, text: "Customer Relations", color: "fuchsia" },
-        { icon: Coins, text: "Revenue Tracking", color: "purple" }
-      ]
-    },
-    5: {
-      title: "Shipping & Packing Management",
-      description: "Efficient logistics, packaging, and distribution management for your agricultural products.",
-      image: "https://images.unsplash.com/photo-1493946740644-2d8a1f1a6aff?auto=format&fit=crop&w=1000&q=80",
-      gradient: "from-violet-500/20 to-purple-500/20",
-      features: [
-        { icon: PackageOpen, text: "Package Management", color: "violet" },
-        { icon: Truck, text: "Logistics Tracking", color: "purple" },
-        { icon: MapPin, text: "Distribution Routes", color: "fuchsia" },
-        { icon: Clock, text: "Delivery Scheduling", color: "pink" }
+        { icon: Lightbulb, text: "Skill Assessments", color: "rose" },
+        { icon: Brain, text: "Curated Pathways", color: "pink" },
+        { icon: TrendingUp, text: "Certifications", color: "fuchsia" },
+        { icon: FileText, text: "Badge & Portfolio", color: "purple" }
       ]
     }
   }
 
   const tabs = [
-    { icon: Tractor, title: "Planning & Preparation", shortTitle: "Planning & Preparation" },
-    { icon: TrendingUp, title: "Operations & Monitoring", shortTitle: "Operations & Monitoring" },
-    { icon: Wheat, title: "Inventory Management", shortTitle: "Inventory Management" },
-    { icon: Package, title: "Weather Forecasting", shortTitle: "Weather Forecasting" },
-    { icon: Handshake, title: "Sales & Contracting", shortTitle: "Sales & Contracting" },
-    { icon: Truck, title: "Shipping & Packing", shortTitle: "Shipping & Packing" }
+    { icon: Users, title: "Hire Connect", shortTitle: "Hire Connect" },
+    { icon: GraduationCap, title: "FYP Bridge", shortTitle: "FYP Bridge" },
+    { icon: FolderGit2, title: "ProjectHub", shortTitle: "ProjectHub" },
+    { icon: FileText, title: "CV Forge", shortTitle: "CV Forge" },
+    { icon: Rocket, title: "SkillBoast Pro", shortTitle: "SkillBoast Pro" }
   ]
 
   const currentContent = tabContent[activeTab]
@@ -138,32 +136,32 @@ const TalentServices: React.FC = () => {
   // ---------- Helper Functions ----------
   const getFeatureDescription = (featureText: string): string => {
     const descriptions: Record<string, string> = {
-      "Resource Management": "Efficiently allocate and track farm resources including equipment, tools, and materials across all operations.",
-      "Labor Management": "Optimize workforce scheduling, track productivity, and manage payroll for seasonal and permanent staff.",
-      "Marketing and Sales": "Develop strategic marketing campaigns and manage sales channels to maximize revenue potential.",
-      "Regulatory Compliance": "Stay compliant with agricultural regulations, certifications, and reporting requirements.",
-      "Budget Planning": "Create comprehensive budgets with seasonal adjustments and expense forecasting.",
-      "Profit Analysis": "Analyze profitability by crop, field, and operation to optimize financial performance.",
-      "Expense Tracking": "Monitor all farm expenses with categorization and automated reporting.",
-      "Financial Reports": "Generate detailed financial reports for stakeholders and tax preparation.",
-      "Crop Planning": "Plan crop rotations, planting schedules, and field management strategies.",
-      "Growth Monitoring": "Track crop development stages with real-time monitoring and alerts.",
-      "Yield Optimization": "Use data analytics to maximize crop yields and quality.",
-      "Precision Agriculture": "Implement GPS-guided farming and variable rate applications.",
-      "Seed Tracking": "Monitor seed inventory, varieties, and planting records.",
-      "Fertilizer Management": "Track fertilizer application rates, timing, and effectiveness.",
-      "Equipment Tracking": "Monitor equipment usage, maintenance schedules, and costs.",
-      "Automated Alerts": "Receive notifications for low inventory, maintenance due, and critical updates.",
-      "Sales Pipeline": "Manage customer relationships and track sales opportunities.",
-      "Contract Management": "Create, manage, and track agricultural contracts and agreements.",
-      "Customer Relations": "Maintain customer database with purchase history and preferences.",
-      "Revenue Tracking": "Monitor revenue streams and payment status across all sales.",
-      "Package Management": "Organize packaging operations with labeling and quality control.",
-      "Logistics Tracking": "Track shipments and delivery status in real-time.",
-      "Distribution Routes": "Optimize delivery routes for efficiency and cost reduction.",
-      "Delivery Scheduling": "Schedule deliveries and coordinate with customers and carriers."
+      "AI Candidate Matching": "Advanced AI pairs open roles with candidates based on skills, experience, and culture-fit signals.",
+      "Smart Talent Search": "Filter professionals by verified skills, past projects, and soft-skill indicators quickly.",
+      "Interview Automation": "Schedule, score, and track interviews with integrated calendar and feedback pipelines.",
+      "Verified Employers": "Organizations and job postings go through verification for trust and transparency.",
+
+      "Industry Mentors": "Students get paired with domain experts who guide research and implementation.",
+      "Company Projects": "Real-world problems provided by companies help students build industry-ready solutions.",
+      "Research & Innovation": "Teams access datasets and tools to prototype and publish meaningful work.",
+      "Placement Pathways": "High-achieving students are showcased directly to hiring partners.",
+
+      "Collaborative Workspaces": "Realtime document sharing, task boards, and versioned artifacts for smooth delivery.",
+      "Rapid Delivery": "Kickstart sprints with templates, milestones and built-in time tracking.",
+      "Team Matchmaking": "Find complementary freelancers & micro-teams based on project needs.",
+      "Project Analytics": "Monitor velocity, quality, and delivery KPIs to improve outcomes.",
+
+      "AI Resume Builder": "Generate role-focused resumes with suggested phrasing and achievement statements.",
+      "Skill Gap Analysis": "AI analyzes your profile and recommends the most impactful skills to learn.",
+      "ATS Optimization": "Resumes formatted and keyword-optimized for higher ATS visibility.",
+      "One-click Export": "Export in PDF/Word or publish as a web portfolio in a single click.",
+
+      "Skill Assessments": "Timed quizzes and practical labs validate capability with scorecards.",
+      "Curated Pathways": "Learning tracks built by industry practitioners for highest ROI.",
+      "Certifications": "Earn verifiable certificates you can share on profiles and LinkedIn.",
+      "Badge & Portfolio": "Showcase validated badges and project work to stand out to recruiters."
     }
-    return descriptions[featureText] || "Comprehensive management solution designed to streamline your agricultural operations."
+    return descriptions[featureText] || "Comprehensive talent solution built to accelerate hiring, growth and career pathways."
   }
 
   const getColorClasses = (color: string): ColorClasses => {
@@ -202,17 +200,16 @@ const TalentServices: React.FC = () => {
         <div className="max-w-7xl mx-auto text-center">
           <div className="inline-flex items-center gap-2 px-4 py-2 bg-green-100 rounded-full mb-6 animate-bounce">
             <Sparkles className="w-4 h-4 text-green-600" />
-            <span className="text-sm font-semibold text-green-800">Next-Gen Farm Management</span>
+            <span className="text-sm font-semibold text-green-800">Next-Gen Talent as a Service</span>
           </div>
           
           <h1 className="text-4xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-green-600 via-emerald-600 to-teal-600 bg-clip-text text-transparent leading-tight">
-            Expand Your Business With Our
-            <br />Farm Management Solution
+            Empower Teams & Careers with <br />TaasGrid Talent Platform
           </h1>
           
           <p className="text-lg md:text-xl text-slate-600 max-w-3xl mx-auto mb-8">
-            Want to get rid of manual tasks and automate processes to maximize yields? 
-            <span className="font-semibold text-green-600"> CropERP</span> is here to help.
+            Want to streamline hiring, projects, and upskilling? 
+            <span className="font-semibold text-green-600"> TaasGrid</span> brings talent, projects, and growth together.
           </p>
 
           <button className="group inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-green-600 to-emerald-600 text-white rounded-full font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300">
@@ -225,7 +222,7 @@ const TalentServices: React.FC = () => {
       {/* Modern Tab Navigation */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="bg-white/80 backdrop-blur-xl rounded-3xl shadow-2xl p-2 border border-slate-200">
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-5">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-5">
             {tabs.map((tab, index) => {
               const IconComponent = tab.icon
               const isActive = activeTab === index
@@ -270,10 +267,6 @@ const TalentServices: React.FC = () => {
           {/* Left Column - Content */}
           <div className="space-y-4">
             <div className="space-y-2">
-              {/* <div className={`inline-block px-4 py-2 bg-gradient-to-r ${currentContent.gradient} rounded-full backdrop-blur-sm`}>
-                <span className="text-sm font-semibold text-slate-700">Feature Spotlight</span>
-              </div> */}
-              
               <h2 className="text-2xl md:text-33xl font-bold text-slate-900 leading-tight">
                 {currentContent.title}
               </h2>
@@ -374,21 +367,21 @@ const TalentServices: React.FC = () => {
                   {/* Gradient overlay */}
                   <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                   
-                  {/* Stats overlay */}
+                  {/* Stats overlay (updated for TaaS) */}
                   <div className="absolute bottom-0 left-0 right-0 p-6 translate-y-full group-hover:translate-y-0 transition-transform duration-500">
                     <div className="bg-white/90 backdrop-blur-xl rounded-2xl p-4 shadow-xl">
                       <div className="grid grid-cols-3 gap-4">
                         <div className="text-center">
-                          <div className="text-2xl font-bold text-green-600">98%</div>
-                          <div className="text-xs text-slate-600">Efficiency</div>
+                          <div className="text-2xl font-bold text-green-600">95%</div>
+                          <div className="text-xs text-slate-600">Placement Success</div>
                         </div>
                         <div className="text-center border-x border-slate-200">
-                          <div className="text-2xl font-bold text-blue-600">24/7</div>
-                          <div className="text-xs text-slate-600">Monitoring</div>
+                          <div className="text-2xl font-bold text-blue-600">50+</div>
+                          <div className="text-xs text-slate-600">Hiring Partners</div>
                         </div>
                         <div className="text-center">
-                          <div className="text-2xl font-bold text-purple-600">100+</div>
-                          <div className="text-xs text-slate-600">Features</div>
+                          <div className="text-2xl font-bold text-purple-600">10k+</div>
+                          <div className="text-xs text-slate-600">Active Users</div>
                         </div>
                       </div>
                     </div>
@@ -399,7 +392,7 @@ const TalentServices: React.FC = () => {
                 <div className="absolute -top-4 -right-4 bg-white rounded-2xl shadow-xl p-4 animate-bounce" style={{animationDuration: '3s'}}>
                   <div className="flex items-center gap-2">
                     <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
-                    <span className="text-sm font-semibold text-slate-700">Live Updates</span>
+                    <span className="text-sm font-semibold text-slate-700">Live Matches</span>
                   </div>
                 </div>
               </div>
@@ -418,13 +411,13 @@ const TalentServices: React.FC = () => {
           
           <div className="relative z-10">
             <h3 className="text-3xl md:text-4xl font-bold text-white mb-4">
-              Ready to Transform Your Farm?
+              Ready to Transform Your Workforce?
             </h3>
             <p className="text-lg text-white/90 mb-8 max-w-2xl mx-auto">
-              Join thousands of farmers who are already experiencing the future of agriculture
+              Join thousands of professionals and employers redefining how talent, projects, and career growth connect.
             </p>
             <button className="group inline-flex items-center gap-3 px-8 py-4 bg-white text-green-600 rounded-full font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300">
-              Schedule a Demo
+              Explore TaasGrid
               <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
             </button>
           </div>
