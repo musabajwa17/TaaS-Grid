@@ -339,6 +339,8 @@ export default function ResumeParser() {
   const [file, setFile] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
   const [parsedData, setParsedData] = useState<ParsedData | null>(null);
+  console.log(parsedData,"backend");
+  
   const [dragActive, setDragActive] = useState(false);
 
   // 📤 Handle upload to API
