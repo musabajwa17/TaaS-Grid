@@ -2,7 +2,7 @@ import ServiceCards from "@/components/cards/ServiceCards";
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
 import HeroSection from "@/components/HeroSection";
-import Services from "@/components/Services";
+import Services from "@/components/cards/ServicesCard";
 import StatsSection from "@/components/StatsSection";
 import TalentServices from "@/components/TalentServices";
 import TestimonialCarousel from "@/components/TestimonialCarousel";

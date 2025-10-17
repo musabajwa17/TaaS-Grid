@@ -148,7 +148,7 @@ const Services = () => {
       <div className="relative z-10 max-w-7xl mx-auto">
         {/* Heading */}
         <div className="text-center mb-16 space-y-4">
-          <h2 className="text-5xl md:text-6xl font-bold text-[#00bb98]">
+          <h2 className="text-5xl md:text-6xl font-bold bg-gradient-to-b from-green-600 to-emerald-600 bg-clip-text text-transparent">
             Empower Your Growth Journey
           </h2>
           <p className="text-gray-700 text-lg max-w-2xl mx-auto">
@@ -185,17 +185,17 @@ const Services = () => {
                 >
                   {/* Card: flexible column layout */}
                   <div
-                    className={`relative w-[360px] md:w-[380px] rounded-3xl border border-[#00bb98]/40 bg-white p-6 md:p-8 flex flex-col transition-all duration-700 ${
+                    className={`relative w-[360px] md:w-[380px] rounded-3xl border border-green-600 bg-white p-6 md:p-8 flex flex-col transition-all duration-700 ${
                       isCenter ? "scale-105" : "scale-95"
                     }`}
                     aria-hidden={false}
                   >
                     {/* Top row: number (left) + icon (right) */}
                     <div className="flex items-start justify-between mb-4">
-                      <div className="text-3xl md:text-4xl font-extrabold text-[#00bb98]/25">
+                      <div className="text-3xl md:text-4xl font-extrabold bg-gradient-to-b from-green-600 to-emerald-600 bg-clip-text text-transparent">
                         {module.id.toString().padStart(2, "0")}
                       </div>
-                      <div className={`p-3 rounded-xl bg-gradient-to-br ${module.gradient}`}>
+                      <div className={`p-2 rounded-xl bg-gradient-to-r from-green-600 to-emerald-600 ${module.gradient}`}>
                         <Icon className="w-7 h-7 text-white" />
                       </div>
                     </div>
@@ -217,10 +217,10 @@ const Services = () => {
                         return (
                           <div
                             key={idx}
-                            className="flex items-center gap-3 border border-[#00bb98]/20 rounded-xl p-3 hover:bg-[#00bb98]/5 transition-all"
+                            className="flex items-center gap-3 border border-green-200 rounded-xl p-3 hover:bg-[#00bb98]/5 transition-all"
                           >
-                            <div className="w-10 h-10 rounded-full border border-[#00bb98] flex items-center justify-center bg-white">
-                              <PIcon className="w-4 h-4 text-[#00bb98]" />
+                            <div className="w-10 h-10 rounded-full border border-green-600 flex items-center justify-center bg-white">
+                              <PIcon className="w-4 h-4 text-green-600" />
                             </div>
                             <div>
                               <div className="text-sm font-semibold text-black">
@@ -245,7 +245,7 @@ const Services = () => {
               key={index}
               onClick={() => setCurrentIndex(index)}
               className={`w-3 h-3 rounded-full transition-all duration-300 ${
-                index === currentIndex ? "w-10 bg-[#00bb98]" : "bg-gray-300 hover:bg-[#00bb98]/40"
+                index === currentIndex ? "w-10 bg-green-600" : "bg-gray-300 hover:bg-[#00bb98]/40"
               }`}
               aria-label={`Go to module ${index + 1}`}
             />

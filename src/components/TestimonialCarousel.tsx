@@ -67,7 +67,7 @@ export default function TestimonialCarousel() {
         {/* Header */}
         <div className="text-center mb-16">
           <h2 className="text-5xl font-bold mb-4">
-            What our <span className="text-teal-500">clients</span> say
+            What our <span className="text-green-600">clients</span> say
           </h2>
           <p className="text-gray-600 text-lg max-w-2xl mx-auto">
             Here from satisfied professionals who have advanced their careers with our dedicated services.
@@ -98,7 +98,7 @@ export default function TestimonialCarousel() {
                               className="w-full h-full object-cover"
                             />
                           </div>
-                          <div className="absolute -bottom-4 -right-4 bg-teal-500 rounded-full p-4 shadow-lg">
+                          <div className="absolute -bottom-4 -right-4 bg-gradient-to-r from-green-600 to-emerald-600 rounded-full p-4 shadow-lg">
                             <Quote className="w-8 h-8 text-white" />
                           </div>
                         </div>
@@ -106,7 +106,7 @@ export default function TestimonialCarousel() {
 
                       {/* Content Section */}
                       <div className="flex-1 text-center md:text-left">
-                        <h3 className="text-teal-500 text-xl font-semibold mb-6">
+                        <h3 className="text-green-600 text-xl font-semibold mb-6">
                           Client Testimonial
                         </h3>
                         <p className="text-gray-700 text-lg leading-relaxed mb-8">
@@ -154,7 +154,7 @@ export default function TestimonialCarousel() {
               onClick={() => setCurrentIndex(index)}
               className={`h-2 rounded-full transition-all duration-300 ${
                 index === currentIndex 
-                  ? 'w-12 bg-teal-500' 
+                  ? 'w-12 bg-green-500' 
                   : 'w-2 bg-gray-300 hover:bg-gray-400'
               }`}
               aria-label={`Go to testimonial ${index + 1}`}

@@ -8,25 +8,25 @@ export default function StatsSection() {
       id: 1,
       number: "50,000+",
       label: "Active Jobs",
-      icon: <Briefcase className="w-10 h-10 text-[#00bb98]" />,
+      icon: <Briefcase className="w-10 h-10 text-green-600" />,
     },
     {
       id: 2,
       number: "25,000+",
       label: "Successful Placements",
-      icon: <Award className="w-10 h-10 text-[#00bb98]" />,
+      icon: <Award className="w-10 h-10 text-green-600" />,
     },
     {
       id: 3,
       number: "1,200+",
       label: "Partner Companies",
-      icon: <Building2 className="w-10 h-10 text-[#00bb98]" />,
+      icon: <Building2 className="w-10 h-10 text-green-600" />,
     },
     {
       id: 4,
       number: "100,000+",
       label: "Registered Professionals",
-      icon: <Users className="w-10 h-10 text-[#00bb98]" />,
+      icon: <Users className="w-10 h-10 text-green-600" />,
     },
   ];
 
@@ -42,10 +42,10 @@ export default function StatsSection() {
             viewport={{ once: true }}
             className="bg-white rounded-2xl shadow-sm hover:shadow-md transition-all duration-300 p-8 text-center border border-gray-100 hover:border-[#00bb98]/30"
           >
-            <div className="flex items-center justify-center mb-4">{stat.icon}</div>
+            <div className="flex items-center justify-center mb-4 ">{stat.icon}</div>
             <h3 className="text-3xl font-extrabold text-black mb-1">{stat.number}</h3>
             <p className="text-gray-600 font-medium">{stat.label}</p>
-            <div className="mt-4 h-1 w-12 bg-[#00bb98] mx-auto rounded-full"></div>
+            <div className="mt-4 h-1 w-12 bg-green-600 mx-auto rounded-full"></div>
           </motion.div>
         ))}
       </div>
