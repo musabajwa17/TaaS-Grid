@@ -167,7 +167,7 @@ export default function Login() {
                 type="button"
                 className="w-full flex items-center justify-center gap-3 py-3 border border-gray-300 rounded-xl hover:bg-gray-50 transition"
               >
-                <img alt="Google logo" className="h-5 w-5" src="/Google.png" />
+                <img alt="Google logo" className="h-5 w-5" src="/Google.jpeg" />
                 <span className="font-medium text-gray-700">
                   Continue with Google
                 </span>
