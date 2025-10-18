@@ -97,7 +97,7 @@ const Header: React.FC = () => {
             {/* Right Side Buttons */}
             <div className="hidden md:flex items-center gap-5">
               <Link
-                href="/signin"
+                href="/login"
                 className="relative text-gray-700 font-bold text-sm hover:text-[#00bb98] transition-all duration-500 group"
               >
                 <span className="relative">Sign In</span>

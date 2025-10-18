@@ -1,163 +1,95 @@
-"use client";
-import React, { useState, DragEvent, ChangeEvent } from "react";
-import {
-  Upload,
-  FileText,
-  Download,
-  Loader2,
-  CheckCircle,
-  Sparkles,
-  User,
-  Mail,
-  Phone,
-  MapPin,
-  Briefcase,
-  GraduationCap,
-  Award,
-  Code,
-  Linkedin,
-  Github,
-} from "lucide-react";
-import { useUploadResume } from "@/hooks/useUploadResume";
-export default function ResumeParser() {
-  const [file, setFile] = useState<File | null>(null);
-  const [dragActive, setDragActive] = useState(false);
-  const { loading, error, parsedData, handleUpload, setParsedData, setError } =
-    useUploadResume();
-  // File input handler
-  const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const selectedFile = e.target.files?.[0];
-    if (selectedFile && selectedFile.type === "application/pdf") {
-      setFile(selectedFile);
-      handleUpload(selectedFile);
-    }
-  };
+import React, { useState } from 'react';
+import { CheckCircle, Download, Mail, Phone, MapPin, Linkedin, Github, User, Briefcase, GraduationCap, Code, Award, Sparkles } from 'lucide-react';
 
-  // Drag events
-  const handleDrag = (e: DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    e.stopPropagation();
-    if (e.type === "dragenter" || e.type === "dragover") setDragActive(true);
-    else if (e.type === "dragleave") setDragActive(false);
-  };
+export default function StunningCVDesigner() {
+  const [parsedData, setParsedData] = useState({
+    name: "Alexandra Morgan",
+    title: "Senior Product Designer & Creative Strategist",
+    email: "alex.morgan@email.com",
+    phone: "+1 (555) 123-4567",
+    location: "San Francisco, CA",
+    linkedin: "linkedin.com/in/alexmorgan",
+    github: "github.com/alexmorgan",
+    summary: "Award-winning designer with 8+ years of experience crafting user-centric digital experiences. Specialized in design systems, product strategy, and leading cross-functional teams to deliver innovative solutions that drive business growth.",
+    experience: [
+      {
+        role: "Senior Product Designer",
+        company: "TechVision Inc.",
+        years: "2021 - Present",
+        description: [
+          "Led design initiatives for 3 major product launches, resulting in 150% increase in user engagement",
+          "Established comprehensive design system used across 12+ products",
+          "Mentored team of 5 junior designers and collaborated with 20+ engineers"
+        ]
+      },
+      {
+        role: "Product Designer",
+        company: "DigitalCraft Studios",
+        years: "2018 - 2021",
+        description: [
+          "Redesigned core user flows, improving conversion rate by 45%",
+          "Conducted user research with 200+ participants to inform design decisions"
+        ]
+      }
+    ],
+    education: [
+      {
+        degree: "Master of Fine Arts in Digital Design",
+        institution: "Stanford University",
+        year: "2018"
+      },
+      {
+        degree: "Bachelor of Arts in Graphic Design",
+        institution: "Rhode Island School of Design",
+        year: "2016"
+      }
+    ],
+    skills: ["UI/UX Design", "Figma", "Adobe Creative Suite", "Design Systems", "Prototyping", "User Research", "React", "CSS/HTML", "Design Thinking"],
+    certifications: [
+      "Google UX Design Professional Certificate (2023)",
+      "Nielsen Norman Group UX Certification (2022)"
+    ]
+  });
 
-  const handleDrop = (e: DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setDragActive(false);
+  const [file, setFile] = useState(null);
+  const [error, setError] = useState(null);
 
-    const droppedFile = e.dataTransfer.files?.[0];
-    if (droppedFile && droppedFile.type === "application/pdf") {
-      setFile(droppedFile);
-      handleUpload(droppedFile);
-    }
-  };
-
-  // Download placeholder
   const downloadPDF = () => {
-    alert("PDF download requires integration with jsPDF or similar library");
+    console.log("Download PDF functionality");
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 p-6 mt-18">
+    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 py-12 px-4">
       <div className="max-w-5xl mx-auto">
-        {/* Header */}
-        <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-gray-800 mb-2">
-            Resume Parser
-          </h1>
-          <p className="text-gray-600">
-            Upload your PDF resume and get structured data instantly
-          </p>
-        </div>
-
-        {/* Error */}
-        {error && (
-          <div className="bg-red-50 border border-red-200 rounded-xl p-4 mb-6 text-red-700">
-            {error}
-          </div>
-        )}
-
-        {/* Upload Section */}
-        {!parsedData && (
-          <div className="bg-white rounded-2xl shadow-xl p-8 mb-8">
-            <div
-              className={`border-3 border-dashed rounded-xl p-12 text-center transition-all ${
-                dragActive
-                  ? "border-indigo-500 bg-indigo-50"
-                  : "border-gray-300 hover:border-indigo-400"
-              }`}
-              onDragEnter={handleDrag}
-              onDragLeave={handleDrag}
-              onDragOver={handleDrag}
-              onDrop={handleDrop}
-            >
-              {loading ? (
-                <div className="flex flex-col items-center">
-                  <Loader2 className="w-16 h-16 text-indigo-600 animate-spin mb-4" />
-                  <h3 className="text-xl font-semibold text-gray-700 mb-2">
-                    Parsing Resume...
-                  </h3>
-                  <p className="text-gray-500">
-                    Extracting information from your document
-                  </p>
-                </div>
-              ) : (
-                <>
-                  <Upload className="w-16 h-16 text-indigo-600 mx-auto mb-4" />
-                  <h3 className="text-xl font-semibold text-gray-700 mb-2">
-                    Drop your resume here
-                  </h3>
-                  <p className="text-gray-500 mb-6">or click to browse</p>
-                  <input
-                    type="file"
-                    accept=".pdf"
-                    onChange={handleFileChange}
-                    className="hidden"
-                    id="file-upload"
-                  />
-                  <label
-                    htmlFor="file-upload"
-                    className="inline-flex items-center px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 cursor-pointer transition-colors"
-                  >
-                    <FileText className="w-5 h-5 mr-2" />
-                    Select PDF File
-                  </label>
-                  {file && (
-                    <p className="mt-4 text-sm text-gray-600">
-                      Selected: {file.name}
-                    </p>
-                  )}
-                </>
-              )}
-            </div>
-          </div>
-        )}
-
-        {/* Parsed Resume Display */}
         {parsedData && (
           <div className="space-y-6">
-            {/* Success */}
-            <div className="bg-green-50 border border-green-200 rounded-xl p-4 flex items-center">
-              <CheckCircle className="w-6 h-6 text-green-600 mr-3" />
-              <div className="flex-1">
-                <h3 className="font-semibold text-green-800">
-                  Resume Parsed Successfully!
-                </h3>
-                <p className="text-sm text-green-600">
-                  Your resume has been processed and structured
-                </p>
+            {/* Success Banner with Gradient */}
+            <div className="relative overflow-hidden bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500 rounded-2xl p-6 shadow-2xl">
+              <div className="absolute top-0 right-0 w-64 h-64 bg-white opacity-10 rounded-full -mr-32 -mt-32"></div>
+              <div className="absolute bottom-0 left-0 w-48 h-48 bg-white opacity-10 rounded-full -ml-24 -mb-24"></div>
+              <div className="relative flex items-center">
+                <div className="bg-white/20 backdrop-blur-sm rounded-full p-3 mr-4">
+                  <CheckCircle className="w-8 h-8 text-white" />
+                </div>
+                <div className="flex-1">
+                  <h3 className="font-bold text-white text-xl mb-1">
+                    Resume Parsed Successfully! ✨
+                  </h3>
+                  <p className="text-white/90">
+                    Your resume has been transformed into a stunning masterpiece
+                  </p>
+                </div>
+                <button
+                  onClick={downloadPDF}
+                  className="flex items-center px-6 py-3 bg-white text-teal-600 rounded-xl hover:shadow-lg hover:scale-105 transition-all duration-300 font-semibold"
+                >
+                  <Download className="w-5 h-5 mr-2" />
+                  Download PDF
+                </button>
               </div>
-              <button
-                onClick={downloadPDF}
-                className="flex items-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
-              >
-                <Download className="w-4 h-4 mr-2" />
-                Download PDF
-              </button>
             </div>
 
-            {/* Resume Content */}
+            {/* Resume Content with Modern Design */}
             <div
               id="resume-content"
               className="relative bg-white rounded-3xl shadow-2xl overflow-hidden"
@@ -523,15 +455,15 @@ export default function ResumeParser() {
               </div>
             </div>
 
-            {/* Action Buttons */}
-            <div className="flex gap-4 justify-center">
+            {/* Action Buttons with Gradient */}
+            <div className="flex gap-4 justify-center pt-4">
               <button
                 onClick={() => {
-                  setParsedData(null);
+                //   setParsedData(null);
                   setFile(null);
                   setError(null);
                 }}
-                className="px-6 py-3 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors font-medium"
+                className="px-8 py-4 bg-gradient-to-r from-gray-700 to-gray-900 text-white rounded-xl hover:shadow-2xl hover:scale-105 transition-all duration-300 font-semibold"
               >
                 Upload Another Resume
               </button>

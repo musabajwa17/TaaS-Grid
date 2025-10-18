@@ -196,12 +196,26 @@ const UserTypesSection = () => {
         </div>
 
         {/* Call to Action */}
-        <div className="text-center mt-16">
-          <button className="group relative px-12 py-4 bg-gradient-to-r from-green-600 to-emerald-600 text-white text-lg font-semibold rounded-full shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105">
+        {/* <div className="text-center mt-16">
+          <button className="group relative px-12 py-4 bg-gradient-to-r from-green-600 to-emerald-600 text-white text-lg font-semibold rounded-full shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-115">
             <span className="relative z-10">Get Started Today</span>
-            <div className="absolute inset-0 bg-gradient-to-r from-purple-600 to-pink-600 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+            <div className="absolute inset-0 group-hover:translate-x-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
           </button>
-        </div>
+        </div> */}
+        <div className='flex justify-center'>
+        <div
+                className="w-2/12 flex justify-center relative mt-16 text-center px-8 py-3.5 bg-gradient-to-r from-green-600 to-emerald-600 text-white font-black text-sm rounded-full hover:scale-110 transition-all duration-500 ease-out overflow-hidden group"
+              >
+                <button className="relative z-10 flex items-center gap-2">
+                  Get Started
+                  {/* <span className="group-hover:translate-x-1 transition-transform duration-500">
+                    →
+                  </span> */}
+                </button>
+                <div className="absolute inset-0 bg-gradient-to-r from-[#00d4ae] to-[#00bb98] opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                <div className="absolute inset-0 bg-white/20 transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-out"></div>
+              </div>
+              </div>
       </div>
 
       <style jsx>{`
