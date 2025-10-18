@@ -1,6 +1,6 @@
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
-import ResumeParser from "@/components/ResumeParser";
+import ResumeParser from "@/components/resume/ResumeParser";
 export default function Home() {
   return (
     <>

@@ -6,7 +6,10 @@ export interface Experience {
   years: string;
   description?: string[] | string;
 }
-
+export interface ParsedItem {
+  field: string;
+  value: string | string[];
+}
 export interface Education {
   degree: string;
   institution: string;
