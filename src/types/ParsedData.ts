@@ -1,5 +1,7 @@
 // types/ParsedData.ts
-
+export interface CvTemplateProps {
+  parsedData: ParsedData;
+}
 export interface Experience {
   role: string;
   company: string;
@@ -19,7 +21,7 @@ export interface Education {
 export interface Project {
   name: string;
   description: string;
-  technologies?: string[];
+  domain?: string[];
   link?: string;
 }
 
@@ -45,4 +47,11 @@ export interface ParsedData {
   projects?: Project[];
   github?: string;
   linkedin?: string;
+  filledSuggestions?: {
+    missing_details?: string[];
+    missing_sections?: string[];
+    suggested_additions?: string[];
+    summary_improvement?: string[];
+  };
 }
+

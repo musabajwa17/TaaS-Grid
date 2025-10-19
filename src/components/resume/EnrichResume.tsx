@@ -35,7 +35,7 @@ export default function EnrichResume() {
 
   // ✅ Handle modify navigation
   const handleModifyResume = () => {
-    if (!parsedData || !enrichedData) return;
+    if (!parsedData || !enrichedData) return alert("Parse your resume first");
 
     // Combine the original parsed data and AI suggestions
     const combinedData = {

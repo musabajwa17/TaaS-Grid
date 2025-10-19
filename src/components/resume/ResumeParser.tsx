@@ -152,13 +152,13 @@ export default function ResumeParser() {
                 <BookText className="w-4 h-4 mr-2" />
                 Enrich CV
               </button>
-              {/* <button
+              <button
                 onClick={downloadPDF}
                 className="flex items-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
               >
                 <Download className="w-4 h-4 mr-2" />
                 Download PDF
-              </button> */}
+              </button>
               </div>
             </div>
 
