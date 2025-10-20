@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, DragEvent, ChangeEvent } from "react";
+import React, { useState, DragEvent, ChangeEvent, useEffect } from "react";
 import {
   Upload,
   FileText,
@@ -18,6 +18,13 @@ export default function ResumeParser() {
   const { loading, error, parsedData, handleUpload, setParsedData, setError } =
     useUploadResume();
   // File input handler
+  // useEffect(() => {
+  //   const token = localStorage.getItem("accessToken");
+  //   if (!token) {
+  //     alert("You must be logged in to access this page.");
+  //     router.push("/login");
+  //   }
+  // }, [router]);
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files?.[0];
     if (selectedFile && selectedFile.type === "application/pdf") {

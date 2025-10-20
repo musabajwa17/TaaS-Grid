@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 const Header: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -24,6 +24,20 @@ const Header: React.FC = () => {
     { name: "About", href: "/about" },
     { name: "CV Forge", href: "/cvbuilder" },
   ];
+//    const router = useRouter();
+
+//  const handleNavigation = (href: string) => {
+//     if (href === "/cvbuilder") {
+//       const token = localStorage.getItem("accessToken");
+
+//       if (!token) {
+//         alert("Please log in to access CV Forge");
+//         router.push("/login");
+//         return;
+//       }
+//     }
+//     router.push(href);
+//   };
 
   return (
     <>
@@ -68,6 +82,7 @@ const Header: React.FC = () => {
               {navItems.map((item, index) => (
                 <Link
                   key={item.name}
+                  // onClick={() => handleNavigation(item.href)}
                   href={item.href}
                   className={`relative px-5 py-2.5 font-bold text-sm transition-all duration-500 group ${
                     pathname === item.href
@@ -167,6 +182,7 @@ const Header: React.FC = () => {
               {navItems.map((item, index) => (
                 <Link
                   key={item.name}
+                  // onClick={() => handleNavigation(item.href)}
                   href={item.href}
                   className={`block px-4 py-3 font-semibold rounded-lg transition-all duration-300 ${
                     pathname === item.href

@@ -272,7 +272,7 @@ const downloadPDF = async () => {
         )}
 
         {/* Skills */}
-        {skills.length > 0 && (
+        {skills &&  skills.length > 0 && (
           <section className="mb-6">
             <h2 className="font-bold text-lg border-b border-gray-300 mb-2">
               Skills

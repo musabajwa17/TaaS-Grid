@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { Mail, Lock, LayoutGrid, Zap, TrendingUp } from "lucide-react";
 import Link from "next/link";
+import { useLoginUser } from "@/hooks/useLoginUser";
 
 const PRIMARY_COLOR_HEX = "#00BB98";
 
@@ -24,15 +25,19 @@ const features = [
 ];
 
 export default function Login() {
-  const [loading, setLoading] = useState(false);
+    const { loginUser, loading } = useLoginUser();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
-  const handleLogin = (e : any) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-      console.log("Login successful!");
-    }, 1000);
+    try {
+      const response = await loginUser(email, password);
+      console.log("User Logged In:", response);
+      alert("Login successful!");
+    } catch (err) {
+      console.log("Error login", err)
+    }
   };
 
   return (
@@ -100,55 +105,59 @@ export default function Login() {
               </p>
             </div>
 
-            <form className="space-y-4" onSubmit={handleLogin}>
-              <div className="relative">
-                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
-                <input
-                  type="email"
-                  placeholder="Enter your email"
-                  className="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#00BB98] focus:border-[#00BB98] text-gray-800 placeholder-gray-400 transition"
-                  required
-                />
-              </div>
+             <form className="space-y-4" onSubmit={handleLogin}>
+      <div className="relative">
+        <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
+        <input
+          type="email"
+          placeholder="Enter your email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          className="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-300 rounded-xl text-gray-800 placeholder-gray-400 transition"
+          required
+        />
+      </div>
 
-              <div className="relative">
-                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
-                <input
-                  type="password"
-                  placeholder="Enter your password"
-                  className="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#00BB98] focus:border-[#00BB98] text-gray-800 placeholder-gray-400 transition"
-                  required
-                />
-              </div>
+      <div className="relative">
+        <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
+        <input
+          type="password"
+          placeholder="Enter your password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          className="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-300 rounded-xl text-gray-800 placeholder-gray-400 transition"
+          required
+        />
+      </div>
 
-              <div className="flex items-center justify-between text-sm mt-2">
-                <label className="flex items-center gap-2 text-gray-600 cursor-pointer">
-                  <input
-                    type="checkbox"
-                    className="rounded border-gray-300 focus:ring-[#00BB98]"
-                  />
-                  Remember me
-                </label>
-                <a
-                  href="#"
-                  className="font-medium"
-                  style={{ color: PRIMARY_COLOR_HEX }}
-                >
-                  Forgot Password?
-                </a>
-              </div>
+      <div className="flex items-center justify-between text-sm mt-2">
+        <label className="flex items-center gap-2 text-gray-600 cursor-pointer">
+          <input
+            type="checkbox"
+            className="rounded border-gray-300 focus:ring-[#00BB98]"
+          />
+          Remember me
+        </label>
+        <a
+          href="#"
+          className="font-medium"
+          style={{ color: PRIMARY_COLOR_HEX }}
+        >
+          Forgot Password?
+        </a>
+      </div>
 
-              <button
-                type="submit"
-                disabled={loading}
-                style={{ backgroundColor: PRIMARY_COLOR_HEX }}
-                className={`w-full text-white font-semibold py-3 rounded-xl hover:opacity-95 transition shadow-md mt-3 ${
-                  loading ? "opacity-75 cursor-not-allowed" : ""
-                }`}
-              >
-                {loading ? "Logging in..." : "Login"}
-              </button>
-            </form>
+      <button
+        type="submit"
+        disabled={loading}
+        style={{ backgroundColor: PRIMARY_COLOR_HEX }}
+        className={`w-full text-white font-semibold py-3 rounded-xl hover:opacity-95 transition shadow-md mt-3 ${
+          loading ? "opacity-75 cursor-not-allowed" : ""
+        }`}
+      >
+        {loading ? "Logging in..." : "Login"}
+      </button>
+    </form>
 
             {/* Divider + Google Button */}
             <div className="mt-6">
