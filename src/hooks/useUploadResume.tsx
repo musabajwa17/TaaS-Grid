@@ -17,6 +17,10 @@ export function useUploadResume() {
 
     const formData = new FormData();
     formData.append("file", uploadFile);
+const role = localStorage.getItem("role");
+
+const endpoint =
+  role === "student" ? `${apiUrl}/parse-resume` : `${apiUrl}/employee-parser`;
 
     try {
       const source = axios.CancelToken.source();
@@ -26,7 +30,7 @@ export function useUploadResume() {
         source.cancel("⏰ Request timed out. Please try a smaller or valid file.");
       }, 10000);
 
-      const res = await axios.post(`${apiUrl}/parse-resume`, formData, {
+      const res = await axios.post(endpoint, formData, {
         cancelToken: source.token,
         headers: {
           "Content-Type": "multipart/form-data",
@@ -35,6 +39,7 @@ export function useUploadResume() {
 
       clearTimeout(timeout);
       setParsedData(res.data);
+      console.log(res)
       toast.success("✅ Resume parsed successfully!");
     } catch (err: any) {
       let message = "An unknown error occurred.";

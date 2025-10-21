@@ -63,14 +63,14 @@ const Header: React.FC = () => {
             {/* Logo */}
             <Link href="/" className="flex items-center group">
               <div
-                className={`relative transition-all duration-700 ease-out ${
+                className={`relative transition-all duration-700 ms-10 ease-out ${
                   isScrolled ? "scale-90" : "scale-100"
                 }`}
               >
                 <img
-                  src="/logo2.png"
+                  src="/logo5.png"
                   alt="Logo"
-                  className={`relative h-14 w-auto object-contain transition-all duration-700 group-hover:scale-110 ${
+                  className={`relative h-12 w-50 object-contain transition-all duration-700 group-hover:scale-110 ${
                     isScrolled ? "h-12" : "h-14"
                   }`}
                 />

@@ -15,7 +15,7 @@ export function useEnrichResume() {
   const enrichResume = async (parsedData: any, selectedFields: SelectedFields) => {
     setLoading(true);
     setError(null);
-
+   
     try {
       const response = await fetch("http://localhost:8000/enrich", {
         method: "POST",

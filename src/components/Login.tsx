@@ -32,6 +32,7 @@ export default function Login() {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
+       console.log("Login Api")
       const response = await loginUser(email, password);
       console.log("User Logged In:", response);
       alert("Login successful!");
