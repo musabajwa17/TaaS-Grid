@@ -7,6 +7,8 @@ import StatsSection from "@/components/StatsSection";
 import TalentServices from "@/components/TalentServices";
 import TestimonialCarousel from "@/components/TestimonialCarousel";
 import UserTypesSection from "@/components/UserTypes";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 export default function Home() {
   return (
     <>
@@ -19,6 +21,16 @@ export default function Home() {
       <UserTypesSection />
       <TestimonialCarousel />
       <Footer />
+      <ToastContainer
+          position="top-right"
+          autoClose={3000}
+          hideProgressBar={false}
+          newestOnTop
+          closeOnClick
+          draggable
+          pauseOnHover
+          theme="light"
+        />
     </>
   );
 }

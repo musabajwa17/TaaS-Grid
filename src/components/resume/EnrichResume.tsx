@@ -111,13 +111,73 @@ export default function EnrichResume() {
       {error && <p className="text-red-600 text-center mt-4">{error}</p>}
 
       {enrichedData && (
-        <div className="mt-10 p-6 bg-gray-50 border border-gray-200 rounded-xl">
-          <h2 className="text-xl font-semibold text-green-700 mb-2">AI Suggestions</h2>
-          <pre className="text-sm bg-white p-4 rounded-lg border border-gray-200 overflow-auto max-h-96">
-            {JSON.stringify(enrichedData.suggestions, null, 2)}
-          </pre>
+  <div className="mt-10 p-6 bg-gray-50 border border-gray-200 rounded-2xl shadow-sm">
+    <h2 className="text-2xl font-semibold text-green-700 mb-6 flex items-center gap-2">
+      <span className="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm font-medium">
+        AI Suggestions
+      </span>
+    </h2>
+
+    <div className="space-y-6">
+      {/* Summary Improvement */}
+      {enrichedData.suggestions.summary_improvement && (
+        <div className="bg-white p-5 rounded-xl border border-gray-100 shadow-sm">
+          <h3 className="text-lg font-semibold text-gray-800 mb-2">📝 Summary Improvement</h3>
+          <p className="text-gray-600 leading-relaxed">
+            {enrichedData.suggestions.summary_improvement}
+          </p>
         </div>
       )}
+
+      {/* Missing Sections */}
+      {enrichedData.suggestions.missing_sections?.length > 0 && (
+        <div className="bg-white p-5 rounded-xl border border-gray-100 shadow-sm">
+          <h3 className="text-lg font-semibold text-gray-800 mb-2">📂 Missing Sections</h3>
+          <ul className="list-disc list-inside text-gray-600 space-y-1">
+            {enrichedData.suggestions.missing_sections.map((section: string, i: number) => (
+              <li key={i}>{section}</li>
+            ))}
+          </ul>
+        </div>
+      )}
+
+      {/* Missing Details */}
+      {enrichedData.suggestions.missing_details?.length > 0 && (
+        <div className="bg-white p-5 rounded-xl border border-gray-100 shadow-sm">
+          <h3 className="text-lg font-semibold text-gray-800 mb-2">⚠️ Missing Details</h3>
+          <ul className="list-disc list-inside text-gray-600 space-y-1">
+            {enrichedData.suggestions.missing_details.map((detail: string, i: number) => (
+              <li key={i}>{detail}</li>
+            ))}
+          </ul>
+        </div>
+      )}
+
+      {/* Suggested Additions */}
+      {enrichedData.suggestions.suggested_additions?.length > 0 && (
+        <div className="bg-white p-5 rounded-xl border border-gray-100 shadow-sm">
+          <h3 className="text-lg font-semibold text-gray-800 mb-2">💡 Suggested Additions</h3>
+          <ul className="list-disc list-inside text-gray-600 space-y-1">
+            {enrichedData.suggestions.suggested_additions.map((addition: string, i: number) => (
+              <li key={i}>{addition}</li>
+            ))}
+          </ul>
+        </div>
+      )}
+
+      {/* Tone Recommendation */}
+      {enrichedData.suggestions.tone_recommendation && (
+        <div className="bg-white p-5 rounded-xl border border-gray-100 shadow-sm">
+          <h3 className="text-lg font-semibold text-gray-800 mb-2">🎯 Tone Recommendation</h3>
+          <p className="text-gray-600 leading-relaxed">
+            {enrichedData.suggestions.tone_recommendation}
+          </p>
+        </div>
+      )}
+    </div>
+  </div>
+)}
+
     </div>
   );
 }

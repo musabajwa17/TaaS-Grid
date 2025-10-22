@@ -184,6 +184,8 @@ const modules = [
 export default function HeroSection() {
   const [activeModule, setActiveModule] = useState(0);
   const [poppedModules, setPoppedModules] = useState<number[]>([]);
+  const [isHovered, setIsHovered] = useState(false);
+
   useEffect(() => {
     const interval = setInterval(() => {
       setActiveModule((prev) => {
@@ -259,7 +261,16 @@ export default function HeroSection() {
             <div className="space-y-6">
               <div className="flex flex-col space-y-4">
                 {/* Dynamic Title 1 */}
-                <div
+                <p
+                  key={`desc-${activeModule}`}
+                  className={`text-3xl leading-relaxed max-w-xl animate-slideInLeft font-bold transition-all duration-500 ${
+                    isBlueModule ? "text-yellow-600" : " text-blue-700"
+                  }`}
+                  style={{ animationDelay: "0.45s" }}
+                >
+                  {activeContent.description}
+                </p>
+                {/* <div
                   key={`title1-${activeModule}`}
                   className="flex items-center gap-4 animate-slideInLeft"
                   style={{ animationDelay: "0s" }}
@@ -276,147 +287,178 @@ export default function HeroSection() {
                     />
                   </div>
                   <h2
-                    className={`text-2xl font-extrabold leading-tight tracking-tight transition-colors duration-500 ${
+                    className={`text-2xl leading-tight tracking-tight transition-colors duration-500 ${
                       isBlueModule ? "text-yellow-600 " : "text-blue-700"
                     }`}
                   >
                     {activeContent.title1}
                   </h2>
-                </div>
+                </div> */}
+                <div className="max-w-lg grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 mt-6">
+                  <div
+                    key={`title1-${activeModule}`}
+                    className={`flex flex-col items-center justify-center mx-3 text-center p-2 rounded-2xl shadow-md transition-all duration-500 hover:shadow-lg ${
+                      isBlueModule ? "bg-yellow-50" : "bg-blue-50"
+                    } animate-slideInLeft`}
+                    style={{ animationDelay: "0s" }}
+                  >
+                    <div
+                      className={`p-2 rounded-full mb-2 transition-colors duration-500 ${
+                        isBlueModule ? "bg-yellow-500/10" : "bg-blue-600/10"
+                      }`}
+                    >
+                      <ActiveIcon
+                        className={`w-5 h-5 transition-colors duration-500 ${
+                          isBlueModule ? "text-yellow-600" : "text-blue-600"
+                        }`}
+                      />
+                    </div>
 
-                {/* Dynamic Title 2 */}
-                <div
-                  key={`title2-${activeModule}`}
-                  className="flex items-center gap-4 animate-slideInLeft"
-                  style={{ animationDelay: "0.15s" }}
-                >
-                  <div
-                    className={`p-3 rounded-2xl transition-colors duration-500 ${
-                      isBlueModule ? "bg-yellow-500/10" : "bg-blue-600/10"
-                    }`}
-                  >
-                    <ActiveIcon
-                      className={`w-6 h-6 transition-colors duration-500 ${
-                        isBlueModule ? "text-yellow-600 " : "text-blue-600"
+                    <h2
+                      className={`text-xs leading-tight tracking-tight transition-colors duration-500 ${
+                        isBlueModule ? "text-yellow-600" : "text-blue-700"
                       }`}
-                    />
+                    >
+                      {activeContent.title1}
+                    </h2>
                   </div>
-                  <h2
-                    className={`text-2xl font-extrabold leading-tight tracking-tight transition-colors duration-500 ${
-                      isBlueModule ? "text-yellow-600 " : "text-blue-700"
-                    }`}
+                  <div
+                    key={`title2-${activeModule}`}
+                    className={`flex flex-col items-center justify-center mx-5 text-center p-2 rounded-2xl shadow-md transition-all duration-500 hover:shadow-lg ${
+                      isBlueModule ? "bg-yellow-50" : "bg-blue-50"
+                    } animate-slideInLeft`}
+                    style={{ animationDelay: "0s" }}
                   >
-                    {activeContent.title2}
-                  </h2>
-                </div>
+                    <div
+                      className={`p-2 rounded-full mb-2 transition-colors duration-500 ${
+                        isBlueModule ? "bg-yellow-500/10" : "bg-blue-600/10"
+                      }`}
+                    >
+                      <ActiveIcon
+                        className={`w-5 h-5 transition-colors duration-500 ${
+                          isBlueModule ? "text-yellow-600" : "text-blue-600"
+                        }`}
+                      />
+                    </div>
 
-                {/* Dynamic Title 3 */}
-                <div
-                  key={`title3-${activeModule}`}
-                  className="flex items-center gap-4 animate-slideInLeft"
-                  style={{ animationDelay: "0.3s" }}
-                >
-                  <div
-                    className={`p-3 rounded-2xl transition-colors duration-500 ${
-                      isBlueModule ? "bg-yellow-500/10 " : "bg-blue-600/10"
-                    }`}
-                  >
-                    <ActiveIcon
-                      className={`w-6 h-6 transition-colors duration-500 ${
-                        isBlueModule ? "text-yellow-600 " : "text-blue-600"
+                    <h2
+                      className={`text-xs leading-tight tracking-tight transition-colors duration-500 ${
+                        isBlueModule ? "text-yellow-600" : "text-blue-700"
                       }`}
-                    />
+                    >
+                      {activeContent.title2}
+                    </h2>
                   </div>
-                  <h2
-                    className={`text-2xl font-extrabold leading-tight tracking-tight transition-colors duration-500 ${
-                      isBlueModule ? "text-yellow-600" : " text-blue-700"
-                    }`}
-                  >
-                    {activeContent.title3}
-                  </h2>
-                </div>
-                <div
-                  key={`title4-${activeModule}`}
-                  className="flex items-center gap-4 animate-slideInLeft"
-                  style={{ animationDelay: "0.3s" }}
-                >
                   <div
-                    className={`p-3 rounded-2xl transition-colors duration-500 ${
-                      isBlueModule ? "bg-yellow-500/10 " : "bg-blue-600/10"
-                    }`}
+                    key={`title3-${activeModule}`}
+                    className={`flex flex-col items-center justify-center mx-3 text-center p-2 rounded-2xl shadow-md transition-all duration-500 hover:shadow-lg ${
+                      isBlueModule ? "bg-yellow-50" : "bg-blue-50"
+                    } animate-slideInLeft`}
+                    style={{ animationDelay: "0s" }}
                   >
-                    <ActiveIcon
-                      className={`w-6 h-6 transition-colors duration-500 ${
-                        isBlueModule ? "text-yellow-600 " : "text-blue-600"
+                    <div
+                      className={`p-2 rounded-full mb-2 transition-colors duration-500 ${
+                        isBlueModule ? "bg-yellow-500/10" : "bg-blue-600/10"
                       }`}
-                    />
+                    >
+                      <ActiveIcon
+                        className={`w-5 h-5 transition-colors duration-500 ${
+                          isBlueModule ? "text-yellow-600" : "text-blue-600"
+                        }`}
+                      />
+                    </div>
+
+                    <h2
+                      className={`text-xs leading-tight tracking-tight transition-colors duration-500 ${
+                        isBlueModule ? "text-yellow-600" : "text-blue-700"
+                      }`}
+                    >
+                      {activeContent.title3}
+                    </h2>
                   </div>
-                  <h2
-                    className={`text-2xl font-extrabold leading-tight tracking-tight transition-colors duration-500 ${
-                      isBlueModule ? "text-yellow-600" : " text-blue-700"
-                    }`}
-                  >
-                    {activeContent.title4}
-                  </h2>
-                </div>
-                <div
-                  key={`title5-${activeModule}`}
-                  className="flex items-center gap-4 animate-slideInLeft"
-                  style={{ animationDelay: "0.3s" }}
-                >
                   <div
-                    className={`p-3 rounded-2xl transition-colors duration-500 ${
-                      isBlueModule ? "bg-yellow-500/10 " : "bg-blue-600/10"
-                    }`}
+                    key={`title4-${activeModule}`}
+                    className={`flex flex-col items-center justify-center mx-3 text-center p-2 rounded-2xl shadow-md transition-all duration-500 hover:shadow-lg ${
+                      isBlueModule ? "bg-yellow-50" : "bg-blue-50"
+                    } animate-slideInLeft`}
+                    style={{ animationDelay: "0s" }}
                   >
-                    <ActiveIcon
-                      className={`w-6 h-6 transition-colors duration-500 ${
-                        isBlueModule ? "text-yellow-600 " : "text-blue-600"
+                    <div
+                      className={`p-2 rounded-full mb-2 transition-colors duration-500 ${
+                        isBlueModule ? "bg-yellow-500/10" : "bg-blue-600/10"
                       }`}
-                    />
+                    >
+                      <ActiveIcon
+                        className={`w-5 h-5 transition-colors duration-500 ${
+                          isBlueModule ? "text-yellow-600" : "text-blue-600"
+                        }`}
+                      />
+                    </div>
+
+                    <h2
+                      className={`text-xs leading-tight tracking-tight transition-colors duration-500 ${
+                        isBlueModule ? "text-yellow-600" : "text-blue-700"
+                      }`}
+                    >
+                      {activeContent.title4}
+                    </h2>
                   </div>
-                  <h2
-                    className={`text-2xl font-extrabold leading-tight tracking-tight transition-colors duration-500 ${
-                      isBlueModule ? "text-yellow-600" : " text-blue-700"
-                    }`}
-                  >
-                    {activeContent.title5}
-                  </h2>
-                </div>
-                <div
-                  key={`title6-${activeModule}`}
-                  className="flex items-center gap-4 animate-slideInLeft"
-                  style={{ animationDelay: "0.3s" }}
-                >
                   <div
-                    className={`p-3 rounded-2xl transition-colors duration-500 ${
-                      isBlueModule ? "bg-yellow-500/10 " : "bg-blue-600/10"
-                    }`}
+                    key={`title5-${activeModule}`}
+                    className={`flex flex-col items-center justify-center mx-3 text-center p-2 rounded-2xl shadow-md transition-all duration-500 hover:shadow-lg ${
+                      isBlueModule ? "bg-yellow-50" : "bg-blue-50"
+                    } animate-slideInLeft`}
+                    style={{ animationDelay: "0s" }}
                   >
-                    <ActiveIcon
-                      className={`w-6 h-6 transition-colors duration-500 ${
-                        isBlueModule ? "text-yellow-600 " : "text-blue-600"
+                    <div
+                      className={`p-2 rounded-full mb-2 transition-colors duration-500 ${
+                        isBlueModule ? "bg-yellow-500/10" : "bg-blue-600/10"
                       }`}
-                    />
+                    >
+                      <ActiveIcon
+                        className={`w-5 h-5 transition-colors duration-500 ${
+                          isBlueModule ? "text-yellow-600" : "text-blue-600"
+                        }`}
+                      />
+                    </div>
+
+                    <h2
+                      className={`text-xs leading-tight tracking-tight transition-colors duration-500 ${
+                        isBlueModule ? "text-yellow-600" : "text-blue-700"
+                      }`}
+                    >
+                      {activeContent.title5}
+                    </h2>
                   </div>
-                  <h2
-                    className={`text-2xl font-extrabold leading-tight tracking-tight transition-colors duration-500 ${
-                      isBlueModule ? "text-yellow-600" : " text-blue-700"
-                    }`}
+                  <div
+                    key={`title6-${activeModule}`}
+                    className={`flex flex-col items-center justify-center mx-3 text-center p-2 rounded-2xl shadow-md transition-all duration-500 hover:shadow-lg ${
+                      isBlueModule ? "bg-yellow-50" : "bg-blue-50"
+                    } animate-slideInLeft`}
+                    style={{ animationDelay: "0s" }}
                   >
-                    {activeContent.title6}
-                  </h2>
+                    <div
+                      className={`p-2 rounded-full mb-2 transition-colors duration-500 ${
+                        isBlueModule ? "bg-yellow-500/10" : "bg-blue-600/10"
+                      }`}
+                    >
+                      <ActiveIcon
+                        className={`w-5 h-5 transition-colors duration-500 ${
+                          isBlueModule ? "text-yellow-600" : "text-blue-600"
+                        }`}
+                      />
+                    </div>
+
+                    <h2
+                      className={`text-xs leading-tight tracking-tight transition-colors duration-500 ${
+                        isBlueModule ? "text-yellow-600" : "text-blue-700"
+                      }`}
+                    >
+                      {activeContent.title6}
+                    </h2>
+                  </div>
                 </div>
               </div>
-              <p
-                key={`desc-${activeModule}`}
-                className={`text-lg leading-relaxed max-w-xl animate-slideInLeft font-medium transition-all duration-500 ${
-                  isBlueModule ? "text-yellow-600" : " text-blue-700"
-                }`}
-                style={{ animationDelay: "0.45s" }}
-              >
-                {activeContent.description}
-              </p>
             </div>
 
             {/* Dynamic Buttons */}
@@ -486,7 +528,17 @@ export default function HeroSection() {
                         isPopped ? 1.2 : 0.9
                       })`,
                       zIndex: isPopped ? 25 : 18,
+                      // animation: isPopped
+                      //   ? "popBounce 1s cubic-bezier(0.25, 1.1, 0.3, 1)"
+                      //   : "none",
                     }}
+                    // onMouseEnter={(e) =>
+                    //   (e.currentTarget.style.animation =
+                    //     "popBounce 1s cubic-bezier(0.25, 1.1, 0.3, 1)")
+                    // }
+                    // onMouseLeave={(e) =>
+                    //   (e.currentTarget.style.animation = "none")
+                    // }
                     onClick={() => setActiveModule(index)}
                   >
                     {/* Module Card with Enhanced Effects */}

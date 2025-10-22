@@ -1,5 +1,4 @@
 "use client";
-
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import Footer from "@/components/Footer";
@@ -18,7 +17,6 @@ export default function CvBuilderPage() {
     const token = localStorage.getItem("accessToken");
 
     if (!token) {
-      alert("Please log in to access CV Forge");
       router.push("/login");
     } else {
       setCheckingAuth(false);

@@ -27,7 +27,7 @@ const endpoint =
 
       // Timeout handler (10s)
       const timeout = setTimeout(() => {
-        source.cancel("⏰ Request timed out. Please try a smaller or valid file.");
+        source.cancel("Request timed out. Please try a smaller or valid file.");
       }, 10000);
 
       const res = await axios.post(endpoint, formData, {
@@ -40,7 +40,7 @@ const endpoint =
       clearTimeout(timeout);
       setParsedData(res.data);
       console.log(res)
-      toast.success("✅ Resume parsed successfully!");
+      toast.success("Resume parsed successfully!");
     } catch (err: any) {
       let message = "An unknown error occurred.";
 

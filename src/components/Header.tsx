@@ -7,6 +7,13 @@ import { usePathname, useRouter } from "next/navigation";
 const Header: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    // Check localStorage for accessToken
+    const token = localStorage.getItem("accessToken");
+    setIsLoggedIn(!!token);
+  }, []);
   const pathname = usePathname();
 
   useEffect(() => {
@@ -14,6 +21,14 @@ const Header: React.FC = () => {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+   const handleLogout = () => {
+    // Clear all auth data
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("role");
+    localStorage.removeItem("userId");
+    setIsLoggedIn(false);
+    window.location.href = "/"; // redirect to home (or login)
+  };
 
   // 🧭 Define your navigation structure (easy to extend later)
   const navItems = [
@@ -24,21 +39,6 @@ const Header: React.FC = () => {
     { name: "About", href: "/about" },
     { name: "CV Forge", href: "/cvbuilder" },
   ];
-//    const router = useRouter();
-
-//  const handleNavigation = (href: string) => {
-//     if (href === "/cvbuilder") {
-//       const token = localStorage.getItem("accessToken");
-
-//       if (!token) {
-//         alert("Please log in to access CV Forge");
-//         router.push("/login");
-//         return;
-//       }
-//     }
-//     router.push(href);
-//   };
-
   return (
     <>
       <nav
@@ -84,7 +84,7 @@ const Header: React.FC = () => {
                   key={item.name}
                   // onClick={() => handleNavigation(item.href)}
                   href={item.href}
-                  className={`relative px-5 py-2.5 font-bold text-sm transition-all duration-500 group ${
+                  className={`relative px-5 py-2.5 font-bold text-base transition-all duration-500 group ${
                     pathname === item.href
                       ? "text-green-600"
                       : "text-gray-700 hover:text-green-800"
@@ -111,17 +111,27 @@ const Header: React.FC = () => {
 
             {/* Right Side Buttons */}
             <div className="hidden md:flex items-center gap-5">
-              <Link
-                href="/login"
-                className="relative text-gray-700 font-bold text-sm hover:text-[#00bb98] transition-all duration-500 group"
-              >
-                <span className="relative">Sign In</span>
-                <div className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-[#00bb98] to-[#00d4ae] group-hover:w-full transition-all duration-500 ease-out"></div>
-              </Link>
+              {isLoggedIn ? (
+                <button
+                  onClick={handleLogout}
+                  className="relative text-gray-700 font-bold text-base hover:text-[#00bb98] transition-all duration-500 group"
+                >
+                  <span className="relative">Sign Out</span>
+                  <div className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-[#00bb98] to-[#00d4ae] group-hover:w-full transition-all duration-500 ease-out"></div>
+                </button>
+              ) : (
+                <Link
+                  href="/login"
+                  className="relative text-gray-700 font-bold text-base hover:text-[#00bb98] transition-all duration-500 group"
+                >
+                  <span className="relative">Sign In</span>
+                  <div className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-[#00bb98] to-[#00d4ae] group-hover:w-full transition-all duration-500 ease-out"></div>
+                </Link>
+              )}
 
               <Link
                 href="/career"
-                className="relative px-10 py-3.5 bg-gradient-to-r from-green-600 to-emerald-600 text-white font-black text-sm rounded-full hover:scale-110 transition-all duration-500 ease-out overflow-hidden group"
+                className="relative px-10 py-3.5 bg-gradient-to-r from-green-600 to-emerald-600 text-white font-black text-base rounded-full hover:scale-110 transition-all duration-500 ease-out overflow-hidden group"
               >
                 <span className="relative z-10 flex items-center gap-2">
                   Build Career

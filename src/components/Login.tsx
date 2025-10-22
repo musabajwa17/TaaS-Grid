@@ -3,6 +3,7 @@ import { useState } from "react";
 import { Mail, Lock, LayoutGrid, Zap, TrendingUp } from "lucide-react";
 import Link from "next/link";
 import { useLoginUser } from "@/hooks/useLoginUser";
+import { useRouter } from "next/navigation";
 
 const PRIMARY_COLOR_HEX = "#00BB98";
 
@@ -28,14 +29,13 @@ export default function Login() {
     const { loginUser, loading } = useLoginUser();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
+  const route = useRouter();
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
        console.log("Login Api")
       const response = await loginUser(email, password);
-      console.log("User Logged In:", response);
-      alert("Login successful!");
+      route.push("/");
     } catch (err) {
       console.log("Error login", err)
     }

@@ -1,5 +1,7 @@
+"use client";
 import { useState } from "react";
 import axios from "axios";
+import toast from "react-hot-toast";
 
 interface RegisterData {
   fullName: string;
@@ -20,15 +22,20 @@ export const useRegisterUser = () => {
       setSuccess(false);
 
     //   const response = await axios.post(`${BASE_URL}/register`, formData, {
-      const response = await axios.post("http://localhost:3001/register", formData, {
+      const response = await axios.post("http://localhost:3001/api/user/register", formData, {
         headers: { "Content-Type": "application/json" },
       });
 
       console.log("✅ Registration Success:", response.data);
+      toast.success(response.data.message)
       setSuccess(true);
       return response.data;
     } catch (err: any) {
       console.error("❌ Registration Error:", err);
+        const errorMessage = err.response?.data?.error || "Something went wrong";
+
+  // ✅ show toast
+  toast.error(errorMessage);
       setError(err.response?.data?.error || err.message);
     } finally {
       setLoading(false);

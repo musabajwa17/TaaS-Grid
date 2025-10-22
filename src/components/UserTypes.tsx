@@ -5,7 +5,7 @@ import { Check, Briefcase, GraduationCap, Laptop } from 'lucide-react';
 interface UserType {
   id: string;
   title: string;
-  avatar: string;
+  avatar: React.ReactNode;
   bgColor: string;
   features: string[];
   position: 'left' | 'right' | 'center';
@@ -15,7 +15,7 @@ const userTypes: UserType[] = [
   {
     id: 'students',
     title: 'Students',
-    avatar: '🎓',
+    avatar: <GraduationCap className="w-16 h-16 text-white" />,
     bgColor: 'from-green-600 to-emerald-600',
     position: 'left',
     features: [
@@ -27,8 +27,8 @@ const userTypes: UserType[] = [
   {
     id: 'employers',
     title: 'Employers',
-    avatar: '💼',
-    bgColor: 'from-blue-500 to-blue-500',
+    avatar: <Briefcase className="w-16 h-16 text-white" />,
+    bgColor: 'from-blue-600 to-blue-700',
     position: 'right',
     features: [
       'Find and hire top talent',
@@ -39,8 +39,8 @@ const userTypes: UserType[] = [
   {
     id: 'freelancers',
     title: 'Freelancers',
-    avatar: '💻',
-    bgColor: 'from-yellow-600 to-amber-600',
+    avatar: <Laptop className="w-16 h-16 text-white" />,
+    bgColor: 'from-yellow-500 to-amber-500',
     position: 'center',
     features: [
       'Find and hire top talent',
@@ -75,9 +75,9 @@ const UserTypesSection = () => {
                   <div className={`w-40 h-40 rounded-full bg-gradient-to-br ${userTypes[0].bgColor} flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-500`}>
                     <div className="text-7xl">{userTypes[0].avatar}</div>
                   </div>
-                  <div className="absolute -top-2 -right-2 w-12 h-12 bg-gradient-to-r from-green-600 to-emerald-600 rounded-full flex items-center justify-center shadow-lg group-hover:rotate-12 transition-transform duration-300">
+                  {/* <div className="absolute -top-2 -right-2 w-12 h-12 bg-gradient-to-r from-green-600 to-emerald-600 rounded-full flex items-center justify-center shadow-lg group-hover:rotate-12 transition-transform duration-300">
                     <GraduationCap className="w-6 h-6 text-white" />
-                  </div>
+                  </div> */}
                 </div>
 
                 {/* Content */}
@@ -94,7 +94,7 @@ const UserTypesSection = () => {
                           animation: `fadeInUp 0.6s ease-out ${idx * 0.1}s both` 
                         }}
                       >
-                        <div className="w-6 h-6 rounded-full bg-emerald-500 flex items-center justify-center flex-shrink-0 group-hover/item:scale-125 transition-transform duration-300">
+                        <div className="w-6 h-6 rounded-full bg-gradient-to-r from-green-600 to-emerald-600 flex items-center justify-center flex-shrink-0 group-hover/item:scale-125 transition-transform duration-300">
                           <Check className="w-4 h-4 text-white" strokeWidth={3} />
                         </div>
                         <span className="text-slate-700 text-base group-hover/item:text-emerald-600 transition-colors duration-300">
@@ -117,9 +117,9 @@ const UserTypesSection = () => {
                   <div className={`w-40 h-40 rounded-full bg-gradient-to-br ${userTypes[1].bgColor} flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-500`}>
                     <div className="text-7xl">{userTypes[1].avatar}</div>
                   </div>
-                  <div className="absolute -top-2 -right-2 w-12 h-12 bg-gradient-to-r from-blue-500 to-blue-500 rounded-full flex items-center justify-center shadow-lg group-hover:rotate-12 transition-transform duration-300">
+                  {/* <div className="absolute -top-2 -right-2 w-12 h-12 bg-gradient-to-r from-blue-500 to-blue-500 rounded-full flex items-center justify-center shadow-lg group-hover:rotate-12 transition-transform duration-300">
                     <Briefcase className="w-6 h-6 text-white" />
-                  </div>
+                  </div> */}
                 </div>
 
                 {/* Content */}
@@ -136,7 +136,7 @@ const UserTypesSection = () => {
                           animation: `fadeInUp 0.6s ease-out ${idx * 0.1}s both` 
                         }}
                       >
-                        <div className="w-6 h-6 rounded-full bg-blue-500 flex items-center justify-center flex-shrink-0 group-hover/item:scale-125 transition-transform duration-300">
+                        <div className="w-6 h-6 rounded-full bg-gradient-to-r from-blue-600 to-blue-700 flex items-center justify-center flex-shrink-0 group-hover/item:scale-125 transition-transform duration-300">
                           <Check className="w-4 h-4 text-white" strokeWidth={3} />
                         </div>
                         <span className="text-slate-700 text-base group-hover/item:text-blue-500 transition-colors duration-300">
@@ -154,16 +154,16 @@ const UserTypesSection = () => {
         {/* Freelancers Card - Bottom Center */}
         <div className="max-w-2xl mx-auto">
           <div className="group relative">
-            <div className="relative bg-white rounded-3xl p-8 shadow-xl hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 border-2 border-transparent hover:border-purple-300">
+            <div className="relative bg-white rounded-3xl p-8 shadow-xl hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 border-2 border-transparent hover:border-yellow-500">
               <div className="flex items-start gap-8">
                 {/* Avatar */}
                 <div className="relative flex-shrink-0">
                   <div className={`w-40 h-40 rounded-full bg-gradient-to-br ${userTypes[2].bgColor} flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-500`}>
                     <div className="text-7xl">{userTypes[2].avatar}</div>
                   </div>
-                  <div className="absolute -top-2 -right-2 w-12 h-12 bg-gradient-to-r from-yellow-600 to-amber-600 rounded-full flex items-center justify-center shadow-lg group-hover:rotate-12 transition-transform duration-300">
+                  {/* <div className="absolute -top-2 -right-2 w-12 h-12 bg-gradient-to-r from-yellow-600 to-amber-600 rounded-full flex items-center justify-center shadow-lg group-hover:rotate-12 transition-transform duration-300">
                     <Laptop className="w-6 h-6 text-white" />
-                  </div>
+                  </div> */}
                 </div>
 
                 {/* Content */}
@@ -180,7 +180,7 @@ const UserTypesSection = () => {
                           animation: `fadeInUp 0.6s ease-out ${idx * 0.1}s both` 
                         }}
                       >
-                        <div className="w-6 h-6 rounded-full bg-gradient-to-r from-yellow-600 to-amber-600 flex items-center justify-center flex-shrink-0 group-hover/item:scale-125 transition-transform duration-300">
+                        <div className="w-6 h-6 rounded-full bg-gradient-to-r from-yellow-500 to-amber-500 flex items-center justify-center flex-shrink-0 group-hover/item:scale-125 transition-transform duration-300">
                           <Check className="w-4 h-4 text-white" strokeWidth={3} />
                         </div>
                         <span className="text-slate-700 text-base group-hover/item:text-amber-600 transition-colors duration-300">

@@ -1,10 +1,11 @@
 'use client';
-
 import { useEffect, useState } from 'react';
 import FinalizedResume from './FinalizedResume';
 import { ParsedData } from '../../types/ParsedData';
 import { useRouter } from "next/navigation";
+import { useUploadCV } from '@/hooks/useUploadCV';
 export default function ModifyResume() {
+  const { uploadCV, loading, error, success } = useUploadCV();
    const router = useRouter();
   const [formData, setFormData] = useState<any>(null);
   const [suggestions, setSuggestions] = useState<any>(null);
@@ -62,55 +63,48 @@ console.log(inputs)
   };
 
   // 💾 On Submit — save & preview
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-console.log(inputs)
+    console.log(inputs);
     // Convert object of objects → object of arrays
     const filledSuggestions: any = {};
     for (const key in inputs) {
       filledSuggestions[key] = Object.values(inputs[key]);
     }
-
+    // Combine form data + suggestions
     const combinedData = {
       ...formData,
       filledSuggestions,
     };
-
-    // 🧹 Remove old localStorage data
-    localStorage.removeItem('enrichedData');
-    localStorage.removeItem('modifyData');
-    localStorage.removeItem('parsedData');
-
-    // 💾 Save new combined data
-    localStorage.setItem('combinedData', JSON.stringify(combinedData));
-
-    console.log('✅ Final Combined Resume Data:', combinedData);
-    alert('CV Saved Successfully! Displaying Preview...');
-
-    setFormData(combinedData);
-    setShowPreview(true);
+    // 🧹 Clean up old localStorage
+    localStorage.removeItem("enrichedData");
+    localStorage.removeItem("modifyData");
+    localStorage.removeItem("parsedData");
+    // 💾 Save locally (for offline preview)
+    localStorage.setItem("combinedData", JSON.stringify(combinedData));
+    console.log("✅ Final Combined Resume Data:", combinedData);
+    try {
+      // 🔥 Upload CV to backend
+      await uploadCV(combinedData);
+      alert("CV uploaded successfully! Displaying Preview...");
+      setFormData(combinedData);
+      setShowPreview(true);
+    } catch (err) {
+      console.error("CV upload failed:", err);
+      alert("Error uploading CV. Please try again.");
+    }
   };
 
   if (!formData)
     return <p className="text-center mt-10 text-gray-600">Loading data...</p>;
-
-  // 🎯 If preview mode is ON, show CvTemplate
-  if (showPreview) {
-    return (
-      <div className="my-10">
-        <FinalizedResume parsedData={formData as ParsedData} />
-      </div>
-    );
-  }
-
   // 🧾 Resume Editing Form
   return (
-    <div className="max-w-5xl mx-auto p-8 bg-white shadow-xl border rounded-2xl my-10">
+    <div className="max-w-5xl mx-auto p-8 bg-white shadow-xl border rounded-2xl my-20">
       <h1 className="text-3xl font-bold text-center text-green-600 mb-3">
         Modify Your Resume
       </h1>
       <p className="text-center text-gray-500 mb-8">
-        Review your parsed resume and fill in missing or AI-suggested fields.
+        Review your parsed resume and fill in missing fields.
       </p>
 
       <form onSubmit={handleSubmit} className="space-y-10">
@@ -227,63 +221,60 @@ console.log(inputs)
 
         {/* 🧩 Projects */}
         <section>
-          <h2 className="text-xl font-semibold mb-3 border-b pb-1">Projects</h2>
-          {formData.projects?.map((proj: any, i: number) => (
-            <div key={i} className="mb-4 border p-4 rounded-lg bg-gray-50">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3">
-                <input
-                  type="text"
-                  placeholder="Project Name"
-                  value={proj.name}
-                  onChange={(e) =>
-                    handleChange('projects', i, 'name', e.target.value)
-                  }
-                  className="border p-2 rounded-md"
-                />
-                <input
-                  type="text"
-                  placeholder="Technologies (comma-separated)"
-                  value={proj.domain}
-                  onChange={(e) =>
-                    handleChange(
-                      'projects',
-                      i,
-                      'technologies',
-                      e.target.value
-                    )
-                  }
-                  className="border p-2 rounded-md"
-                />
-              </div>
+  <h2 className="text-xl font-semibold mb-3 border-b pb-1">Projects</h2>
+  {(formData.projects?.length ? formData.projects : [{}]).map(
+    (proj: any, i: number) => (
+      <div key={i} className="mb-4 border p-4 rounded-lg bg-gray-50">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3">
+          <input
+            type="text"
+            placeholder="Project Name"
+            value={proj.name || ''}
+            onChange={(e) =>
+              handleChange('projects', i, 'name', e.target.value)
+            }
+            className="border p-2 rounded-md"
+          />
+          <input
+            type="text"
+            placeholder="Technologies (comma-separated)"
+            value={proj.technologies || ''}
+            onChange={(e) =>
+              handleChange('projects', i, 'technologies', e.target.value)
+            }
+            className="border p-2 rounded-md"
+          />
+        </div>
 
-              <textarea
-                placeholder="Project Description"
-                value={proj.description || ''}
-                onChange={(e) =>
-                  handleChange('projects', i, 'description', e.target.value)
-                }
-                rows={3}
-                className="border p-2 rounded-md w-full mb-2"
-              />
+        <textarea
+          placeholder="Project Description"
+          value={proj.description || ''}
+          onChange={(e) =>
+            handleChange('projects', i, 'description', e.target.value)
+          }
+          rows={3}
+          className="border p-2 rounded-md w-full mb-2"
+        />
+        <input
+          type="text"
+          placeholder="Project Link (optional)"
+          value={proj.link || ''}
+          onChange={(e) =>
+            handleChange('projects', i, 'link', e.target.value)
+          }
+          className="border p-2 rounded-md w-full"
+        />
+      </div>
+    )
+  )}
+</section>
 
-              <input
-                type="text"
-                placeholder="Project Link (optional)"
-                value={proj.link || ''}
-                onChange={(e) =>
-                  handleChange('projects', i, 'link', e.target.value)
-                }
-                className="border p-2 rounded-md w-full"
-              />
-            </div>
-          ))}
-        </section>
 
         {/* --- AI Suggestions Section --- */}
          {suggestions && (
           <section>
             <h2 className="text-2xl font-semibold mb-4 border-b pb-2 text-[#00bb98]">
-              AI Suggestions
+              Suggestions
             </h2>
 
             {/* Missing Details */}
