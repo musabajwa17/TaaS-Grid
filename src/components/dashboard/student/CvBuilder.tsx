@@ -1,7 +1,8 @@
 "use client";
 import React, { useState, FormEvent } from "react";
 import { Plus } from "lucide-react";
-import FinalizedResume from "./FinalizedResume";
+// import FinalizedResume from "./FinalizedResume";
+import FinalizedResume from "../../resume/FinalizedResume";
 interface Education {
   degree: string;
   institution: string;
@@ -126,7 +127,7 @@ const NewResume: React.FC = () => {
   }
 
   return (
-    <div className="max-w-5xl mx-auto p-8 bg-white shadow-xl border rounded-2xl my-20">
+    <div className="max-w-5xl mx-auto p-8 bg-white shadow-xl rounded-2x">
       <h1 className="text-3xl font-bold text-center text-green-600 mb-3">
         Create a New Resume
       </h1>

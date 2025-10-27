@@ -3,17 +3,21 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
+import { useAuth } from "@/context/AuthContext";
 
 const Header: React.FC = () => {
+  const { user, logout } = useAuth();
+  const router = useRouter();
+  const isLoggedIn = !!user;
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  // const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  useEffect(() => {
-    // Check localStorage for accessToken
-    const token = localStorage.getItem("accessToken");
-    setIsLoggedIn(!!token);
-  }, []);
+  // useEffect(() => {
+  //   // Check localStorage for accessToken
+  //   const token = localStorage.getItem("accessToken");
+  //   // setIsLoggedIn(!!token);
+  // }, []);
   const pathname = usePathname();
 
   useEffect(() => {
@@ -21,13 +25,14 @@ const Header: React.FC = () => {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
-   const handleLogout = () => {
-    // Clear all auth data
-    localStorage.removeItem("accessToken");
-    localStorage.removeItem("role");
-    localStorage.removeItem("userId");
-    setIsLoggedIn(false);
-    window.location.href = "/"; // redirect to home (or login)
+   const handleLogout = async () => {
+    try {
+      await logout();
+      // window.location.href = "/";
+       router.push("/");
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
   };
 
   // 🧭 Define your navigation structure (easy to extend later)
@@ -37,7 +42,7 @@ const Header: React.FC = () => {
     { name: "Services", href: "/services" },
     { name: "Contact", href: "/contact" },
     { name: "About", href: "/about" },
-    { name: "CV Forge", href: "/cvbuilder" },
+    // { name: "CV Forge", href: "/cvbuilder" },
   ];
   return (
     <>
@@ -112,24 +117,36 @@ const Header: React.FC = () => {
             {/* Right Side Buttons */}
             <div className="hidden md:flex items-center gap-5">
               {isLoggedIn ? (
-                <button
-                  onClick={handleLogout}
-                  className="relative text-gray-700 font-bold text-base hover:text-[#00bb98] transition-all duration-500 group"
-                >
-                  <span className="relative">Sign Out</span>
-                  <div className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-[#00bb98] to-[#00d4ae] group-hover:w-full transition-all duration-500 ease-out"></div>
-                </button>
-              ) : (
-                <Link
-                  href="/login"
-                  className="relative text-gray-700 font-bold text-base hover:text-[#00bb98] transition-all duration-500 group"
-                >
-                  <span className="relative">Sign In</span>
-                  <div className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-[#00bb98] to-[#00d4ae] group-hover:w-full transition-all duration-500 ease-out"></div>
-                </Link>
-              )}
+        <button
+          onClick={handleLogout}
+          className="relative px-10 py-3.5 bg-gradient-to-r from-green-600 to-emerald-600 text-white font-black text-base rounded-full hover:scale-110 transition-all duration-500 ease-out overflow-hidden group"
+        >
+          <span className="relative z-10 flex items-center gap-2">
+            Sign Out
+            <span className="group-hover:translate-x-1 transition-transform duration-500">
+              →
+            </span>
+          </span>
+          <div className="absolute inset-0 bg-gradient-to-r from-[#00d4ae] to-[#00bb98] opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+          <div className="absolute inset-0 bg-white/20 transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-out"></div>
+        </button>
+      ) : (
+        <Link
+          href="/login"
+          className="relative px-10 py-3.5 bg-gradient-to-r from-green-600 to-emerald-600 text-white font-black text-base rounded-full transition-all duration-500 ease-out overflow-hidden group"
+        >
+          <span className="relative z-10 flex items-center gap-2">
+            Login
+            <span className="group-hover:translate-x-1 transition-transform duration-500">
+              →
+            </span>
+          </span>
+          <div className="absolute inset-0 bg-gradient-to-r from-[#00d4ae] to-[#00bb98] opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+          <div className="absolute inset-0 bg-white/20 transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-out"></div>
+        </Link>
+      )}
 
-              <Link
+              {/* <Link
                 href="/career"
                 className="relative px-10 py-3.5 bg-gradient-to-r from-green-600 to-emerald-600 text-white font-black text-base rounded-full hover:scale-110 transition-all duration-500 ease-out overflow-hidden group"
               >
@@ -141,7 +158,7 @@ const Header: React.FC = () => {
                 </span>
                 <div className="absolute inset-0 bg-gradient-to-r from-[#00d4ae] to-[#00bb98] opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                 <div className="absolute inset-0 bg-white/20 transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-out"></div>
-              </Link>
+              </Link> */}
             </div>
 
             {/* Mobile Menu Button */}

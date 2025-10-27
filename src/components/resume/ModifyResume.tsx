@@ -1,7 +1,5 @@
 'use client';
 import { useEffect, useState } from 'react';
-import FinalizedResume from './FinalizedResume';
-import { ParsedData } from '../../types/ParsedData';
 import { useRouter } from "next/navigation";
 import { useUploadCV } from '@/hooks/useUploadCV';
 export default function ModifyResume() {

@@ -1,28 +1,26 @@
-"use client";
-import React, { useState, useEffect } from "react";
-import {
+// "use client";
+import React, { useState, useEffect } from 'react';
+import { 
+  Handshake, 
+  FolderSymlink, 
+  Lightbulb, 
+  Rocket, 
+  NotepadText, 
+  Star, 
+  TrendingUp, 
+  GraduationCap,
   Briefcase,
-  Brain,
-  Users,
-  Rocket,
-  Lightbulb,
   GitBranch,
   FileText,
-  GraduationCap,
   Zap,
-  Handshake,
-  FolderSymlink,
-  RocketIcon,
-  NotepadText,
-  Star,
-  TrendingUp,
-} from "lucide-react";
+  Brain
+} from 'lucide-react';
 
 const modules = [
   {
     name: "HireConnect",
     color: "from-blue-600 to-blue-700",
-    icon: <Handshake className="w-10 h-10 text-white" />,
+    icon: Handshake,
     angle: 0,
     content: {
       title1: "Job Posting",
@@ -31,9 +29,8 @@ const modules = [
       title4: "Shortlisting Tools",
       title5: "Interview Scheduling",
       title6: "Employer Dashboard",
-      description:
-        "Bridge the gap between talent and opportunity with AI-powered matching",
-      lucideIcon: Briefcase,
+      description: "Where employers post and candidates get hired",
+      lucideIcon: Handshake,
       buttonPrimary: "Find Talent",
       buttonSecondary: "Post Jobs",
     },
@@ -42,7 +39,7 @@ const modules = [
   {
     name: "FYP Bridge",
     color: "from-yellow-500 to-amber-500",
-    icon: <FolderSymlink className="w-10 h-10 text-white" />,
+    icon: FolderSymlink,
     angle: 45,
     content: {
       title1: "Project Selection",
@@ -51,9 +48,8 @@ const modules = [
       title4: "Submission Portal",
       title5: "Project Submission",
       title6: "Feedback & Evaluation",
-      description:
-        "Connect final year projects with industry needs and real-world solutions",
-      lucideIcon: GitBranch,
+      description: "Linking industry challenges with student projects",
+      lucideIcon: FolderSymlink,
       buttonPrimary: "Explore Projects",
       buttonSecondary: "Submit FYP",
     },
@@ -62,7 +58,7 @@ const modules = [
   {
     name: "Idea Vault",
     color: "from-blue-600 to-blue-700",
-    icon: <Lightbulb className="w-10 h-10 text-white" />,
+    icon: Lightbulb,
     angle: 90,
     content: {
       title1: "Idea Submission",
@@ -71,8 +67,7 @@ const modules = [
       title4: "Collaboration Requests",
       title5: "Voting / Rating System",
       title6: "Idea-to-Project Conversion",
-      description:
-        "Secure your innovations and transform ideas into market-ready solutions",
+      description: "A repository of project ideas for students",
       lucideIcon: Lightbulb,
       buttonPrimary: "Submit Ideas",
       buttonSecondary: "Browse Vault",
@@ -82,7 +77,7 @@ const modules = [
   {
     name: "ProjectHub",
     color: "from-yellow-500 to-amber-500",
-    icon: <RocketIcon className="w-10 h-10 text-white" />,
+    icon: Rocket,
     angle: 135,
     content: {
       title1: "Project Posting",
@@ -91,8 +86,7 @@ const modules = [
       title4: "Contracting & Escrow Payments",
       title5: "Project Progress Tracking",
       title6: "Review & Rating",
-      description:
-        "Centralized hub for managing student projects with industry mentorship",
+      description: "Marketplace for outsourcing projects",
       lucideIcon: Rocket,
       buttonPrimary: "Start Project",
       buttonSecondary: "View Hub",
@@ -102,18 +96,17 @@ const modules = [
   {
     name: "CV Forge",
     color: "from-blue-600 to-blue-700",
-    icon: <NotepadText className="w-10 h-10 text-white" />,
+    icon: NotepadText,
     angle: 180,
     content: {
       title1: "CV Templates",
       title2: "Skill-Based Sections",
       title3: "Cover Letter Generator",
-      title4: "Porfolio/Project Showcase",
+      title4: "Portfolio/Project Showcase",
       title5: "Export to PDF",
       title6: "One-Click Apply",
-      description:
-        "AI-powered resume builder that highlights your skills for employers",
-      lucideIcon: FileText,
+      description: "Crafting resumes that stand out",
+      lucideIcon: NotepadText,
       buttonPrimary: "Create CV",
       buttonSecondary: "View Templates",
     },
@@ -122,18 +115,17 @@ const modules = [
   {
     name: "TalentMatch AI",
     color: "from-yellow-500 to-amber-500",
-    icon: <Star className="w-10 h-10 text-white" />,
+    icon: Star,
     angle: 225,
     content: {
       title1: "CV Upload & Parsing",
       title2: "Skill Extraction",
       title3: "Auto-Match",
-      title4: "Recommandations",
+      title4: "Recommendations",
       title5: "Scoring System",
       title6: "Career Path Suggestions",
-      description:
-        "Intelligent algorithms matching candidates with perfect-fit opportunities",
-      lucideIcon: Zap,
+      description: "AI-powered CV analysis & automatic matching to jobs/projects",
+      lucideIcon: Star,
       buttonPrimary: "Get Matched",
       buttonSecondary: "See Matches",
     },
@@ -142,7 +134,7 @@ const modules = [
   {
     name: "SkillBoost Pro",
     color: "from-blue-600 to-blue-700",
-    icon: <TrendingUp className="w-10 h-10 text-white" />,
+    icon: TrendingUp,
     angle: 270,
     content: {
       title1: "Employer Training",
@@ -151,9 +143,8 @@ const modules = [
       title4: "Learning Management Dashboard",
       title5: "Employee Progress Tracking",
       title6: "Certification & Reporting",
-      description:
-        "Professional development programs tailored to industry demands",
-      lucideIcon: Brain,
+      description: "Company-led upskilling for employees",
+      lucideIcon: TrendingUp,
       buttonPrimary: "Start Learning",
       buttonSecondary: "View Courses",
     },
@@ -162,7 +153,7 @@ const modules = [
   {
     name: "LearnEdge",
     color: "from-yellow-500 to-amber-500",
-    icon: <GraduationCap className="w-10 h-10 text-white" />,
+    icon: GraduationCap,
     angle: 315,
     content: {
       title1: "Course Catalog",
@@ -171,8 +162,7 @@ const modules = [
       title4: "Practice Assignment & Quizzes",
       title5: "Discussions & Communities",
       title6: "Certificates & Badges",
-      description:
-        "Cutting-edge learning platform connecting education with career success",
+      description: "students/job seekers upskill themselves individually",
       lucideIcon: GraduationCap,
       buttonPrimary: "Join Platform",
       buttonSecondary: "Explore Learning",
@@ -181,57 +171,55 @@ const modules = [
   },
 ];
 
-export default function HeroSection() {
+const HeroSection = () => {
   const [activeModule, setActiveModule] = useState(0);
-  const [poppedModules, setPoppedModules] = useState<number[]>([]);
   const [isHovered, setIsHovered] = useState(false);
+  const [hoveredModule, setHoveredModule] = useState<number | null>(null);
+  const [animationPhase, setAnimationPhase] = useState(0);
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setActiveModule((prev) => {
-        setPoppedModules((prevPopped) => [...prevPopped, prev]);
-        setTimeout(() => {
-          setPoppedModules((prevPopped) =>
-            prevPopped.filter((m) => m !== prev)
-          );
-        }, 3000);
-        return (prev + 1) % modules.length;
-      });
-    }, 3000);
+    if (animationPhase < modules.length) {
+      const timer = setTimeout(() => {
+        setAnimationPhase(prev => prev + 1);
+      }, 300);
+      return () => clearTimeout(timer);
+    }
+  }, [animationPhase]);
 
-    return () => clearInterval(interval);
-  }, []); // run once on mount
+  useEffect(() => {
+    if (!isHovered && animationPhase >= modules.length) {
+      const interval = setInterval(() => {
+        setActiveModule(prev => (prev + 1) % modules.length);
+      }, 3000);
+      return () => clearInterval(interval);
+    }
+  }, [isHovered, animationPhase]);
 
-  const getPosition = (index: number) => {
-    const angle = (modules[index].angle - 90) * (Math.PI / 180);
-    const radius = 220;
+  const displayModule = hoveredModule !== null ? hoveredModule : activeModule;
+  const currentModule = modules[displayModule];
+  
+  const isYellow = currentModule.color.includes('yellow');
+
+  const getModulePosition = (angle: number, radius: number) => {
+    const radian = (angle - 90) * (Math.PI / 180);
     return {
-      x: Math.cos(angle) * radius,
-      y: Math.sin(angle) * radius,
+      x: radius * Math.cos(radian),
+      y: radius * Math.sin(radian),
     };
   };
 
-  const activeContent = modules[activeModule].content;
-  const ActiveIcon = activeContent.lucideIcon;
-  const isBlueModule = modules[activeModule].color.includes("blue");
-
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-slate-100 relative overflow-hidden mt-10">
-      {/* Hexagonal Network Background */}
+    <div className="relative min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-slate-100 overflow-hidden">
+      {/* Connected Hexagon Background */}
       <div className="absolute inset-0 opacity-10">
         <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
           <defs>
-            <pattern
-              id="hexagons"
-              width="100"
-              height="86.6"
-              patternUnits="userSpaceOnUse"
-            >
-              <polygon
-                points="50,0 93.3,25 93.3,75 50,100 6.7,75 6.7,25"
-                fill="none"
-                stroke="#3b82f6"
-                strokeWidth="1.5"
+            <pattern id="hexagons" width="100" height="86.6" patternUnits="userSpaceOnUse">
+              <polygon 
+                points="50,0 93.3,25 93.3,75 50,100 6.7,75 6.7,25" 
+                fill="none" 
+                stroke="#3b82f6" 
+                strokeWidth="2"
               />
             </pattern>
           </defs>
@@ -239,474 +227,261 @@ export default function HeroSection() {
         </svg>
       </div>
 
-      {/* Animated Network Dots */}
-      <div className="absolute top-1/4 left-1/4 w-2 h-2 bg-blue-400 rounded-full animate-pulse"></div>
-      <div
-        className="absolute top-1/3 right-1/3 w-3 h-3 bg-blue-500 rounded-full animate-pulse"
-        style={{ animationDelay: "0.5s" }}
-      ></div>
-      <div
-        className="absolute bottom-1/4 left-1/3 w-2 h-2 bg-blue-400 rounded-full animate-pulse"
-        style={{ animationDelay: "1s" }}
-      ></div>
-      <div
-        className="absolute top-2/3 right-1/4 w-3 h-3 bg-blue-500 rounded-full animate-pulse"
-        style={{ animationDelay: "1.5s" }}
-      ></div>
+      <div className="relative z-10 mx-auto px-12 py-12 lg:px-20 lg:py-20">
+        <div className="grid lg:grid-cols-2 gap-20 items-center">
+          
+          {/* Left Side - Content */}
+          <div className="space-y-10">
+  {/* 🟢 Description (Top → Bottom) */}
+  <div
+    className="transition-all duration-1000 ease-out"
+    style={{
+      opacity: animationPhase >= displayModule ? 1 : 0,
+      transform:
+        animationPhase >= displayModule
+          ? "translateY(0)"
+          : "translateY(-80px)", // moved further up for smoother drop
+      transition: "all 1s ease-out",
+    }}
+  >
+    <h1
+      className={`text-2xl lg:text-4xl font-extrabold bg-gradient-to-r ${currentModule.color} bg-clip-text text-transparent leading-tight mb-6`}
+    >
+      {currentModule.content.description}
+    </h1>
+  </div>
 
-      <div className="relative z-10 container mx-auto px-6 py-10 flex items-center min-h-screen">
-        <div className="grid lg:grid-cols-2 gap-20 items-center w-full">
-          {/* Left Content - Dynamic based on active module */}
-          <div className="space-y-8 mx-8">
-            <div className="space-y-6">
-              <div className="flex flex-col space-y-4">
-                {/* Dynamic Title 1 */}
-                <p
-                  key={`desc-${activeModule}`}
-                  className={`text-3xl leading-relaxed max-w-xl animate-slideInLeft font-bold transition-all duration-500 ${
-                    isBlueModule ? "text-yellow-600" : " text-blue-700"
-                  }`}
-                  style={{ animationDelay: "0.45s" }}
-                >
-                  {activeContent.description}
-                </p>
-                {/* <div
-                  key={`title1-${activeModule}`}
-                  className="flex items-center gap-4 animate-slideInLeft"
-                  style={{ animationDelay: "0s" }}
-                >
-                  <div
-                    className={`p-3 rounded-2xl transition-colors duration-500 ${
-                      isBlueModule ? "bg-yellow-500/10" : "bg-blue-600/10 "
-                    }`}
-                  >
-                    <ActiveIcon
-                      className={`w-6 h-6 transition-colors duration-500 ${
-                        isBlueModule ? "text-yellow-600" : "text-blue-600"
-                      }`}
-                    />
-                  </div>
-                  <h2
-                    className={`text-2xl leading-tight tracking-tight transition-colors duration-500 ${
-                      isBlueModule ? "text-yellow-600 " : "text-blue-700"
-                    }`}
-                  >
-                    {activeContent.title1}
-                  </h2>
-                </div> */}
-                <div className="max-w-lg grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 mt-6">
-                  <div
-                    key={`title1-${activeModule}`}
-                    className={`flex flex-col items-center justify-center mx-3 text-center p-2 rounded-2xl shadow-md transition-all duration-500 hover:shadow-lg ${
-                      isBlueModule ? "bg-yellow-50" : "bg-blue-50"
-                    } animate-slideInLeft`}
-                    style={{ animationDelay: "0s" }}
-                  >
-                    <div
-                      className={`p-2 rounded-full mb-2 transition-colors duration-500 ${
-                        isBlueModule ? "bg-yellow-500/10" : "bg-blue-600/10"
-                      }`}
-                    >
-                      <ActiveIcon
-                        className={`w-5 h-5 transition-colors duration-500 ${
-                          isBlueModule ? "text-yellow-600" : "text-blue-600"
-                        }`}
-                      />
-                    </div>
+  {/* 🟣 Feature Cards (Left → Right) */}
+  <div className="grid grid-cols-3 gap-5 w-125">
+    {[1, 2, 3, 4, 5, 6].map((num) => {
+      type TitleKey =
+        | "title1"
+        | "title2"
+        | "title3"
+        | "title4"
+        | "title5"
+        | "title6";
+      const titleKey = `title${num}` as TitleKey;
+      const icons = [Briefcase, GitBranch, Lightbulb, Rocket, FileText, Zap];
+      const CardIcon = icons[num - 1];
+      const titleValue = String((currentModule.content as any)[titleKey]);
 
-                    <h2
-                      className={`text-xs leading-tight tracking-tight transition-colors duration-500 ${
-                        isBlueModule ? "text-yellow-600" : "text-blue-700"
-                      }`}
-                    >
-                      {activeContent.title1}
-                    </h2>
-                  </div>
-                  <div
-                    key={`title2-${activeModule}`}
-                    className={`flex flex-col items-center justify-center mx-5 text-center p-2 rounded-2xl shadow-md transition-all duration-500 hover:shadow-lg ${
-                      isBlueModule ? "bg-yellow-50" : "bg-blue-50"
-                    } animate-slideInLeft`}
-                    style={{ animationDelay: "0s" }}
-                  >
-                    <div
-                      className={`p-2 rounded-full mb-2 transition-colors duration-500 ${
-                        isBlueModule ? "bg-yellow-500/10" : "bg-blue-600/10"
-                      }`}
-                    >
-                      <ActiveIcon
-                        className={`w-5 h-5 transition-colors duration-500 ${
-                          isBlueModule ? "text-yellow-600" : "text-blue-600"
-                        }`}
-                      />
-                    </div>
-
-                    <h2
-                      className={`text-xs leading-tight tracking-tight transition-colors duration-500 ${
-                        isBlueModule ? "text-yellow-600" : "text-blue-700"
-                      }`}
-                    >
-                      {activeContent.title2}
-                    </h2>
-                  </div>
-                  <div
-                    key={`title3-${activeModule}`}
-                    className={`flex flex-col items-center justify-center mx-3 text-center p-2 rounded-2xl shadow-md transition-all duration-500 hover:shadow-lg ${
-                      isBlueModule ? "bg-yellow-50" : "bg-blue-50"
-                    } animate-slideInLeft`}
-                    style={{ animationDelay: "0s" }}
-                  >
-                    <div
-                      className={`p-2 rounded-full mb-2 transition-colors duration-500 ${
-                        isBlueModule ? "bg-yellow-500/10" : "bg-blue-600/10"
-                      }`}
-                    >
-                      <ActiveIcon
-                        className={`w-5 h-5 transition-colors duration-500 ${
-                          isBlueModule ? "text-yellow-600" : "text-blue-600"
-                        }`}
-                      />
-                    </div>
-
-                    <h2
-                      className={`text-xs leading-tight tracking-tight transition-colors duration-500 ${
-                        isBlueModule ? "text-yellow-600" : "text-blue-700"
-                      }`}
-                    >
-                      {activeContent.title3}
-                    </h2>
-                  </div>
-                  <div
-                    key={`title4-${activeModule}`}
-                    className={`flex flex-col items-center justify-center mx-3 text-center p-2 rounded-2xl shadow-md transition-all duration-500 hover:shadow-lg ${
-                      isBlueModule ? "bg-yellow-50" : "bg-blue-50"
-                    } animate-slideInLeft`}
-                    style={{ animationDelay: "0s" }}
-                  >
-                    <div
-                      className={`p-2 rounded-full mb-2 transition-colors duration-500 ${
-                        isBlueModule ? "bg-yellow-500/10" : "bg-blue-600/10"
-                      }`}
-                    >
-                      <ActiveIcon
-                        className={`w-5 h-5 transition-colors duration-500 ${
-                          isBlueModule ? "text-yellow-600" : "text-blue-600"
-                        }`}
-                      />
-                    </div>
-
-                    <h2
-                      className={`text-xs leading-tight tracking-tight transition-colors duration-500 ${
-                        isBlueModule ? "text-yellow-600" : "text-blue-700"
-                      }`}
-                    >
-                      {activeContent.title4}
-                    </h2>
-                  </div>
-                  <div
-                    key={`title5-${activeModule}`}
-                    className={`flex flex-col items-center justify-center mx-3 text-center p-2 rounded-2xl shadow-md transition-all duration-500 hover:shadow-lg ${
-                      isBlueModule ? "bg-yellow-50" : "bg-blue-50"
-                    } animate-slideInLeft`}
-                    style={{ animationDelay: "0s" }}
-                  >
-                    <div
-                      className={`p-2 rounded-full mb-2 transition-colors duration-500 ${
-                        isBlueModule ? "bg-yellow-500/10" : "bg-blue-600/10"
-                      }`}
-                    >
-                      <ActiveIcon
-                        className={`w-5 h-5 transition-colors duration-500 ${
-                          isBlueModule ? "text-yellow-600" : "text-blue-600"
-                        }`}
-                      />
-                    </div>
-
-                    <h2
-                      className={`text-xs leading-tight tracking-tight transition-colors duration-500 ${
-                        isBlueModule ? "text-yellow-600" : "text-blue-700"
-                      }`}
-                    >
-                      {activeContent.title5}
-                    </h2>
-                  </div>
-                  <div
-                    key={`title6-${activeModule}`}
-                    className={`flex flex-col items-center justify-center mx-3 text-center p-2 rounded-2xl shadow-md transition-all duration-500 hover:shadow-lg ${
-                      isBlueModule ? "bg-yellow-50" : "bg-blue-50"
-                    } animate-slideInLeft`}
-                    style={{ animationDelay: "0s" }}
-                  >
-                    <div
-                      className={`p-2 rounded-full mb-2 transition-colors duration-500 ${
-                        isBlueModule ? "bg-yellow-500/10" : "bg-blue-600/10"
-                      }`}
-                    >
-                      <ActiveIcon
-                        className={`w-5 h-5 transition-colors duration-500 ${
-                          isBlueModule ? "text-yellow-600" : "text-blue-600"
-                        }`}
-                      />
-                    </div>
-
-                    <h2
-                      className={`text-xs leading-tight tracking-tight transition-colors duration-500 ${
-                        isBlueModule ? "text-yellow-600" : "text-blue-700"
-                      }`}
-                    >
-                      {activeContent.title6}
-                    </h2>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Dynamic Buttons */}
+      return (
+        <div
+          key={num}
+          className={`group relative bg-white rounded-2xl p-3 border-2 transition-all duration-700 hover:-translate-y-4 hover:shadow-2xl cursor-pointer ${
+            isYellow
+              ? "border-amber-200 hover:border-amber-400 hover:shadow-amber-500/30"
+              : "border-blue-200 hover:border-blue-400 hover:shadow-blue-500/30"
+          }`}
+          style={{
+            opacity: animationPhase >= displayModule ? 1 : 0,
+            transform:
+              animationPhase >= displayModule
+                ? "translateX(0)"
+                : "translateX(-100px)", // slide in from left
+            transitionDelay: `${num * 120}ms`,
+            transition: "all 0.8s ease-out",
+          }}
+        >
+          <div className="flex flex-col items-center text-center space-y-3 ">
             <div
-              key={`buttons-${activeModule}`}
-              className="flex flex-wrap gap-4 animate-slideInLeft"
-              style={{ animationDelay: "0.6s" }}
+              className={`w-10 h-10 rounded-xl bg-gradient-to-br ${currentModule.color} flex items-center justify-center group-hover:scale-125 group-hover:rotate-12 transition-all duration-700 shadow-lg`}
             >
-              <button
-                className={`group px-8 py-2 rounded-full text-white font-bold text-lg shadow-lg hover:shadow-2xl hover:scale-105 transition-all duration-300 flex items-center gap-3 ${
-                  isBlueModule
-                    ? "bg-yellow-500 hover:bg-yellow-600"
-                    : "bg-blue-600 hover:bg-blue-700 "
-                }`}
-              >
-                {activeContent.buttonPrimary}
-                <span className="text-xl group-hover:translate-x-2 transition-transform duration-300">
-                  →
-                </span>
-              </button>
-
-              <button
-                className={`group px-8 py-2 bg-white rounded-full font-bold text-lg shadow-md hover:shadow-lg hover:scale-105 transition-all duration-300 flex items-center gap-3 border-2 ${
-                  isBlueModule
-                    ? "border-yellow-500 text-yellow-600 hover:bg-yellow-50"
-                    : "border-blue-600 text-blue-600 hover:bg-blue-50 "
-                }`}
-              >
-                {activeContent.buttonSecondary}
-                <span className="text-xl group-hover:translate-x-2 transition-transform duration-300">
-                  →
-                </span>
-              </button>
+              <CardIcon className="w-5 h-5 text-white" />
             </div>
+            <p
+              className={`text-xs font-bold leading-tight bg-gradient-to-r ${currentModule.color} bg-clip-text text-transparent`}
+            >
+              {titleValue}
+            </p>
           </div>
+          <div
+            className={`absolute inset-0 rounded-2xl bg-gradient-to-br ${currentModule.color} opacity-0 group-hover:opacity-5 transition-opacity duration-700`}
+          ></div>
+        </div>
+      );
+    })}
+  </div>
 
-          {/* Right Side - Circular Module Layout */}
+  {/* 🟠 Buttons (Bottom → Top) */}
+  <div
+    className="flex gap-5 pt-4"
+    style={{
+      opacity: animationPhase >= displayModule ? 1 : 0,
+      transform:
+        animationPhase >= displayModule
+          ? "translateY(0)"
+          : "translateY(80px)", // slide up from bottom
+      transitionDelay: "900ms",
+      transition: "all 1s ease-out",
+    }}
+  >
+    <button
+      className={`group relative px-8 py-3 bg-gradient-to-r ${currentModule.color} text-white rounded-2xl font-bold text-base overflow-hidden transition-all duration-700 hover:scale-105 hover:-translate-y-1 ${
+        isYellow
+          ? "hover:shadow-2xl hover:shadow-amber-500/50"
+          : "hover:shadow-2xl hover:shadow-blue-500/50"
+      }`}
+    >
+      <span className="relative z-10">
+        {currentModule.content.buttonPrimary}
+      </span>
+      <div className="absolute inset-0 bg-white opacity-0 group-hover:opacity-20 transition-opacity duration-700"></div>
+    </button>
+
+    <button
+      className={`group relative px-8 bg-white text-gray-800 rounded-2xl font-bold text-lg border-2 overflow-hidden transition-all duration-700 hover:scale-105 hover:-translate-y-1 hover:shadow-xl ${
+        isYellow
+          ? "border-amber-300 hover:border-amber-500"
+          : "border-blue-300 hover:border-blue-500"
+      }`}
+    >
+      <span
+        className={`relative z-10 bg-gradient-to-r ${currentModule.color} bg-clip-text text-transparent`}
+      >
+        {currentModule.content.buttonSecondary}
+      </span>
+      <div
+        className={`absolute inset-0 bg-gradient-to-r ${currentModule.color} opacity-0 group-hover:opacity-10 transition-opacity duration-700`}
+      ></div>
+    </button>
+  </div>
+</div>
+
+
+          {/* Right Side - Circular Module Display */}
           <div className="relative flex items-center justify-center h-[650px]">
-            <div className="relative w-full h-full flex items-center justify-center">
-              {/* Center Circle - Domains Included */}
-              <div className="absolute z-30 w-45 h-45 rounded-full bg-gradient-to-br from-blue-600 via-blue-700 to-blue-800 shadow-2xl flex items-center justify-center">
-                <div className="text-center rounded-full overflow-hidden w-full h-full">
-                  <img
-                    src="/logo3.jpg"
-                    alt="Logo"
-                    className="w-full h-full object-cover rounded-full"
-                  />
+            {/* Central Circle with Module Name */}
+            <div className="absolute inset-0 flex items-center justify-center">
+              <div className="relative">
+                <div className={`w-42 h-42 rounded-full bg-gradient-to-br ${currentModule.color} shadow-2xl flex flex-col items-center justify-center transition-all duration-1000 ${
+                  isYellow ? 'shadow-amber-500/40' : 'shadow-blue-500/40'
+                }`}>
+                  {React.createElement(currentModule.content.lucideIcon, {
+                    className: "w-15 h-15 text-white mb-2",
+                  })}
+                  <p className="text-sm font-bold text-white text-center px-2">
+                    {currentModule.name}
+                  </p>
                 </div>
               </div>
+            </div>
 
-              {/* Orbital Rings */}
-              <div className="absolute w-[500px] h-[500px] rounded-full border-2 border-blue-200/50"></div>
-              <div className="absolute w-[520px] h-[520px] rounded-full border border-blue-100/30"></div>
+            {/* Orbiting Modules */}
+            {modules.map((module, index) => {
+              const pos = getModulePosition(module.angle, 200);
+              const isActive = index === displayModule;
+              const isVisible = animationPhase > index;
+              const Icon = module.icon;
+              const moduleIsYellow = module.color.includes('yellow');
 
-              {/* Circular Modules */}
-              {modules.map((module, index) => {
-                const pos = getPosition(index);
-                const isActive = activeModule === index;
-                const isPopped = poppedModules.includes(index);
-
-                return (
+              return (
+                <div
+                  key={index}
+                  className="absolute transition-all duration-1000 ease-out cursor-pointer"
+                  style={{
+                    left: '50%',
+                    top: '50%',
+                    transform: `translate(calc(-50% + ${pos.x}px), calc(-50% + ${pos.y}px)) scale(${isActive ? 1.1 : 0.9}) rotate(${module.angle}deg)`,
+                    opacity: isVisible ? 1 : 0,
+                    transitionDelay: `${index * 100}ms`,
+                    zIndex: isActive ? 20 : 10,
+                  }}
+                  onMouseEnter={() => {
+                    setIsHovered(true);
+                    setHoveredModule(index);
+                  }}
+                  onMouseLeave={() => {
+                    setIsHovered(false);
+                    setHoveredModule(null);
+                  }}
+                >
                   <div
-                    key={index}
-                    className="absolute transition-all duration-700 cursor-pointer"
+                    className="relative group"
                     style={{
-                      transform: `translate(${pos.x}px, ${pos.y}px) scale(${
-                        isPopped ? 1.2 : 0.9
-                      })`,
-                      zIndex: isPopped ? 25 : 18,
-                      // animation: isPopped
-                      //   ? "popBounce 1s cubic-bezier(0.25, 1.1, 0.3, 1)"
-                      //   : "none",
+                      transform: `rotate(-${module.angle}deg)`,
                     }}
-                    // onMouseEnter={(e) =>
-                    //   (e.currentTarget.style.animation =
-                    //     "popBounce 1s cubic-bezier(0.25, 1.1, 0.3, 1)")
-                    // }
-                    // onMouseLeave={(e) =>
-                    //   (e.currentTarget.style.animation = "none")
-                    // }
-                    onClick={() => setActiveModule(index)}
                   >
-                    {/* Module Card with Enhanced Effects */}
                     <div
-                      className={`relative w-32 h-32 rounded-3xl bg-gradient-to-br ${
-                        module.color
-                      } shadow-2xl hover:shadow-3xl transition-all duration-700 flex flex-col items-center justify-center group overflow-hidden border-4 border-white/20
-                      ${isPopped ? "animate-popBounce" : ""}`}
+                      className={`relative w-30 h-30 rounded-2xl bg-gradient-to-br ${module.color} shadow-xl flex flex-col items-center justify-center transition-all duration-1000 ease-out ${
+                        isActive ? 'ring-4 ring-white ring-offset-4 ring-offset-slate-100' : ''
+                      } group-hover:-translate-y-4 group-hover:scale-110 group-hover:ring-4 group-hover:ring-white group-hover:ring-offset-4 group-hover:ring-offset-slate-100 ${
+                        moduleIsYellow ? 'group-hover:shadow-2xl group-hover:shadow-amber-500/50' : 'group-hover:shadow-2xl group-hover:shadow-blue-500/50'
+                      }`}
                     >
-                      {/* Shine Effect */}
-                      <div
-                        className={`absolute inset-0 bg-gradient-to-tr from-transparent via-white/20 to-transparent transition-all duration-1000 ${
-                          isPopped
-                            ? "opacity-100 translate-x-0"
-                            : "opacity-0 -translate-x-full"
-                        }`}
-                      ></div>
-
-                      <div className="relative z-10 text-center">
-                        <div
-                          className={`text-5xl mb-2 flex justify-center transition-all duration-700 drop-shadow-2xl ${
-                            isPopped ? "scale-125 rotate-12" : "scale-100"
-                          }`}
-                        >
-                          {module.icon}
-                        </div>
-                        <p className="text-white font-bold text-sm px-2 leading-tight drop-shadow-lg">
+                      <div className="flex flex-col items-center justify-center space-y-2">
+                        {React.createElement(Icon, {
+                          className: "w-14 h-14 text-white",
+                        })}
+                        <p className="text-white text-xs font-bold text-center px-2">
                           {module.name}
                         </p>
-                        <p className="text-white text-xs px-2 leading-tight drop-shadow-lg">
-                          {module.keywords}
-                        </p>
                       </div>
-
-                      {/* Multiple Pulse Rings when Popped */}
-                      {isPopped && (
-                        <>
-                          <div className="absolute inset-0 animate-pingRing"></div>
-                          <div
-                            className="absolute inset-0 animate-pingRing"
-                            style={{ animationDelay: "0.2s" }}
-                          ></div>
-                        </>
-                      )}
                     </div>
-
-                    {/* Enhanced Side Label with Dot */}
-                    <div
-                      className="absolute top-1/2 -translate-y-1/2 flex items-center gap-2"
-                      style={{
-                        left: pos.x > 0 ? "100%" : "auto",
-                        right: pos.x < 0 ? "100%" : "auto",
-                        marginLeft: pos.x > 0 ? "12px" : "0",
-                        marginRight: pos.x < 0 ? "12px" : "0",
-                      }}
-                    >
-                      <div
-                        className={`w-3 h-3 rounded-full transition-all duration-700 ${
-                          isActive
-                            ? "bg-yellow-400 animate-pulse shadow-lg shadow-yellow-400/50 scale-125"
-                            : "bg-blue-400/50"
-                        }`}
-                      ></div>
-                      <div
-                        className={`h-px w-6 transition-all duration-700 ${
-                          isActive
-                            ? "bg-yellow-400 shadow-sm shadow-yellow-400"
-                            : "bg-blue-400/50"
-                        }`}
-                      ></div>
-                    </div>
+                    {/* <div className="absolute -bottom-12 left-1/2 transform -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-all duration-700 group-hover:-translate-y-1">
+                      <p className={`text-xs font-semibold whitespace-nowrap bg-white px-4 py-2 rounded-xl backdrop-blur-sm border-2 shadow-lg ${
+                        moduleIsYellow 
+                          ? 'border-amber-300 text-amber-700' 
+                          : 'border-blue-300 text-blue-700'
+                      }`}>
+                        {module.keywords}
+                      </p>
+                    </div> */}
                   </div>
-                );
+                </div>
+              );
+            })}
+
+            {/* Connecting Lines with Glow */}
+            {/* <svg className="absolute inset-0 w-full h-full pointer-events-none">
+              <defs>
+                <filter id="glow">
+                  <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+                  <feMerge>
+                    <feMergeNode in="coloredBlur"/>
+                    <feMergeNode in="SourceGraphic"/>
+                  </feMerge>
+                </filter>
+              </defs>
+              {modules.map((module, index) => {
+                if (index === displayModule) {
+                  const pos = getModulePosition(module.angle, 180);
+                  return (
+                    <line
+                      key={index}
+                      x1="50%"
+                      y1="50%"
+                      x2={`calc(50% + ${pos.x}px)`}
+                      y2={`calc(50% + ${pos.y}px)`}
+                      stroke={isYellow ? "#f59e0b" : "#3b82f6"}
+                      strokeWidth="4"
+                      className="animate-pulse"
+                      filter="url(#glow)"
+                      opacity="0.7"
+                    />
+                  );
+                }
+                return null;
               })}
-            </div>
+            </svg> */}
+
+            {/* Orbit Rings */}
+            {/* <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+              <div className={`w-[360px] h-[360px] rounded-full border-2 animate-pulse ${
+                isYellow ? 'border-amber-300/30' : 'border-blue-300/30'
+              }`} style={{ animationDuration: '3s' }}></div>
+              <div className={`absolute w-[400px] h-[400px] rounded-full border animate-pulse ${
+                isYellow ? 'border-amber-200/20' : 'border-blue-200/20'
+              }`} style={{ animationDuration: '4s' }}></div>
+            </div> */}
           </div>
         </div>
       </div>
 
-      <style jsx>{`
-        @keyframes slideInLeft {
-          from {
-            opacity: 0;
-            transform: translateX(-80px);
-          }
-          to {
-            opacity: 1;
-            transform: translateX(0);
-          }
-        }
-
-        @keyframes popBounce {
-          0% {
-            transform: scale(0.8);
-          }
-          60% {
-            transform: scale(1);
-          }
-          100% {
-            transform: scale(1);
-          }
-        }
-
-        @keyframes pingRing {
-          0% {
-            transform: scale(1);
-            opacity: 1;
-          }
-          100% {
-            transform: scale(1.8);
-            opacity: 0;
-          }
-        }
-
-        @keyframes float {
-          0%,
-          100% {
-            transform: translateY(0px) translateX(0px);
-            opacity: 0.3;
-          }
-          50% {
-            transform: translateY(-20px) translateX(10px);
-            opacity: 0.6;
-          }
-        }
-
-        @keyframes slowSpin {
-          from {
-            transform: rotate(0deg);
-          }
-          to {
-            transform: rotate(360deg);
-          }
-        }
-
-        @keyframes slowSpinReverse {
-          from {
-            transform: rotate(360deg);
-          }
-          to {
-            transform: rotate(0deg);
-          }
-        }
-
-        .animate-slideInLeft {
-          animation: slideInLeft 1s cubic-bezier(0.16, 1, 0.3, 1) backwards;
-        }
-
-        .animate-popBounce {
-          animation: popBounce 1.2s cubic-bezier(0.24, 1.12, 0.48, 0.8);
-        }
-
-        .animate-pingRing {
-          animation: pingRing 1.2s cubic-bezier(0.4, 0, 0.6, 1);
-        }
-
-        .animate-float {
-          animation: float 8s ease-in-out infinite;
-        }
-
-        .animate-slowSpin {
-          animation: slowSpin 30s linear infinite;
-        }
-
-        .animate-slowSpinReverse {
-          animation: slowSpinReverse 40s linear infinite;
-        }
-      `}</style>
+      {/* Floating Particles - REMOVED */}
     </div>
   );
-}
+};
+
+export default HeroSection;

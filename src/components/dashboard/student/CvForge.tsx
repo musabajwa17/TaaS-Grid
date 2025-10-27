@@ -10,8 +10,8 @@ import {
 } from "lucide-react";
 import { useUploadResume } from "@/hooks/useUploadResume";
 import { useRouter } from "next/navigation";
-import ResumeTemplate from "../resume/ResumeTemplate";
-export default function ResumeParser() {
+import ResumeTemplate from "../../resume/ResumeTemplate";
+export default function CvForge() {
   const router = useRouter();
   const [file, setFile] = useState<File | null>(null);
   const [dragActive, setDragActive] = useState(false);
@@ -59,9 +59,9 @@ export default function ResumeParser() {
       handleUpload(droppedFile);
     }
   };
- const handleNewResume = () => {
-      router.push("/newresume")
- }
+  const handleNewResume = () => {
+    router.push("/newresume");
+  };
   // Download placeholder
   const downloadPDF = () => {
     alert("PDF download requires integration with jsPDF or similar library");
@@ -71,10 +71,10 @@ export default function ResumeParser() {
     router.push("/enrichcv");
   };
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 p-6 mt-18">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 p-6">
       <div className="max-w-5xl mx-auto">
         {/* Header */}
-        <div className="text-center mb-8">
+        {/* <div className="text-center mb-8">
           <h1 className="text-4xl font-bold text-gray-800 mb-2">
             Resume Parser & Builder
           </h1>
@@ -88,7 +88,7 @@ export default function ResumeParser() {
           >
             Create New Resume
           </button>
-        </div>
+        </div> */}
 
         {/* Error */}
         {error && (
@@ -103,8 +103,8 @@ export default function ResumeParser() {
             <div
               className={`border-3 border-dashed rounded-xl p-12 text-center transition-all ${
                 dragActive
-                  ? "border-indigo-500 bg-indigo-50"
-                  : "border-gray-300 hover:border-indigo-400"
+                  ? "border-emerald-500 bg-emerald-50"
+                  : "border-gray-300 hover:border-emerald-400"
               }`}
               onDragEnter={handleDrag}
               onDragLeave={handleDrag}
@@ -123,25 +123,36 @@ export default function ResumeParser() {
                 </div>
               ) : (
                 <>
-                  <Upload className="w-16 h-16 text-indigo-600 mx-auto mb-4" />
+                  <Upload className="w-16 h-16 text-emerald-600 mx-auto mb-4" />
                   <h3 className="text-xl font-semibold text-gray-700 mb-2">
                     Drop your resume here
                   </h3>
-                  <p className="text-gray-500 mb-6">or click to browse</p>
+                  <p className="text-gray-500 mb-4">or click to browse</p>
+
                   <input
                     type="file"
-                    accept=".pdf"
+                    accept=".pdf,.doc,.docx"
                     onChange={handleFileChange}
                     className="hidden"
                     id="file-upload"
                   />
+
                   <label
                     htmlFor="file-upload"
-                    className="inline-flex items-center px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 cursor-pointer transition-colors"
+                    className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-emerald-600 to-teal-600 text-white rounded-lg hover:bg-indigo-700 cursor-pointer transition-colors"
                   >
                     <FileText className="w-5 h-5 mr-2" />
-                    Select PDF File
+                    Upload PDF or Word Document
                   </label>
+
+                  <p className="text-sm text-gray-400 mt-3">
+                    Supported formats:{" "}
+                    <span className="font-medium text-gray-600">
+                      .pdf, .doc, .docx
+                    </span>{" "}
+                    — Max file size:{" "}
+                    <span className="font-medium text-gray-600">2 MB</span>
+                  </p>
                 </>
               )}
             </div>

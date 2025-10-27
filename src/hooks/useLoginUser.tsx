@@ -1,5 +1,4 @@
 import { useState } from "react";
-import axios from "axios";
 import toast from "react-hot-toast";
 import api from "@/utils/axiosInstance";
 
@@ -8,7 +7,7 @@ const BASE_URL = process.env.BASE_URL;
 
 export const useLoginUser = () => {
   const [loading, setLoading] = useState(false);
-
+  const [userLogin, setUserLogin] = useState<any>(null);
   const loginUser = async (email: string, password: string) => {
     console.log("Login Credentials", email, password);
     setLoading(true);
@@ -18,9 +17,16 @@ export const useLoginUser = () => {
         email,
         password,
       });
+      
+// Log the full JSON
+console.log("Login Response:", response.data);
+
+// Set the entire JSON object to your state
+setUserLogin(response.data);
       const { user, accessToken, refreshToken } = response.data;
-      console.log("User Login", user);
-      console.log("Login Response:", response.data);
+      // setUser(user);
+      // console.log("User Login", user);
+      // console.log("Login Response:", response.data);
       localStorage.setItem("user", JSON.stringify(user)); // contains _id, fullName, role, email
       localStorage.setItem("accessToken", accessToken);
       localStorage.setItem("refreshToken", refreshToken);
@@ -53,5 +59,5 @@ export const useLoginUser = () => {
     }
   };
 
-  return { loginUser, logout, loading };
+  return { loginUser,userLogin, logout, loading };
 };

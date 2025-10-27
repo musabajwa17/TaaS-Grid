@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useLoginUser } from "@/hooks/useLoginUser";
 import { useRouter } from "next/navigation";
 
-const PRIMARY_COLOR_HEX = "#00BB98";
+// const PRIMARY_COLOR_HEX = "#00BB98";
 
 const features = [
   {
@@ -35,7 +35,7 @@ export default function Login() {
     try {
        console.log("Login Api")
       const response = await loginUser(email, password);
-      route.push("/");
+      route.push("/userdashboard");
     } catch (err) {
       console.log("Error login", err)
     }
@@ -83,7 +83,7 @@ export default function Login() {
               >
                 <f.icon
                   className="h-6 w-6 flex-shrink-0 mt-1"
-                  style={{ color: PRIMARY_COLOR_HEX }}
+                  // style={{ color: PRIMARY_COLOR_HEX }}
                 />
                 <div>
                   <h3 className="font-semibold text-gray-900">{f.title}</h3>
@@ -141,8 +141,8 @@ export default function Login() {
         </label>
         <a
           href="#"
-          className="font-medium"
-          style={{ color: PRIMARY_COLOR_HEX }}
+          className="font-medium text-green-600"
+          // style={{ color: PRIMARY_COLOR_HEX }}
         >
           Forgot Password?
         </a>
@@ -151,8 +151,8 @@ export default function Login() {
       <button
         type="submit"
         disabled={loading}
-        style={{ backgroundColor: PRIMARY_COLOR_HEX }}
-        className={`w-full text-white font-semibold py-3 rounded-xl hover:opacity-95 transition shadow-md mt-3 ${
+        // style={{ backgroundColor: PRIMARY_COLOR_HEX }}
+        className={`w-full text-white font-semibold py-3 rounded-xl bg-green-600 hover:opacity-95 transition shadow-md mt-3 ${
           loading ? "opacity-75 cursor-not-allowed" : ""
         }`}
       >
@@ -187,8 +187,8 @@ export default function Login() {
                 Don’t have an account?{" "}
                 <Link
                   href="/signup"
-                  className="font-medium"
-                  style={{ color: PRIMARY_COLOR_HEX }}
+                  className="font-medium text-green-600"
+                  // style={{ color: PRIMARY_COLOR_HEX }}
                 >
                   Sign Up
                 </Link>
