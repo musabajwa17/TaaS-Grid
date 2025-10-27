@@ -6,11 +6,25 @@ import { usePathname, useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 
 const Header: React.FC = () => {
-  const { user, logout } = useAuth();
+  // const { user, logout } = useAuth();
   const router = useRouter();
-  const isLoggedIn = !!user;
+  // const isLoggedIn = !!user;
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    // You can replace this logic with your auth token or role check
+    const token = localStorage.getItem("accessToken");
+    setIsLoggedIn(!!token);
+  }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("role");
+    setIsLoggedIn(false);
+    window.location.href = "/"; // Redirect to home after logout
+  };
   // const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   // useEffect(() => {
@@ -20,20 +34,20 @@ const Header: React.FC = () => {
   // }, []);
   const pathname = usePathname();
 
-  useEffect(() => {
-    const handleScroll = () => setIsScrolled(window.scrollY > 50);
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-   const handleLogout = async () => {
-    try {
-      await logout();
-      // window.location.href = "/";
-       router.push("/");
-    } catch (error) {
-      console.error("Logout failed:", error);
-    }
-  };
+  // useEffect(() => {
+  //   const handleScroll = () => setIsScrolled(window.scrollY > 50);
+  //   window.addEventListener("scroll", handleScroll);
+  //   return () => window.removeEventListener("scroll", handleScroll);
+  // }, []);
+  //  const handleLogout = async () => {
+  //   try {
+  //     await logout();
+  //     // window.location.href = "/";
+  //      router.push("/");
+  //   } catch (error) {
+  //     console.error("Logout failed:", error);
+  //   }
+  // };
 
   // 🧭 Define your navigation structure (easy to extend later)
   const navItems = [
@@ -73,7 +87,7 @@ const Header: React.FC = () => {
                 }`}
               >
                 <img
-                  src="/logo5.png"
+                  src="/logo9.png"
                   alt="Logo"
                   className={`relative h-12 w-50 object-contain transition-all duration-700 group-hover:scale-110 ${
                     isScrolled ? "h-12" : "h-14"
@@ -117,19 +131,19 @@ const Header: React.FC = () => {
             {/* Right Side Buttons */}
             <div className="hidden md:flex items-center gap-5">
               {isLoggedIn ? (
-        <button
-          onClick={handleLogout}
+        <Link
+          href="/dashboard"
           className="relative px-10 py-3.5 bg-gradient-to-r from-green-600 to-emerald-600 text-white font-black text-base rounded-full hover:scale-110 transition-all duration-500 ease-out overflow-hidden group"
         >
           <span className="relative z-10 flex items-center gap-2">
-            Sign Out
+            Dashboard
             <span className="group-hover:translate-x-1 transition-transform duration-500">
               →
             </span>
           </span>
           <div className="absolute inset-0 bg-gradient-to-r from-[#00d4ae] to-[#00bb98] opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
           <div className="absolute inset-0 bg-white/20 transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-out"></div>
-        </button>
+        </Link>
       ) : (
         <Link
           href="/login"
@@ -145,6 +159,7 @@ const Header: React.FC = () => {
           <div className="absolute inset-0 bg-white/20 transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-out"></div>
         </Link>
       )}
+
 
               {/* <Link
                 href="/career"
@@ -233,12 +248,12 @@ const Header: React.FC = () => {
                 >
                   Sign In
                 </Link>
-                <Link
+                {/* <Link
                   href="/career"
                   className="block w-full px-4 py-3 text-center bg-gradient-to-r from-[#00bb98] to-[#00d4ae] text-white font-bold rounded-lg transition-all duration-300"
                 >
                   Build Career
-                </Link>
+                </Link> */}
               </div>
             </div>
           </div>

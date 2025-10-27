@@ -12,11 +12,11 @@ import {
   User,
 } from "lucide-react";
 import Link from "next/link";
-import StudentDashboard from "./dashboard/student/Dashboard";
-import CvForge from "./dashboard/student/CvForge";
-import NewResume from "./dashboard/student/CvBuilder";
+import StudentDashboard from "@/components/dashboard/student/Dashboard";
+import CvForge from "@/components/dashboard/student/CvForge";
+import NewResume from "@/components/dashboard/student/CvBuilder";
 import { useAuth } from "@/context/AuthContext";
-import BookMarks from "./dashboard/student/BookMarks";
+import BookMarks from "@/components/dashboard/student/BookMarks";
 
 interface Stage {
   name: string;
@@ -25,7 +25,7 @@ interface Stage {
   locked?: boolean;
 }
 
-export default function Sidebar(): ReactElement {
+export default function UserSidebar(): ReactElement {
   const { logout } = useAuth();
   const [openStage, setOpenStage] = useState<string | null>(null);
   const [selected, setSelected] = useState<string>("Dashboard Overview");

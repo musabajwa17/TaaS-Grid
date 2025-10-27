@@ -1,5 +1,6 @@
-// "use client";
+"use client";
 import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Handshake, 
   FolderSymlink, 
@@ -176,6 +177,14 @@ const HeroSection = () => {
   const [isHovered, setIsHovered] = useState(false);
   const [hoveredModule, setHoveredModule] = useState<number | null>(null);
   const [animationPhase, setAnimationPhase] = useState(0);
+  const [animate, setAnimate] = useState(false);
+
+  // useEffect(() => {
+  //   // Trigger smooth drop animation on every change
+  //   setAnimate(false);
+  //   const timer = setTimeout(() => setAnimate(true), 50);
+  //   return () => clearTimeout(timer);
+  // }, [currentModule]);
 
   useEffect(() => {
     if (animationPhase < modules.length) {
@@ -230,124 +239,131 @@ const HeroSection = () => {
       <div className="relative z-10 mx-auto px-12 py-12 lg:px-20 lg:py-20">
         <div className="grid lg:grid-cols-2 gap-20 items-center">
           
-          {/* Left Side - Content */}
+          {/* Left Side - Content with Framer Motion animations */}
           <div className="space-y-10">
-  {/* 🟢 Description (Top → Bottom) */}
-  <div
-    className="transition-all duration-1000 ease-out"
-    style={{
-      opacity: animationPhase >= displayModule ? 1 : 0,
-      transform:
-        animationPhase >= displayModule
-          ? "translateY(0)"
-          : "translateY(-80px)", // moved further up for smoother drop
-      transition: "all 1s ease-out",
-    }}
-  >
-    <h1
-      className={`text-2xl lg:text-4xl font-extrabold bg-gradient-to-r ${currentModule.color} bg-clip-text text-transparent leading-tight mb-6`}
-    >
-      {currentModule.content.description}
-    </h1>
-  </div>
+            {/* Variants for stagger and directional motion */}
+            {/* Parent container keyed by displayModule to re-trigger animations on change */}
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={displayModule}
+                initial="hidden"
+                animate="visible"
+                exit="hidden"
+                variants={{
+                  hidden: {},
+                  // tighter stagger and a small delay so cards feel connected
+                  visible: { transition: { staggerChildren: 0.09, delayChildren: 0.06 } },
+                }}
+                className="space-y-6"
+              >
+                {/* Heading (drops from top) */}
+                <motion.h1
+                  variants={{
+                    hidden: { y: -60, opacity: 0 },
+                    visible: { y: 0, opacity: 1, transition: { duration: 0.7, ease: 'easeOut' } },
+                  }}
+                  className={`text-2xl lg:text-4xl font-extrabold bg-gradient-to-r ${currentModule.color} bg-clip-text text-transparent leading-tight mb-6`}
+                >
+                  {currentModule.content.description}
+                </motion.h1>
 
-  {/* 🟣 Feature Cards (Left → Right) */}
-  <div className="grid grid-cols-3 gap-5 w-125">
-    {[1, 2, 3, 4, 5, 6].map((num) => {
-      type TitleKey =
-        | "title1"
-        | "title2"
-        | "title3"
-        | "title4"
-        | "title5"
-        | "title6";
-      const titleKey = `title${num}` as TitleKey;
-      const icons = [Briefcase, GitBranch, Lightbulb, Rocket, FileText, Zap];
-      const CardIcon = icons[num - 1];
-      const titleValue = String((currentModule.content as any)[titleKey]);
+                {/* Feature Cards (slide left → right with stagger) */}
+                <motion.div className="grid grid-cols-3 gap-5 w-125" variants={{ hidden: {}, visible: {} }}>
+                  {[1, 2, 3, 4, 5, 6].map((num) => {
+                    type TitleKey =
+                      | "title1"
+                      | "title2"
+                      | "title3"
+                      | "title4"
+                      | "title5"
+                      | "title6";
+                    const titleKey = `title${num}` as TitleKey;
+                    const icons = [Briefcase, GitBranch, Lightbulb, Rocket, FileText, Zap];
+                    const CardIcon = icons[num - 1];
+                    const titleValue = String((currentModule.content as any)[titleKey]);
 
-      return (
-        <div
-          key={num}
-          className={`group relative bg-white rounded-2xl p-3 border-2 transition-all duration-700 hover:-translate-y-4 hover:shadow-2xl cursor-pointer ${
-            isYellow
-              ? "border-amber-200 hover:border-amber-400 hover:shadow-amber-500/30"
-              : "border-blue-200 hover:border-blue-400 hover:shadow-blue-500/30"
-          }`}
-          style={{
-            opacity: animationPhase >= displayModule ? 1 : 0,
-            transform:
-              animationPhase >= displayModule
-                ? "translateX(0)"
-                : "translateX(-100px)", // slide in from left
-            transitionDelay: `${num * 120}ms`,
-            transition: "all 0.8s ease-out",
-          }}
-        >
-          <div className="flex flex-col items-center text-center space-y-3 ">
-            <div
-              className={`w-10 h-10 rounded-xl bg-gradient-to-br ${currentModule.color} flex items-center justify-center group-hover:scale-125 group-hover:rotate-12 transition-all duration-700 shadow-lg`}
-            >
-              <CardIcon className="w-5 h-5 text-white" />
-            </div>
-            <p
-              className={`text-xs font-bold leading-tight bg-gradient-to-r ${currentModule.color} bg-clip-text text-transparent`}
-            >
-              {titleValue}
-            </p>
+                    return (
+                      <motion.div
+                        key={num}
+                        variants={{
+                          hidden: { x: -60, y: 8, opacity: 0, scale: 0.98 },
+                          visible: {
+                            x: 0,
+                            y: 0,
+                            opacity: 1,
+                            scale: 1,
+                            transition: { type: 'spring', stiffness: 100, damping: 14, mass: 0.6 },
+                          },
+                        }}
+                        whileHover={{ y: -8, scale: 1.03, transition: { type: 'spring', stiffness: 300, damping: 22 } }}
+                        whileTap={{ scale: 0.995 }}
+                        className={`group relative bg-white rounded-2xl p-3 border-2 hover:shadow-2xl cursor-pointer ${
+                          isYellow
+                            ? "border-amber-200 hover:border-amber-400 hover:shadow-amber-500/30"
+                            : "border-blue-200 hover:border-blue-400 hover:shadow-blue-500/30"
+                        }`}
+                      >
+                        <div className="flex flex-col items-center text-center space-y-3 ">
+                          <div
+                            className={`w-10 h-10 rounded-xl bg-gradient-to-br ${currentModule.color} flex items-center justify-center group-hover:scale-125 group-hover:rotate-12 transition-all duration-700 shadow-lg`}
+                          >
+                            <CardIcon className="w-5 h-5 text-white" />
+                          </div>
+                          <p
+                            className={`text-xs font-bold leading-tight bg-gradient-to-r ${currentModule.color} bg-clip-text text-transparent`}
+                          >
+                            {titleValue}
+                          </p>
+                        </div>
+                        <div
+                          className={`absolute inset-0 rounded-2xl bg-gradient-to-br ${currentModule.color} opacity-0 group-hover:opacity-5 transition-opacity duration-700`}
+                        ></div>
+                      </motion.div>
+                    );
+                  })}
+                </motion.div>
+
+                {/* Buttons (slide bottom → top) */}
+                <motion.div
+                  className="flex gap-5 pt-4"
+                  variants={{
+                    hidden: { y: 60, opacity: 0 },
+                    visible: { y: 0, opacity: 1, transition: { duration: 0.7, ease: 'easeOut', delay: 0.45 } },
+                  }}
+                >
+                  <button
+                    className={`group relative px-8 py-3 bg-gradient-to-r ${currentModule.color} text-white rounded-2xl font-bold text-base overflow-hidden transition-all duration-700 hover:scale-105 hover:-translate-y-1 ${
+                      isYellow
+                        ? "hover:shadow-2xl hover:shadow-amber-500/50"
+                        : "hover:shadow-2xl hover:shadow-blue-500/50"
+                    }`}
+                  >
+                    <span className="relative z-10">
+                      {currentModule.content.buttonPrimary}
+                    </span>
+                    <div className="absolute inset-0 bg-white opacity-0 group-hover:opacity-20 transition-opacity duration-700"></div>
+                  </button>
+
+                  <button
+                    className={`group relative px-8 bg-white text-gray-800 rounded-2xl font-bold text-lg border-2 overflow-hidden transition-all duration-700 hover:scale-105 hover:-translate-y-1 hover:shadow-xl ${
+                      isYellow
+                        ? "border-amber-300 hover:border-amber-500"
+                        : "border-blue-300 hover:border-blue-500"
+                    }`}
+                  >
+                    <span
+                      className={`relative z-10 bg-gradient-to-r ${currentModule.color} bg-clip-text text-transparent`}
+                    >
+                      {currentModule.content.buttonSecondary}
+                    </span>
+                    <div
+                      className={`absolute inset-0 bg-gradient-to-r ${currentModule.color} opacity-0 group-hover:opacity-10 transition-opacity duration-700`}
+                    ></div>
+                  </button>
+                </motion.div>
+              </motion.div>
+            </AnimatePresence>
           </div>
-          <div
-            className={`absolute inset-0 rounded-2xl bg-gradient-to-br ${currentModule.color} opacity-0 group-hover:opacity-5 transition-opacity duration-700`}
-          ></div>
-        </div>
-      );
-    })}
-  </div>
-
-  {/* 🟠 Buttons (Bottom → Top) */}
-  <div
-    className="flex gap-5 pt-4"
-    style={{
-      opacity: animationPhase >= displayModule ? 1 : 0,
-      transform:
-        animationPhase >= displayModule
-          ? "translateY(0)"
-          : "translateY(80px)", // slide up from bottom
-      transitionDelay: "900ms",
-      transition: "all 1s ease-out",
-    }}
-  >
-    <button
-      className={`group relative px-8 py-3 bg-gradient-to-r ${currentModule.color} text-white rounded-2xl font-bold text-base overflow-hidden transition-all duration-700 hover:scale-105 hover:-translate-y-1 ${
-        isYellow
-          ? "hover:shadow-2xl hover:shadow-amber-500/50"
-          : "hover:shadow-2xl hover:shadow-blue-500/50"
-      }`}
-    >
-      <span className="relative z-10">
-        {currentModule.content.buttonPrimary}
-      </span>
-      <div className="absolute inset-0 bg-white opacity-0 group-hover:opacity-20 transition-opacity duration-700"></div>
-    </button>
-
-    <button
-      className={`group relative px-8 bg-white text-gray-800 rounded-2xl font-bold text-lg border-2 overflow-hidden transition-all duration-700 hover:scale-105 hover:-translate-y-1 hover:shadow-xl ${
-        isYellow
-          ? "border-amber-300 hover:border-amber-500"
-          : "border-blue-300 hover:border-blue-500"
-      }`}
-    >
-      <span
-        className={`relative z-10 bg-gradient-to-r ${currentModule.color} bg-clip-text text-transparent`}
-      >
-        {currentModule.content.buttonSecondary}
-      </span>
-      <div
-        className={`absolute inset-0 bg-gradient-to-r ${currentModule.color} opacity-0 group-hover:opacity-10 transition-opacity duration-700`}
-      ></div>
-    </button>
-  </div>
-</div>
 
 
           {/* Right Side - Circular Module Display */}
@@ -355,15 +371,14 @@ const HeroSection = () => {
             {/* Central Circle with Module Name */}
             <div className="absolute inset-0 flex items-center justify-center">
               <div className="relative">
-                <div className={`w-42 h-42 rounded-full bg-gradient-to-br ${currentModule.color} shadow-2xl flex flex-col items-center justify-center transition-all duration-1000 ${
-                  isYellow ? 'shadow-amber-500/40' : 'shadow-blue-500/40'
-                }`}>
-                  {React.createElement(currentModule.content.lucideIcon, {
+                <div className="w-42 h-42 rounded-full">
+                  {/* {React.createElement(currentModule.content.lucideIcon, {
                     className: "w-15 h-15 text-white mb-2",
                   })}
                   <p className="text-sm font-bold text-white text-center px-2">
                     {currentModule.name}
-                  </p>
+                  </p> */}
+                  <img src="/logo7.png" className="w-full h-full mb-4" />
                 </div>
               </div>
             </div>

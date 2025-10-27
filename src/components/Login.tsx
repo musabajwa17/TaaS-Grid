@@ -35,7 +35,7 @@ export default function Login() {
     try {
        console.log("Login Api")
       const response = await loginUser(email, password);
-      route.push("/userdashboard");
+      route.push("/dashboard");
     } catch (err) {
       console.log("Error login", err)
     }

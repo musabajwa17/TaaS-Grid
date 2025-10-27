@@ -45,7 +45,7 @@ interface ResumeFormData {
 
 
 // NewResume Form Component
-const NewResume: React.FC = () => {
+const EmployeeResumeBuilder: React.FC = () => {
   const [formData, setFormData] = useState<ResumeFormData>({
     name: "",
     email: "",
@@ -382,4 +382,4 @@ const NewResume: React.FC = () => {
   );
 };
 
-export default NewResume;
+export default EmployeeResumeBuilder;

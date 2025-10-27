@@ -12,11 +12,15 @@ import {
   User,
 } from "lucide-react";
 import Link from "next/link";
-import StudentDashboard from "./dashboard/student/Dashboard";
-import CvForge from "./dashboard/student/CvForge";
-import NewResume from "./dashboard/student/CvBuilder";
+import StudentDashboard from "@/components/dashboard/student/Dashboard";
+import CvForge from "@/components/dashboard/student/CvForge";
+import NewResume from "@/components/dashboard/student/CvBuilder";
 import { useAuth } from "@/context/AuthContext";
-import BookMarks from "./dashboard/student/BookMarks";
+import BookMarks from "@/components/dashboard/student/BookMarks";
+import EmployeeDashboard from "@/components/dashboard/employee/Dashboard";
+import EmployeeResume from "@/components/dashboard/employee/EmployeeResume";
+import EmployeeResumeBuilder from "@/components/dashboard/employee/EmployeeResumeBuilder";
+import BookMarkJobs from "@/components/dashboard/employee/BookMarkJobs";
 
 interface Stage {
   name: string;
@@ -25,7 +29,7 @@ interface Stage {
   locked?: boolean;
 }
 
-export default function Sidebar(): ReactElement {
+export default function EmployeeSidebar(): ReactElement {
   const { logout } = useAuth();
   const [openStage, setOpenStage] = useState<string | null>(null);
   const [selected, setSelected] = useState<string>("Dashboard Overview");
@@ -210,10 +214,10 @@ export default function Sidebar(): ReactElement {
 
         {/* ✅ Main content (auto fills height with flex) */}
         <div className="flex-1 overflow-y-auto bg-white">
-          {selected === "Dashboard Overview" && <StudentDashboard />}
-          {selected === "Resume Builder" && <CvForge />}
-          {selected === "AI CV Optimizer" && <NewResume />}
-          {selected === "Saved Opportunities" && <BookMarks />}
+          {selected === "Dashboard Overview" && <EmployeeDashboard />}
+          {selected === "Resume Builder" && <EmployeeResume />}
+          {selected === "AI CV Optimizer" && <EmployeeResumeBuilder />}
+          {selected === "Saved Opportunities" && <BookMarkJobs />}
         </div>
       </main>
     </div>
