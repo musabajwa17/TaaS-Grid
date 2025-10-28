@@ -9,10 +9,9 @@ interface SelectedFields {
 
 export function useEnrichResume() {
   const [loading, setLoading] = useState(false);
-  const [enrichedData, setEnrichedData] = useState<any>(null);
+  const [enrichedData, setEnrichedData] = useState<Record<string, unknown> | null>(null);
   const [error, setError] = useState<string | null>(null);
-
-  const enrichResume = async (parsedData: any, selectedFields: SelectedFields) => {
+  const enrichResume = async (parsedData: unknown, selectedFields: SelectedFields) => {
     setLoading(true);
     setError(null);
    
@@ -39,9 +38,13 @@ export function useEnrichResume() {
       } else {
         throw new Error("API returned unexpected format");
       }
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error("❌ Error enriching resume:", err);
-      setError(err.message || "Unknown error");
+      if (err instanceof Error) {
+        setError(err.message || "Unknown error");
+      } else {
+        setError("Unknown error");
+      }
     } finally {
       setLoading(false);
     }

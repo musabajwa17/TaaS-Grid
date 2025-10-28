@@ -8,7 +8,6 @@ import {
   TrendingUp,
   Clock,
   Sparkles,
-  CheckCircle,
   ChevronRight,
   Brain,
   Award,
@@ -33,7 +32,7 @@ interface Deadline {
 }
 
 export default function EmployeeDashboard() {
-  let plan: "Basic" | "Premium" = "Basic";
+  const plan: string = "Basic";
 
   // Dummy Data
   const jobs: Job[] = [

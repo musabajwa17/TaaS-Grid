@@ -29,13 +29,19 @@ export const useRegisterUser = () => {
       toast.success(response.data.message)
       setSuccess(true);
       return response.data;
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error("❌ Registration Error:", err);
-        const errorMessage = err.response?.data?.error || "Something went wrong";
+      let errorMessage = "Something went wrong";
 
-  // ✅ show toast
-  toast.error(errorMessage);
-      setError(err.response?.data?.error || err.message);
+      if (axios.isAxiosError(err) && err.response?.data) {
+        errorMessage = String(err.response.data?.error || err.response.data);
+      } else if (err instanceof Error) {
+        errorMessage = err.message;
+      }
+
+      // ✅ show toast
+      toast.error(errorMessage);
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }

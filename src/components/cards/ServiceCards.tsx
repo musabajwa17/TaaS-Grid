@@ -144,7 +144,7 @@ const ServiceCards = () => {
                     {card.hoverTitle}
                   </h3>
                   <p className="text-lg text-slate-200 leading-relaxed italic">
-                    "{card.hoverDescription}"
+                    &ldquo;{card.hoverDescription}&rdquo;
                   </p>
                   <div className="mt-6 pt-6 border-t border-white/20">
                     <p className="text-white font-semibold text-lg">{card.author}</p>

@@ -165,8 +165,8 @@ const Services = () => {
             onMouseLeave={() => setIsAutoPlaying(true)}
           >
             {visibleIndices.map((index, position) => {
-              const module = modules[index];
-              const Icon = module.icon;
+              const mod = modules[index];
+              const Icon = mod.icon;
               const isCenter = position === 1;
               const isLeft = position === 0;
               const isRight = position === 2;
@@ -193,26 +193,26 @@ const Services = () => {
                     {/* Top row: number (left) + icon (right) */}
                     <div className="flex items-start justify-between mb-4">
                       <div className="text-3xl md:text-4xl font-extrabold bg-gradient-to-b from-green-600 to-emerald-600 bg-clip-text text-transparent">
-                        {module.id.toString().padStart(2, "0")}
+                        {mod.id.toString().padStart(2, "0")}
                       </div>
-                      <div className={`p-2 rounded-xl bg-gradient-to-r from-green-600 to-emerald-600 ${module.gradient}`}>
-                        <Icon className="w-7 h-7 text-white" />
+            <div className={`p-2 rounded-xl bg-gradient-to-r from-green-600 to-emerald-600 ${mod.gradient}`}>
+              <Icon className="w-7 h-7 text-white" />
                       </div>
                     </div>
 
                     {/* Title & paragraph */}
-                    <div className="mb-4">
+                        <div className="mb-4">
                       <h3 className="text-xl md:text-2xl font-semibold text-black">
-                        {module.title}
+                        {mod.title}
                       </h3>
                       <p className="text-gray-600 text-sm md:text-base mt-2">
-                        {module.description}
+                        {mod.description}
                       </p>
                     </div>
 
                     {/* Points: push to bottom when space allows */}
                     <div className="mt-auto space-y-3">
-                      {module.points.map((point, idx) => {
+                      {mod.points.map((point, idx) => {
                         const PIcon = point.icon;
                         return (
                           <div

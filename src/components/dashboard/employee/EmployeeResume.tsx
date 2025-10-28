@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, DragEvent, ChangeEvent, useEffect } from "react";
+import React, { useState, DragEvent, ChangeEvent } from "react";
 import {
   Upload,
   FileText,
@@ -8,7 +8,7 @@ import {
   BookText,
   Search,
 } from "lucide-react";
-import { Mail, Phone, GraduationCap, Briefcase, Award, Book, Users, Star, Wrench, BookOpen, UserCircle } from "lucide-react";
+// icon imports for the template are handled inside EmployeeResumeTemplate
 
 interface Education {
   degree: string;
@@ -74,8 +74,7 @@ interface ParsedData {
 
 import { useUploadResume } from "@/hooks/useUploadResume";
 import { useRouter } from "next/navigation";
-import ResumeTemplate from "../../resume/ResumeTemplate";
-import EmployeeResumeTemplate from "./EmployeeResumeTemplate";
+import EmployeeResumeTemplate, { EmployeeParsedData } from "./EmployeeResumeTemplate";
 // export default function EmployeeResume: React.FC<{ parsedData: ParsedData }> = ({parsedData}) => {
 export default function EmployeeResume() {
   const router = useRouter();
@@ -125,9 +124,7 @@ export default function EmployeeResume() {
       handleUpload(droppedFile);
     }
   };
-  const handleNewResume = () => {
-    router.push("/newresume");
-  };
+  // removed unused helper: const handleNewResume = () => router.push("/newresume");
   // Download placeholder
   const downloadPDF = () => {
     alert("PDF download requires integration with jsPDF or similar library");
@@ -242,7 +239,7 @@ export default function EmployeeResume() {
             </div>
 
             {/* Resume Content */}
-            <EmployeeResumeTemplate parsedData={parsedData as any} />
+            <EmployeeResumeTemplate parsedData={parsedData as EmployeeParsedData} />
 
             {/* Action Buttons */}
             <div className="flex gap-4 justify-center">

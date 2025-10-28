@@ -1,18 +1,22 @@
-import axios from "axios";
+import axios, { type AxiosInstance, type AxiosRequestConfig, type InternalAxiosRequestConfig } from "axios";
 
-const api = axios.create({
-  baseURL: "http://localhost:3001/api",
-  withCredentials: true, // 🔥 allows cookies to be sent/received
+const api: AxiosInstance = axios.create({
+	baseURL: process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:3001/api",
+	withCredentials: true, // allows cookies to be sent/received if needed
 });
-api.interceptors.request.use(
-  (config) => {
-    const token = localStorage.getItem("accessToken");
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
-    return config;
-  },
-  (error) => Promise.reject(error)
-);
+
+// Attach token if present
+api.interceptors.request.use((config: InternalAxiosRequestConfig) => {
+	try {
+		const token = typeof window !== "undefined" ? localStorage.getItem("accessToken") : null;
+		if (token && config.headers) {
+			// only set Authorization if headers object already exists on the request
+			(config.headers as Record<string, string>)["Authorization"] = `Bearer ${token}`;
+		}
+	} catch {
+		// ignore (SSR or storage access issues)
+	}
+	return config;
+});
 
 export default api;

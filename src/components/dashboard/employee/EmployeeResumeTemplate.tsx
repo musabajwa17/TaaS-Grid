@@ -2,42 +2,42 @@
 import React from "react";
 import { Mail, Phone, GraduationCap, Briefcase, Award, Book, Users, Star, Wrench, BookOpen, UserCircle } from "lucide-react";
 
-interface Education {
+export interface Education {
   degree: string;
   institution: string;
   year: string;
 }
 
-interface Experience {
+export interface Experience {
   role: string;
   institute: string;
   years: string;
 }
 
-interface Training {
+export interface Training {
   title: string;
   description: string;
   year: string;
 }
 
-interface Skill {
+export interface Skill {
   title: string;
   lang: string;
 }
 
-interface Membership {
+export interface Membership {
   heading: string;
   desc: string;
 }
 
-interface Reference {
+export interface Reference {
   prof: string;
   designation: string;
   mail: string;
   phone: string;
 }
 
-interface ParsedData {
+export interface EmployeeParsedData {
   name?: string;
   email?: string;
   phone?: string;
@@ -64,7 +64,7 @@ interface ParsedData {
   references?: Reference[];
 }
 
-const EmployeeResumeTemplate: React.FC<{ parsedData: ParsedData }> = ({ parsedData }) => {
+const EmployeeResumeTemplate: React.FC<{ parsedData: EmployeeParsedData }> = ({ parsedData }) => {
   return (
     <div className="bg-white shadow-lg rounded-xl p-8 border border-gray-200 space-y-8 text-gray-800">
       {/* Header */}

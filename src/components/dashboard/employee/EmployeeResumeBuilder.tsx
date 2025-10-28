@@ -71,19 +71,20 @@ const EmployeeResumeBuilder: React.FC = () => {
     value: string
   ) => {
     if (index === null) {
-      setFormData({ ...formData, [section]: value });
+      setFormData({ ...formData, [section]: value as any });
     } else {
-      const updatedSection = [...(formData[section] as any)];
-      updatedSection[index][field] = value;
-      setFormData({ ...formData, [section]: updatedSection });
+      // treat section as an array of records for editing purposes
+      const updatedSection = [...(formData[section] as unknown as Record<string, string>[])];
+      updatedSection[index] = { ...updatedSection[index], [field]: value };
+      setFormData({ ...formData, [section]: updatedSection } as any);
     }
   };
 
-  const addItem = (section: keyof ResumeFormData, emptyItem: any) => {
+  const addItem = (section: keyof ResumeFormData, emptyItem: unknown) => {
     setFormData({
       ...formData,
-      [section]: [...(formData[section] as any), emptyItem],
-    });
+      [section]: [...(formData[section] as unknown as unknown[]), emptyItem],
+    } as any);
   };
 
   const handleSkillChange = (index: number, value: string) => {
@@ -152,7 +153,7 @@ const EmployeeResumeBuilder: React.FC = () => {
               key={field}
               type="text"
               placeholder={field.charAt(0).toUpperCase() + field.slice(1)}
-              value={(formData as any)[field]}
+              value={(formData as unknown as Record<string, string>)[field] || ""}
               onChange={(e) =>
                 handleChange(
                   field as keyof ResumeFormData,

@@ -14,6 +14,15 @@ export default function EnrichResume() {
 
   const { enrichResume, enrichedData, loading, error } = useEnrichResume();
 
+  type Suggestions = {
+    summary_improvement?: string;
+    missing_sections?: string[];
+    missing_details?: string[];
+    suggested_additions?: string[];
+    tone_recommendation?: string;
+  };
+
+  const suggestions = enrichedData ? (enrichedData as { suggestions?: Suggestions }).suggestions : undefined;
   useEffect(() => {
     const stored = localStorage.getItem("parsedData");
     if (stored) setParsedData(JSON.parse(stored));
@@ -40,7 +49,7 @@ export default function EnrichResume() {
     // Combine the original parsed data and AI suggestions
     const combinedData = {
       ...parsedData,
-      ai_suggestions: enrichedData.suggestions || {},
+      ai_suggestions: suggestions || {},
     };
 
     // Save combined data to localStorage to access in ModifyResume
@@ -120,21 +129,21 @@ export default function EnrichResume() {
 
     <div className="space-y-6">
       {/* Summary Improvement */}
-      {enrichedData.suggestions.summary_improvement && (
+  {suggestions?.summary_improvement && (
         <div className="bg-white p-5 rounded-xl border border-gray-100 shadow-sm">
           <h3 className="text-lg font-semibold text-gray-800 mb-2">📝 Summary Improvement</h3>
           <p className="text-gray-600 leading-relaxed">
-            {enrichedData.suggestions.summary_improvement}
+            {suggestions?.summary_improvement}
           </p>
         </div>
       )}
 
       {/* Missing Sections */}
-      {enrichedData.suggestions.missing_sections?.length > 0 && (
+  {Array.isArray(suggestions?.missing_sections) && suggestions!.missing_sections!.length > 0 && (
         <div className="bg-white p-5 rounded-xl border border-gray-100 shadow-sm">
           <h3 className="text-lg font-semibold text-gray-800 mb-2">📂 Missing Sections</h3>
           <ul className="list-disc list-inside text-gray-600 space-y-1">
-            {enrichedData.suggestions.missing_sections.map((section: string, i: number) => (
+            {suggestions!.missing_sections!.map((section: string, i: number) => (
               <li key={i}>{section}</li>
             ))}
           </ul>
@@ -142,11 +151,11 @@ export default function EnrichResume() {
       )}
 
       {/* Missing Details */}
-      {enrichedData.suggestions.missing_details?.length > 0 && (
+  {Array.isArray(suggestions?.missing_details) && suggestions!.missing_details!.length > 0 && (
         <div className="bg-white p-5 rounded-xl border border-gray-100 shadow-sm">
           <h3 className="text-lg font-semibold text-gray-800 mb-2">⚠️ Missing Details</h3>
           <ul className="list-disc list-inside text-gray-600 space-y-1">
-            {enrichedData.suggestions.missing_details.map((detail: string, i: number) => (
+            {suggestions!.missing_details!.map((detail: string, i: number) => (
               <li key={i}>{detail}</li>
             ))}
           </ul>
@@ -154,11 +163,11 @@ export default function EnrichResume() {
       )}
 
       {/* Suggested Additions */}
-      {enrichedData.suggestions.suggested_additions?.length > 0 && (
+  {Array.isArray(suggestions?.suggested_additions) && suggestions!.suggested_additions!.length > 0 && (
         <div className="bg-white p-5 rounded-xl border border-gray-100 shadow-sm">
           <h3 className="text-lg font-semibold text-gray-800 mb-2">💡 Suggested Additions</h3>
           <ul className="list-disc list-inside text-gray-600 space-y-1">
-            {enrichedData.suggestions.suggested_additions.map((addition: string, i: number) => (
+            {suggestions!.suggested_additions!.map((addition: string, i: number) => (
               <li key={i}>{addition}</li>
             ))}
           </ul>
@@ -166,11 +175,11 @@ export default function EnrichResume() {
       )}
 
       {/* Tone Recommendation */}
-      {enrichedData.suggestions.tone_recommendation && (
+  {suggestions?.tone_recommendation && (
         <div className="bg-white p-5 rounded-xl border border-gray-100 shadow-sm">
           <h3 className="text-lg font-semibold text-gray-800 mb-2">🎯 Tone Recommendation</h3>
           <p className="text-gray-600 leading-relaxed">
-            {enrichedData.suggestions.tone_recommendation}
+            {suggestions?.tone_recommendation}
           </p>
         </div>
       )}

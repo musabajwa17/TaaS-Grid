@@ -41,14 +41,14 @@ const endpoint =
       setParsedData(res.data);
       console.log(res)
       toast.success("Resume parsed successfully!");
-    } catch (err: any) {
+    } catch (err: unknown) {
       let message = "An unknown error occurred.";
 
       if (axios.isCancel(err)) {
-        message = err.message;
-      } else if (err.response?.data?.error) {
-        message = err.response.data.error;
-      } else if (err.message) {
+        message = (err as Error).message;
+      } else if (axios.isAxiosError(err) && err.response?.data?.error) {
+        message = String(err.response.data.error);
+      } else if (err instanceof Error) {
         message = err.message;
       }
 

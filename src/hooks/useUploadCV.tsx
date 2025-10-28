@@ -13,7 +13,7 @@ export const useUploadCV = () => {
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
 
-  const uploadCV = async (combinedData: any) => {
+  const uploadCV = async (combinedData: unknown) => {
     console.log(combinedData)
     setLoading(true);
     setError(null);
@@ -32,9 +32,18 @@ export const useUploadCV = () => {
      const response = await axios.post("http://localhost:3001/api/cv/upload", { combinedData });
       setSuccess(response.data.message);
       return response.data;
-    } catch (err: any) {
-      console.error("Error uploading CV:", err.response?.data || err.message);
-      setError(err.response?.data?.message || "Something went wrong");
+    } catch (err: unknown) {
+      let message = "Something went wrong";
+      console.error("Error uploading CV:", err);
+
+      if (axios.isAxiosError(err) && err.response?.data) {
+        // prefer message from server
+        message = String(err.response.data?.message || err.response.data);
+      } else if (err instanceof Error) {
+        message = err.message;
+      }
+
+      setError(message);
     } finally {
       setLoading(false);
     }

@@ -398,7 +398,7 @@ const HeroSection = () => {
                   style={{
                     left: '50%',
                     top: '50%',
-                    transform: `translate(calc(-50% + ${pos.x}px), calc(-50% + ${pos.y}px)) scale(${isActive ? 1.1 : 0.9}) rotate(${module.angle}deg)`,
+                    transform: `translate(calc(-50% + ${pos.x}px), calc(-50% + ${pos.y}px)) scale(${isActive ? 1 : 0.8}) rotate(${module.angle}deg)`,
                     opacity: isVisible ? 1 : 0,
                     transitionDelay: `${index * 100}ms`,
                     zIndex: isActive ? 20 : 10,
@@ -419,7 +419,7 @@ const HeroSection = () => {
                     }}
                   >
                     <div
-                      className={`relative w-30 h-30 rounded-2xl bg-gradient-to-br ${module.color} shadow-xl flex flex-col items-center justify-center transition-all duration-1000 ease-out ${
+                      className={`relative w-32 h-32 rounded-2xl bg-gradient-to-br ${module.color} shadow-xl flex flex-col items-center justify-center transition-all duration-1000 ease-out ${
                         isActive ? 'ring-4 ring-white ring-offset-4 ring-offset-slate-100' : ''
                       } group-hover:-translate-y-4 group-hover:scale-110 group-hover:ring-4 group-hover:ring-white group-hover:ring-offset-4 group-hover:ring-offset-slate-100 ${
                         moduleIsYellow ? 'group-hover:shadow-2xl group-hover:shadow-amber-500/50' : 'group-hover:shadow-2xl group-hover:shadow-blue-500/50'
@@ -427,11 +427,14 @@ const HeroSection = () => {
                     >
                       <div className="flex flex-col items-center justify-center space-y-2">
                         {React.createElement(Icon, {
-                          className: "w-14 h-14 text-white",
+                          className: "w-12 h-12 text-white",
                         })}
-                        <p className="text-white text-xs font-bold text-center px-2">
+                        <p className="text-white text-sm font-bold text-center px-1">
                           {module.name}
                         </p>
+                        <span className="text-white text-[11px] font-semibold text-center px-1">
+                          ({module.keywords})
+                        </span>
                       </div>
                     </div>
                     {/* <div className="absolute -bottom-12 left-1/2 transform -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-all duration-700 group-hover:-translate-y-1">

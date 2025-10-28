@@ -178,7 +178,7 @@ const ResumeTemplate: React.FC<CvTemplateProps> = ({ parsedData }) => {
               </div>
 
               <div className="space-y-6">
-                {parsedData.experience.map((exp: any, idx: number) => {
+                {parsedData.experience.map((exp: unknown, idx: number) => {
                   if (typeof exp === "string") {
                     const expText = exp.trim();
                     if (!expText) return null;
@@ -195,25 +195,18 @@ const ResumeTemplate: React.FC<CvTemplateProps> = ({ parsedData }) => {
                     );
                   }
 
-                  const role =
-                    typeof exp.role === "string" ? exp.role.trim() : "";
-                  const company =
-                    typeof exp.company === "string" ? exp.company.trim() : "";
-                  const years =
-                    typeof exp.years === "string" ? exp.years.trim() : "";
+                  const expObj = exp as Record<string, unknown>;
+                  const role = typeof expObj.role === "string" ? (expObj.role as string).trim() : "";
+                  const company = typeof expObj.company === "string" ? (expObj.company as string).trim() : "";
+                  const years = typeof expObj.years === "string" ? (expObj.years as string).trim() : "";
 
                   let descriptionItems: string[] = [];
-                  if (Array.isArray(exp.description)) {
-                    descriptionItems = exp.description
-                      .filter(
-                        (d: any) => typeof d === "string" && d.trim() !== ""
-                      )
-                      .map((d: any) => d.trim());
-                  } else if (
-                    typeof exp.description === "string" &&
-                    exp.description.trim()
-                  ) {
-                    descriptionItems = [exp.description.trim()];
+                  if (Array.isArray(expObj.description)) {
+                    descriptionItems = (expObj.description as unknown[])
+                      .filter((d: unknown) => typeof d === "string" && (d as string).trim() !== "")
+                      .map((d: unknown) => (d as string).trim());
+                  } else if (typeof expObj.description === "string" && (expObj.description as string).trim()) {
+                    descriptionItems = [(expObj.description as string).trim()];
                   }
 
                   if (
@@ -284,7 +277,7 @@ const ResumeTemplate: React.FC<CvTemplateProps> = ({ parsedData }) => {
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {parsedData.education.map((edu: any, idx: number) => {
+                {parsedData.education.map((edu: unknown, idx: number) => {
                   if (typeof edu === "string") {
                     const eduText = edu.trim();
                     if (!eduText) return null;
@@ -300,14 +293,10 @@ const ResumeTemplate: React.FC<CvTemplateProps> = ({ parsedData }) => {
                     );
                   }
 
-                  const degree =
-                    typeof edu.degree === "string" ? edu.degree.trim() : "";
-                  const institution =
-                    typeof edu.institution === "string"
-                      ? edu.institution.trim()
-                      : "";
-                  const year =
-                    typeof edu.year === "string" ? edu.year.trim() : "";
+                  const eduObj = edu as Record<string, unknown>;
+                  const degree = typeof eduObj.degree === "string" ? (eduObj.degree as string).trim() : "";
+                  const institution = typeof eduObj.institution === "string" ? (eduObj.institution as string).trim() : "";
+                  const year = typeof eduObj.year === "string" ? (eduObj.year as string).trim() : "";
 
                   if (!degree && !institution && !year) return null;
 
@@ -350,17 +339,16 @@ const ResumeTemplate: React.FC<CvTemplateProps> = ({ parsedData }) => {
             </div>
 
             <div className="flex flex-wrap gap-3">
-              {parsedData.skills.map((skill: any, idx: number) => {
+              {parsedData.skills.map((skill: unknown, idx: number) => {
                 let skillName = "";
 
                 if (typeof skill === "string") {
                   skillName = skill.trim();
-                } else if (
-                  typeof skill === "object" &&
-                  (typeof skill.name === "string" ||
-                    typeof skill.title === "string")
-                ) {
-                  skillName = (skill.name || skill.title || "").trim();
+                } else if (typeof skill === "object" && skill !== null) {
+                  const skillObj = skill as Record<string, unknown>;
+                  if (typeof skillObj.name === "string" || typeof skillObj.title === "string") {
+                    skillName = ((skillObj.name as string) || (skillObj.title as string) || "").trim();
+                  }
                 }
 
                 if (!skillName) return null;
@@ -400,19 +388,12 @@ const ResumeTemplate: React.FC<CvTemplateProps> = ({ parsedData }) => {
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {parsedData.projects.map((proj: any, idx: number) => {
-                  const name =
-                    typeof proj.name === "string" ? proj.name.trim() : "";
-                  const description =
-                    typeof proj.description === "string"
-                      ? proj.description.trim()
-                      : "";
-                  const technologies =
-                    typeof proj.technologies === "string"
-                      ? proj.technologies.trim()
-                      : "";
-                  const link =
-                    typeof proj.link === "string" ? proj.link.trim() : "";
+                {parsedData.projects.map((proj: unknown, idx: number) => {
+                  const projObj = proj as Record<string, unknown>;
+                  const name = typeof projObj.name === "string" ? (projObj.name as string).trim() : "";
+                  const description = typeof projObj.description === "string" ? (projObj.description as string).trim() : "";
+                  const technologies = typeof projObj.technologies === "string" ? (projObj.technologies as string).trim() : "";
+                  const link = typeof projObj.link === "string" ? (projObj.link as string).trim() : "";
 
                   if (!name && !description && !technologies && !link)
                     return null;
@@ -468,7 +449,7 @@ const ResumeTemplate: React.FC<CvTemplateProps> = ({ parsedData }) => {
               </div>
 
               <div className="bg-gradient-to-br from-amber-50 to-orange-50 rounded-2xl p-6 space-y-3">
-                {parsedData.certifications.map((cert: any, idx: number) => {
+                {parsedData.certifications.map((cert: unknown, idx: number) => {
                   if (typeof cert === "string") {
                     const certText = cert.trim();
                     if (!certText) return null;
@@ -481,16 +462,9 @@ const ResumeTemplate: React.FC<CvTemplateProps> = ({ parsedData }) => {
                     );
                   }
 
-                  const name =
-                    typeof cert.name === "string"
-                      ? cert.name.trim()
-                      : typeof cert.title === "string"
-                      ? cert.title.trim()
-                      : "";
-                  const description =
-                    typeof cert.description === "string"
-                      ? cert.description.trim()
-                      : "";
+                  const certObj = cert as Record<string, unknown>;
+                  const name = typeof certObj.name === "string" ? (certObj.name as string).trim() : typeof certObj.title === "string" ? (certObj.title as string).trim() : "";
+                  const description = typeof certObj.description === "string" ? (certObj.description as string).trim() : "";
 
                   if (!name && !description) return null;
 

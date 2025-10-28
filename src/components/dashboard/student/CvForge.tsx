@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, DragEvent, ChangeEvent, useEffect } from "react";
+import React, { useState, DragEvent, ChangeEvent } from "react";
 import {
   Upload,
   FileText,

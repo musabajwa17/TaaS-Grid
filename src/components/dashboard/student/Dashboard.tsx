@@ -57,7 +57,7 @@ const deadlines: Deadline[] = [
 
 // =================== COMPONENT ===================
 export default function StudentDashboard() {
-  let plan: "Basic" | "Premium" = "Basic"; // can be dynamically fetched later
+  const plan: string = "Basic"; // can be dynamically fetched later
 
   return (
     <div className="min-h-screen bg-gray-50 px-6 py-10">

@@ -1,13 +1,14 @@
 import { useState } from "react";
 import toast from "react-hot-toast";
 import api from "@/utils/axiosInstance";
+import axios from "axios";
 
 // const BASE_URL = "http://localhost:3001";
 const BASE_URL = process.env.BASE_URL;
 
 export const useLoginUser = () => {
   const [loading, setLoading] = useState(false);
-  const [userLogin, setUserLogin] = useState<any>(null);
+  const [userLogin, setUserLogin] = useState<Record<string, unknown> | null>(null);
   const loginUser = async (email: string, password: string) => {
     console.log("Login Credentials", email, password);
     setLoading(true);
@@ -32,14 +33,20 @@ setUserLogin(response.data);
       localStorage.setItem("refreshToken", refreshToken);
       toast.success(response.data.message);
       return user;
-    } catch (error: any) {
-      console.error("Login failed:", error.response?.data || error.message);
-      const errorMessage =
-        error.response?.data?.error || "Something went wrong";
+    } catch (error: unknown) {
+      console.error("Login failed:", error);
+      let errorMessage = "Something went wrong";
+
+      if (axios.isAxiosError(error as any) && (error as any).response?.data) {
+        // best effort for axios error
+        errorMessage = String((error as any).response.data?.error || (error as any).response.data || errorMessage);
+      } else if (error instanceof Error) {
+        errorMessage = error.message;
+      }
 
       // ✅ show toast
       toast.error(errorMessage);
-      throw error.response?.data || error;
+      throw error;
     } finally {
       setLoading(false);
     }
@@ -54,8 +61,8 @@ setUserLogin(response.data);
     try {
       await api.post("/users/logout", { userId: user._id });
       localStorage.removeItem("user");
-    } catch (err: any) {
-      console.error("Logout Error:", err.response?.data || err.message);
+    } catch (err: unknown) {
+      console.error("Logout Error:", err);
     }
   };
 
