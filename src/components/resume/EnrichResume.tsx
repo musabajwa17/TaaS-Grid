@@ -9,7 +9,7 @@ export default function EnrichResume() {
   const [industry, setIndustry] = useState("");
   const [experience, setExperience] = useState("");
   const [tone, setTone] = useState("");
-  const [parsedData, setParsedData] = useState<any>(null);
+ const [parsedData, setParsedData] = useState<Record<string, unknown> | null>(null);
   const router = useRouter();
 
   const { enrichResume, enrichedData, loading, error } = useEnrichResume();

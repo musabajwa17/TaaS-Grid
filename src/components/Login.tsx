@@ -4,6 +4,7 @@ import { Mail, Lock, LayoutGrid, Zap, TrendingUp } from "lucide-react";
 import Link from "next/link";
 import { useLoginUser } from "@/hooks/useLoginUser";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 // const PRIMARY_COLOR_HEX = "#00BB98";
 
@@ -34,7 +35,7 @@ export default function Login() {
     e.preventDefault();
     try {
        console.log("Login Api")
-      const response = await loginUser(email, password);
+     await loginUser(email, password);
       route.push("/dashboard");
     } catch (err) {
       console.log("Error login", err)
@@ -177,7 +178,13 @@ export default function Login() {
                 type="button"
                 className="w-full flex items-center justify-center gap-3 py-3 border border-gray-300 rounded-xl hover:bg-gray-50 transition"
               >
-                <img alt="Google logo" className="h-5 w-5" src="/Google.jpeg" />
+                <Image
+  src="/Google.jpeg"
+  alt="Google logo"
+  width={20}    // corresponds roughly to h-5 (20px)
+  height={20}   // corresponds roughly to w-5 (20px)
+  className="h-5 w-5 object-contain"
+/>
                 <span className="font-medium text-gray-700">
                   Continue with Google
                 </span>

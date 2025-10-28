@@ -1,6 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
-import api from "@/utils/axiosInstance";
+// import api from "@/utils/axiosInstance";
 
 // interface UploadResponse {
 //   message: string;

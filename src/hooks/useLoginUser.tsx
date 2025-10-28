@@ -1,10 +1,10 @@
 import { useState } from "react";
 import toast from "react-hot-toast";
-import api from "@/utils/axiosInstance";
+// import api from "@/utils/axiosInstance";
 import axios from "axios";
 
 // const BASE_URL = "http://localhost:3001";
-const BASE_URL = process.env.BASE_URL;
+// const BASE_URL = process.env.BASE_URL;
 
 export const useLoginUser = () => {
   const [loading, setLoading] = useState(false);
@@ -14,7 +14,7 @@ export const useLoginUser = () => {
     setLoading(true);
     try {
       console.log("Login Credentials 1");
-      const response = await api.post("/user/login", {
+      const response = await axios.post("http://localhost:3001/api/user/login", {
         email,
         password,
       });
@@ -59,7 +59,7 @@ setUserLogin(response.data);
     if (!user) return;
 
     try {
-      await api.post("/users/logout", { userId: user._id });
+      await axios.post("http://localhost:3001/api/users/logout", { userId: user._id });
       localStorage.removeItem("user");
     } catch (err: unknown) {
       console.error("Logout Error:", err);

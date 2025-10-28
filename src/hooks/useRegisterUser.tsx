@@ -2,7 +2,7 @@
 import { useState } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
-import api from "@/utils/axiosInstance";
+// import api from "@/utils/axiosInstance";
 
 interface RegisterData {
   fullName: string;
@@ -10,7 +10,7 @@ interface RegisterData {
   password: string;
   role: string;
 }
-const BASE_URL = process.env.BASE_URL;
+// const BASE_URL = process.env.BASE_URL;
 export const useRegisterUser = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -23,7 +23,7 @@ export const useRegisterUser = () => {
       setSuccess(false);
 
     //   const response = await axios.post(`${BASE_URL}/register`, formData, {
-      const response = await api.post("/user/register", formData);
+      const response = await axios.post("http://localhost:3001/api/user/register", formData);
 
       console.log("✅ Registration Success:", response.data);
       toast.success(response.data.message)

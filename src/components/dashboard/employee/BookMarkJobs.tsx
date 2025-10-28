@@ -1,6 +1,6 @@
 "use client";
 
-import { Bookmark, Briefcase, Star, ChevronRight, Building2 } from "lucide-react";
+import { Bookmark, Star, ChevronRight, Building2 } from "lucide-react";
 import Link from "next/link";
 
 const bookmarkedJobs = [

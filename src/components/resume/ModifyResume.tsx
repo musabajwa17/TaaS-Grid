@@ -2,8 +2,70 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from "next/navigation";
 import { useUploadCV } from '@/hooks/useUploadCV';
+// src/types/ParsedData.ts
+export interface Experience {
+  role: string;
+  company: string;
+  years: string;
+  description?: string | string[];
+}
+
+export interface Education {
+  degree: string;
+  institution: string;
+  year: string;
+}
+
+export interface Project {
+  name: string;
+  description: string;
+  technologies?: string;
+  link?: string;
+}
+
+export interface Certification {
+  title?: string;
+  name?: string;
+  description?: string;
+}
+
+export interface FilledSuggestions {
+  missing_details?: string[];
+  missing_sections?: string[];
+  suggested_additions?: string[];
+  summary_improvement?: string[];
+}
+
+export interface ParsedData {
+  name?: string;
+  email?: string;
+  phone?: string;
+  location?: string;
+  linkedin?: string;
+  github?: string;
+  title?: string;
+  summary?: string;
+  experience?: Experience[];
+  education?: Education[];
+  projects?: Project[];
+  certifications?: Certification[];
+  skills?: string[];
+  filledSuggestions?: FilledSuggestions;
+}
+
+export interface Suggestions {
+  missing_details?: string[];
+  missing_sections?: string[];
+  suggested_additions?: string[];
+  summary_improvement?: string;
+}
+
+export interface CvTemplateProps {
+  parsedData: ParsedData;
+}
+
 export default function ModifyResume() {
-  const { uploadCV, loading, error, success } = useUploadCV();
+  const { uploadCV } = useUploadCV();
    const router = useRouter();
   const [formData, setFormData] = useState<any>(null);
   const [suggestions, setSuggestions] = useState<any>(null);

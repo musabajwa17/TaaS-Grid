@@ -39,12 +39,6 @@ const roles = [
   { id: "employee", label: "Employee" },
   { id: "company", label: "Company" },
 ];
-interface RegisterData {
-  fullName: string;
-  email: string;
-  password: string;
-  role: string;
-}
 
 export default function SignUp() {
   const [fullName, setFullName] = useState("");
@@ -52,7 +46,7 @@ export default function SignUp() {
   const [password, setPassword] = useState("");
   const [role, setRole] = useState("");
   const route = useRouter();
-  const { registerUser, loading, error, success } = useRegisterUser();
+  const { registerUser } = useRegisterUser();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

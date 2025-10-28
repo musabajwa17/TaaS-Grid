@@ -64,28 +64,51 @@ const EmployeeResumeBuilder: React.FC = () => {
 
   const [showPreview, setShowPreview] = useState(false);
 
-  const handleChange = (
-    section: keyof ResumeFormData,
-    index: number | null,
-    field: string,
-    value: string
-  ) => {
-    if (index === null) {
-      setFormData({ ...formData, [section]: value as any });
-    } else {
-      // treat section as an array of records for editing purposes
-      const updatedSection = [...(formData[section] as unknown as Record<string, string>[])];
-      updatedSection[index] = { ...updatedSection[index], [field]: value };
-      setFormData({ ...formData, [section]: updatedSection } as any);
-    }
-  };
+ const handleChange = <K extends keyof ResumeFormData>(
+  section: K,
+  index: number | null,
+  field: string,
+  value: string
+) => {
+  setFormData((prev) => {
+    const updated = { ...prev };
 
-  const addItem = (section: keyof ResumeFormData, emptyItem: unknown) => {
-    setFormData({
-      ...formData,
-      [section]: [...(formData[section] as unknown as unknown[]), emptyItem],
-    } as any);
-  };
+    if (index === null) {
+      // Direct field (like name, email, etc.)
+      updated[section] = value as ResumeFormData[K];
+    } else {
+      // Section is an array (like education, experience, etc.)
+      const sectionData = updated[section];
+
+      if (Array.isArray(sectionData)) {
+        const newSection = [...sectionData];
+        const currentItem = newSection[index] as Record<string, string>;
+        newSection[index] = { ...currentItem, [field]: value } as typeof currentItem;
+        updated[section] = newSection as ResumeFormData[K];
+      }
+    }
+
+    return updated;
+  });
+};
+
+
+const addItem = <K extends keyof ResumeFormData>(
+  section: K,
+  emptyItem: ResumeFormData[K] extends Array<infer U> ? U : never
+) => {
+  setFormData((prev) => {
+    const updated = { ...prev };
+    const sectionData = updated[section];
+
+    if (Array.isArray(sectionData)) {
+      updated[section] = [...sectionData, emptyItem] as ResumeFormData[K];
+    }
+
+    return updated;
+  });
+};
+
 
   const handleSkillChange = (index: number, value: string) => {
     const updatedSkills = [...formData.skills];

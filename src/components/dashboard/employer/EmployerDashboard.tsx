@@ -1,37 +1,37 @@
 'use client'
 import { useState, useEffect } from 'react';
-import {
-  Bell,
-  Users,
-  Briefcase,
-  LineChart as LineChartIcon,
-  TrendingUp,
-  BarChart3,
-  Settings,
-  LogOut
-} from "lucide-react";
+// import {
+//   Bell,
+//   Users,
+//   Briefcase,
+//   LineChart as LineChartIcon,
+//   TrendingUp,
+//   BarChart3,
+//   Settings,
+//   LogOut
+// } from "lucide-react";
 import { ResponsiveContainer, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip } from 'recharts';
 // 📊 Performance data (for charts)
-interface PerformanceData {
-  month: string;
-  jobs: number;
-  applications: number;
-}
+// interface PerformanceData {
+//   month: string;
+//   jobs: number;
+//   applications: number;
+// }
 
 // 💼 Recent job listings
-interface RecentJob {
-  title: string;
-  applicants: number;
-  status: "active" | "closed" | "paused";
-  postedDays: number;
-}
+// interface RecentJob {
+//   title: string;
+//   applicants: number;
+//   status: "active" | "closed" | "paused";
+//   postedDays: number;
+// }
 
 // 👥 Upcoming interviews
-interface UpcomingInterview {
-  candidate: string;
-  position: string;
-  time: string;
-}
+// interface UpcomingInterview {
+//   candidate: string;
+//   position: string;
+//   time: string;
+// }
 
   const performanceData = [
     { month: 'Jan', jobs: 20, applications: 145 },
@@ -58,8 +58,8 @@ interface UpcomingInterview {
 export default function EmployerDashboard() {
   const [animatedStats, setAnimatedStats] = useState([0, 0, 0, 0]);
   const [hoveredCard, setHoveredCard] = useState<number | null>(null);
-  const [notificationCount, setNotificationCount] = useState(3);
-  const [showNotificationPulse, setShowNotificationPulse] = useState(true);
+  // const [notificationCount, setNotificationCount] = useState(3);
+  const [, setShowNotificationPulse] = useState(true);
   const [mounted, setMounted] = useState(false);
 
   const targetStats = [9, 52, 17, 5];

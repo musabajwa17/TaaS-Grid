@@ -64,20 +64,34 @@ const NewResume: React.FC = () => {
 
   const [showPreview, setShowPreview] = useState(false);
 
-  const handleChange = (
-    section: keyof ResumeFormData,
-    index: number | null,
-    field: string,
-    value: string
-  ) => {
+ const handleChange = <K extends keyof ResumeFormData>(
+  section: K,
+  index: number | null,
+  field: string,
+  value: string
+) => {
+  setFormData((prevFormData) => {
+    const updated = { ...prevFormData };
+
     if (index === null) {
-      setFormData({ ...formData, [section]: value as any });
+      // handle simple fields (name, email, etc.)
+      updated[section] = value as ResumeFormData[K];
     } else {
-      const updatedSection = [...(formData[section] as unknown as Record<string, string>[])];
-      updatedSection[index] = { ...updatedSection[index], [field]: value };
-      setFormData({ ...formData, [section]: updatedSection } as any);
+      // handle array sections (education, experience, etc.)
+      const sectionData = updated[section];
+
+      if (Array.isArray(sectionData)) {
+        const newSection = [...sectionData];
+        const item = newSection[index] as Record<string, string>;
+        newSection[index] = { ...item, [field]: value } as typeof item;
+        updated[section] = newSection as ResumeFormData[K];
+      }
     }
-  };
+
+    return updated;
+  });
+};
+
 
   const addItem = (section: keyof ResumeFormData, emptyItem: unknown) => {
     setFormData({

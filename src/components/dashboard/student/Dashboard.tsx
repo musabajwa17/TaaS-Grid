@@ -9,10 +9,6 @@ import {
   ChevronRight,
   Clock,
   Lightbulb,
-  TrendingUp,
-  MessageCircle,
-  Sparkles,
-  Shield,
   Rocket,
   Award,
 } from "lucide-react";
@@ -153,7 +149,7 @@ export default function StudentDashboard() {
         <DataSection
           icon={<Lightbulb className="text-[#00bb98]" />}
           title="Active Final Year Ideas"
-          items={projectIdeas.map((idea, i) => ({
+          items={projectIdeas.map((idea) => ({
             title: idea.title,
             subtitle: idea.domain,
             status: idea.status,

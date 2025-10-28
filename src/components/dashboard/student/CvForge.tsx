@@ -13,7 +13,7 @@ import { useRouter } from "next/navigation";
 import ResumeTemplate from "../../resume/ResumeTemplate";
 export default function CvForge() {
   const router = useRouter();
-  const [file, setFile] = useState<File | null>(null);
+  const [, setFile] = useState<File | null>(null);
   const [dragActive, setDragActive] = useState(false);
   const { loading, error, parsedData, handleUpload, setParsedData, setError } =
     useUploadResume();
@@ -58,9 +58,6 @@ export default function CvForge() {
       setFile(droppedFile);
       handleUpload(droppedFile);
     }
-  };
-  const handleNewResume = () => {
-    router.push("/newresume");
   };
   // Download placeholder
   const downloadPDF = () => {

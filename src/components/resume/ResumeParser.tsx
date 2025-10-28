@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, DragEvent, ChangeEvent, useEffect } from "react";
+import React, { useState, DragEvent, ChangeEvent } from "react";
 import {
   Upload,
   FileText,
@@ -13,7 +13,7 @@ import { useRouter } from "next/navigation";
 import ResumeTemplate from "../resume/ResumeTemplate";
 export default function ResumeParser() {
   const router = useRouter();
-  const [file, setFile] = useState<File | null>(null);
+  const [, setFile] = useState<File | null>(null);
   const [dragActive, setDragActive] = useState(false);
   const { loading, error, parsedData, handleUpload, setParsedData, setError } =
     useUploadResume();

@@ -2,14 +2,15 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
-import { useAuth } from "@/context/AuthContext";
+import { usePathname } from "next/navigation";
+import Image from "next/image";
+// import { useAuth } from "@/context/AuthContext";
 
 const Header: React.FC = () => {
   // const { user, logout } = useAuth();
-  const router = useRouter();
+  // const router = useRouter();
   // const isLoggedIn = !!user;
-  const [isScrolled, setIsScrolled] = useState(false);
+  const [isScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
 
@@ -19,36 +20,13 @@ const Header: React.FC = () => {
     setIsLoggedIn(!!token);
   }, []);
 
-  const handleLogout = () => {
-    localStorage.removeItem("accessToken");
-    localStorage.removeItem("role");
-    setIsLoggedIn(false);
-    window.location.href = "/"; // Redirect to home after logout
-  };
-  // const [isLoggedIn, setIsLoggedIn] = useState(false);
-
-  // useEffect(() => {
-  //   // Check localStorage for accessToken
-  //   const token = localStorage.getItem("accessToken");
-  //   // setIsLoggedIn(!!token);
-  // }, []);
-  const pathname = usePathname();
-
-  // useEffect(() => {
-  //   const handleScroll = () => setIsScrolled(window.scrollY > 50);
-  //   window.addEventListener("scroll", handleScroll);
-  //   return () => window.removeEventListener("scroll", handleScroll);
-  // }, []);
-  //  const handleLogout = async () => {
-  //   try {
-  //     await logout();
-  //     // window.location.href = "/";
-  //      router.push("/");
-  //   } catch (error) {
-  //     console.error("Logout failed:", error);
-  //   }
+  // const handleLogout = () => {
+  //   localStorage.removeItem("accessToken");
+  //   localStorage.removeItem("role");
+  //   setIsLoggedIn(false);
+  //   window.location.href = "/"; // Redirect to home after logout
   // };
-
+  const pathname = usePathname();
   // 🧭 Define your navigation structure (easy to extend later)
   const navItems = [
     { name: "Home", href: "/" },
@@ -86,13 +64,17 @@ const Header: React.FC = () => {
                   isScrolled ? "scale-90" : "scale-100"
                 }`}
               >
-                <img
-                  src="/logo9.png"
-                  alt="Logo"
-                  className={`relative h-12 w-50 object-contain transition-all duration-700 group-hover:scale-110 ${
-                    isScrolled ? "h-12" : "h-14"
-                  }`}
-                />
+<Image
+      src="/logo9.png"
+      alt="Logo"
+      width={200}
+      height={50}
+      className={`relative object-contain transition-all duration-700 group-hover:scale-110 ${
+        isScrolled ? "h-12" : "h-14"
+      }`}
+      priority
+    />
+
               </div>
             </Link>
 

@@ -111,7 +111,7 @@ const ResumePDF: React.FC<{ data?: CVData | null }> = ({ data }) => (
   </Document>
 );
 
-export async function downloadPDF(cvData : any) {
+export async function downloadPDF(cvData : CVData) {
   const blob = await pdf(<ResumePDF data={cvData} />).toBlob();
   saveAs(blob, `${(cvData?.name || "resume").replace(/\s+/g, "_")}.pdf`);
 }

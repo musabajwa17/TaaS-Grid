@@ -19,6 +19,7 @@ import {
   CheckCircle2,
   Settings
 } from 'lucide-react'
+import Image from 'next/image';
 
 // ---------- Type Definitions ----------
 interface Feature {
@@ -46,7 +47,7 @@ interface ColorClasses {
 const TalentServices: React.FC = () => {
   const [activeTab, setActiveTab] = useState<number>(0)
   const [openDropdown, setOpenDropdown] = useState<number | null>(null)
-  const [mousePosition, setMousePosition] = useState<{ x: number; y: number }>({ x: 0, y: 0 })
+  const [, setMousePosition] = useState<{ x: number; y: number }>({ x: 0, y: 0 })
   const [isHovering, setIsHovering] = useState<boolean>(false)
 
   useEffect(() => {
@@ -358,11 +359,13 @@ const TalentServices: React.FC = () => {
                 
                 {/* Main image */}
                 <div className="relative overflow-hidden rounded-3xl shadow-2xl">
-                  <img
-                    src={currentContent.image}
-                    alt={currentContent.title}
-                    className="w-full h-[500px] object-cover transform group-hover:scale-110 transition-transform duration-700"
-                  />
+                  <Image
+  src={currentContent.image}
+  alt={currentContent.title}
+  width={1000} // approximate width, adjust as needed
+  height={500} // matches h-[500px]
+  className="w-full h-[500px] object-cover transform group-hover:scale-110 transition-transform duration-700"
+/>
                   
                   {/* Gradient overlay */}
                   <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>

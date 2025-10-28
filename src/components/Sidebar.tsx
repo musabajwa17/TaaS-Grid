@@ -17,6 +17,7 @@ import CvForge from "./dashboard/student/CvForge";
 import NewResume from "./dashboard/student/CvBuilder";
 import { useAuth } from "@/context/AuthContext";
 import BookMarks from "./dashboard/student/BookMarks";
+import Image from "next/image";
 
 interface Stage {
   name: string;
@@ -27,7 +28,6 @@ interface Stage {
 
 export default function Sidebar(): ReactElement {
   const { logout } = useAuth();
-  const [openStage, setOpenStage] = useState<string | null>(null);
   const [selected, setSelected] = useState<string>("Dashboard Overview");
   const [menuOpen, setMenuOpen] = useState<boolean>(false);
   const [userEmail, setUserEmail] = useState<string | null>(null);
@@ -82,11 +82,13 @@ export default function Sidebar(): ReactElement {
         {/* Logo Section */}
         <div className="px-6 py-4 border-b border-slate-200 bg-white">
           <Link href="/" className="flex justify-center">
-            <img
-              src="/logo5.png"
-              alt="Logo"
-              className="h-13 w-auto object-contain transition-transform duration-300 hover:scale-105"
-            />
+           <Image
+  src="/logo5.png"
+  alt="Logo"
+  width={200} // adjust as needed
+  height={52} // roughly matches h-13 (≈52px)
+  className="h-13 w-auto object-contain transition-transform duration-300 hover:scale-105"
+/>
           </Link>
         </div>
 

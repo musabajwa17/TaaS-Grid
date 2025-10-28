@@ -13,9 +13,9 @@ import {
   Briefcase,
   GitBranch,
   FileText,
-  Zap,
-  Brain
+  Zap
 } from 'lucide-react';
+import Image from 'next/image';
 
 const modules = [
   {
@@ -177,15 +177,6 @@ const HeroSection = () => {
   const [isHovered, setIsHovered] = useState(false);
   const [hoveredModule, setHoveredModule] = useState<number | null>(null);
   const [animationPhase, setAnimationPhase] = useState(0);
-  const [animate, setAnimate] = useState(false);
-
-  // useEffect(() => {
-  //   // Trigger smooth drop animation on every change
-  //   setAnimate(false);
-  //   const timer = setTimeout(() => setAnimate(true), 50);
-  //   return () => clearTimeout(timer);
-  // }, [currentModule]);
-
   useEffect(() => {
     if (animationPhase < modules.length) {
       const timer = setTimeout(() => {
@@ -280,7 +271,7 @@ const HeroSection = () => {
                     const titleKey = `title${num}` as TitleKey;
                     const icons = [Briefcase, GitBranch, Lightbulb, Rocket, FileText, Zap];
                     const CardIcon = icons[num - 1];
-                    const titleValue = String((currentModule.content as any)[titleKey]);
+                    const titleValue = String((currentModule.content)[titleKey]);
 
                     return (
                       <motion.div
@@ -372,13 +363,15 @@ const HeroSection = () => {
             <div className="absolute inset-0 flex items-center justify-center">
               <div className="relative">
                 <div className="w-42 h-42 rounded-full">
-                  {/* {React.createElement(currentModule.content.lucideIcon, {
-                    className: "w-15 h-15 text-white mb-2",
-                  })}
-                  <p className="text-sm font-bold text-white text-center px-2">
-                    {currentModule.name}
-                  </p> */}
-                  <img src="/logo7.png" className="w-full h-full mb-4" />
+
+<Image
+  src="/logo7.png"
+  alt="Logo"
+  width={500}     // you can adjust this as needed
+  height={500}    // adjust to your actual image ratio
+  className="w-full h-full mb-4 object-contain"
+/>
+
                 </div>
               </div>
             </div>

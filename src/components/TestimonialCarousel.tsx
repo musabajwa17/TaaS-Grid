@@ -1,6 +1,7 @@
 "use client"
 import { useState, useEffect } from 'react';
 import { ChevronLeft, ChevronRight, Quote } from 'lucide-react';
+import Image from 'next/image';
 
 export default function TestimonialCarousel() {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -92,11 +93,13 @@ export default function TestimonialCarousel() {
                       <div className="flex-shrink-0">
                         <div className="relative">
                           <div className="w-72 h-72 rounded-2xl overflow-hidden shadow-2xl">
-                            <img
-                              src={testimonial.image}
-                              alt={testimonial.name}
-                              className="w-full h-full object-cover"
-                            />
+                            <Image
+  src={testimonial.image}
+  alt={testimonial.name}
+  width={500}    // adjust as needed based on your layout
+  height={500}   // adjust for your aspect ratio
+  className="w-full h-full object-cover"
+/>
                           </div>
                           <div className="absolute -bottom-4 -right-4 bg-gradient-to-r from-green-600 to-emerald-600 rounded-full p-4 shadow-lg">
                             <Quote className="w-8 h-8 text-white" />
