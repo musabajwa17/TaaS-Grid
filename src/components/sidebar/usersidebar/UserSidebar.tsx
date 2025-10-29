@@ -70,8 +70,8 @@ export default function UserSidebar(): ReactElement {
 
   const stages: Stage[] = [
     { name: "Dashboard Overview", icon: Layers, color: "emerald" },
-    { name: "Resume Builder", icon: FileText, color: "emerald" },
-    { name: "AI CV Optimizer", icon: MapPin, color: "emerald" },
+    { name: "Resume Forge", icon: FileText, color: "emerald" },
+    { name: "Resume Builder", icon: MapPin, color: "emerald" },
     { name: "Saved Opportunities", icon: Droplet, color: "emerald" },
   ];
 
@@ -169,9 +169,9 @@ export default function UserSidebar(): ReactElement {
             <p className="text-emerald-50 text-sm">
               {selected === "Dashboard Overview"
                 ? "Overview and insights"
-                : selected === "Resume Builder"
+                : selected === "Resume Forge"
                 ? "Build and manage your resume"
-                : selected === "AI CV Optimizer"
+                : selected === "Resume Builder"
                 ? "Enhance your CV using AI"
                 : "Save and manage your opportunities"}
             </p>
@@ -213,8 +213,8 @@ export default function UserSidebar(): ReactElement {
         {/* ✅ Main content (auto fills height with flex) */}
         <div className="flex-1 overflow-y-auto bg-white">
           {selected === "Dashboard Overview" && <StudentDashboard />}
-          {selected === "Resume Builder" && <CvForge />}
-          {selected === "AI CV Optimizer" && <NewResume />}
+          {selected === "Resume Forge" && <CvForge />}
+          {selected === "Resume Builder" && <NewResume />}
           {selected === "Saved Opportunities" && <BookMarks />}
         </div>
       </main>

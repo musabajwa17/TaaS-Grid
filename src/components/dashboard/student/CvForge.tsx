@@ -5,18 +5,19 @@ import {
   FileText,
   Loader2,
   CheckCircle,
-  BookText,
-  Search,
+  BookText
 } from "lucide-react";
 import { useUploadResume } from "@/hooks/useUploadResume";
 import { useRouter } from "next/navigation";
-import ResumeTemplate from "../../resume/ResumeTemplate";
+import { useUploadCV } from "@/hooks/useUploadCV";
+import CvTemplate from "./CvTemplate";
 export default function CvForge() {
   const router = useRouter();
   const [, setFile] = useState<File | null>(null);
   const [dragActive, setDragActive] = useState(false);
   const { loading, error, parsedData, handleUpload, setParsedData, setError } =
     useUploadResume();
+    const { uploadCV } = useUploadCV();
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files?.[0];
 
@@ -60,8 +61,20 @@ export default function CvForge() {
     }
   };
   // Download placeholder
-  const downloadPDF = () => {
-    alert("PDF download requires integration with jsPDF or similar library");
+const downloadSubmit = async () => {
+  console.log(parsedData)
+    try {
+      if (!parsedData) {
+        return alert("No resume data available to upload.");
+      }
+
+      // ✅ Trigger the upload function
+      await uploadCV(parsedData);
+
+      console.log("✅ Resume uploaded successfully:", parsedData);
+    } catch (error) {
+      console.error("❌ Resume upload failed:", error);
+    }
   };
   const enrichCv = () => {
     localStorage.setItem("parsedData", JSON.stringify(parsedData));
@@ -70,22 +83,6 @@ export default function CvForge() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 p-6">
       <div className="max-w-5xl mx-auto">
-        {/* Header */}
-        {/* <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-gray-800 mb-2">
-            Resume Parser & Builder
-          </h1>
-          <p className="text-gray-600 mb-4">
-            Upload your PDF resume and get structured data instantly
-          </p>
-
-          <button
-            onClick={() => handleNewResume() }
-            className="px-6 py-2 bg-green-600 text-white font-medium rounded-lg shadow-md hover:bg-green-700 transition-all duration-200"
-          >
-            Create New Resume
-          </button>
-        </div> */}
 
         {/* Error */}
         {error && (
@@ -179,17 +176,17 @@ export default function CvForge() {
                   Enrich CV
                 </button>
                 <button
-                  onClick={downloadPDF}
+                  onClick={downloadSubmit}
                   className="flex items-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
                 >
-                  <Search className="w-4 h-4 mr-2" />
-                  Job Search
+                  {/* <Search className="w-4 h-4 mr-2" /> */}
+                  Submit
                 </button>
               </div>
             </div>
 
             {/* Resume Content */}
-            <ResumeTemplate parsedData={parsedData} />
+            <CvTemplate parsedData={parsedData} />
 
             {/* Action Buttons */}
             <div className="flex gap-4 justify-center">

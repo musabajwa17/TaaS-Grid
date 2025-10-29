@@ -3,6 +3,7 @@ import React, { useState, FormEvent } from "react";
 import { Plus } from "lucide-react";
 // import FinalizedResume from "./FinalizedResume";
 import FinalizedResume from "../../resume/FinalizedResume";
+import { useUploadCV } from "@/hooks/useUploadCV";
 interface Education {
   degree: string;
   institution: string;
@@ -61,7 +62,8 @@ const EmployeeResumeBuilder: React.FC = () => {
     certifications: [{ title: "", organization: "", year: "" }],
     skills: [""],
   });
-
+const { uploadCV, loading, error, success } = useUploadCV();
+console.log("Employee Resume Builder Rendered");
   const [showPreview, setShowPreview] = useState(false);
 
  const handleChange = <K extends keyof ResumeFormData>(
@@ -74,10 +76,8 @@ const EmployeeResumeBuilder: React.FC = () => {
     const updated = { ...prev };
 
     if (index === null) {
-      // Direct field (like name, email, etc.)
       updated[section] = value as ResumeFormData[K];
     } else {
-      // Section is an array (like education, experience, etc.)
       const sectionData = updated[section];
 
       if (Array.isArray(sectionData)) {
@@ -120,10 +120,17 @@ const addItem = <K extends keyof ResumeFormData>(
     setFormData({ ...formData, skills: [...formData.skills, ""] });
   };
 
-  const handleSubmit = (e: FormEvent) => {
+const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     console.log("Submitted Resume Data:", formData);
-    setShowPreview(true); // Show finalized resume
+
+    try {
+      const response = await uploadCV(formData);
+      console.log("Server Response:", response);
+      setShowPreview(true); // ✅ Show finalized resume after upload
+    } catch (err) {
+      console.error("Error during resume submission:", err);
+    }
   };
 
   const renderSectionHeader = (

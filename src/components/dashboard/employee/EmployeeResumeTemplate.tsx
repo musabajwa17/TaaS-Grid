@@ -65,6 +65,7 @@ export interface EmployeeParsedData {
 }
 
 const EmployeeResumeTemplate: React.FC<{ parsedData: EmployeeParsedData }> = ({ parsedData }) => {
+  console.log("EmployeeResumeTemplate Rendered with parsedData:");
   return (
     <div className="bg-white shadow-lg rounded-xl p-8 border border-gray-200 space-y-8 text-gray-800">
       {/* Header */}
@@ -207,20 +208,6 @@ const EmployeeResumeTemplate: React.FC<{ parsedData: EmployeeParsedData }> = ({ 
         <Section title="Memberships & Associations" icon={<UserCircle className="w-5 h-5" />}>
           {parsedData.membershipsAndAssociations?.map((m, idx) => (
             <Item key={idx} title={m.heading} subtitle={m.desc} />
-          ))}
-        </Section>
-      )}
-
-      {/* References */}
-      {(parsedData.references?.length ?? 0) > 0 && (
-        <Section title="References" icon={<Users className="w-5 h-5" />}>
-          {parsedData.references?.map((r, idx) => (
-            <div key={idx} className="mb-2">
-              <p className="font-semibold">{r.prof}</p>
-              <p className="text-sm">{r.designation}</p>
-              <p className="text-sm">{r.mail}</p>
-              <p className="text-sm">{r.phone}</p>
-            </div>
           ))}
         </Section>
       )}

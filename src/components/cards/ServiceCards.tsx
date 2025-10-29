@@ -1,6 +1,6 @@
 "use client"
 import React, { useState } from 'react';
-import { Play } from 'lucide-react';
+import { Play, Sparkles } from 'lucide-react';
 
 interface Card {
   id: number;
@@ -47,7 +47,7 @@ const cards: Card[] = [
     description: "through workflow automation",
     hoverTitle: "Intelligent Process Automation",
     hoverDescription:
-      "TaaS Grid’s automation engine streamlines operations, connects systems, and eliminates repetitive tasks — empowering teams to focus on strategic outcomes.",
+      "TaaS Grid's automation engine streamlines operations, connects systems, and eliminates repetitive tasks — empowering teams to focus on strategic outcomes.",
     author: "Emily Rodriguez",
     authorRole: "Automation Lead"
   },
@@ -94,18 +94,32 @@ const ServiceCards = () => {
   const [hoveredCard, setHoveredCard] = useState<number | null>(null);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 p-8">
-      <div className="max-w-7xl mx-auto">
-        <div className="text-center mb-12">
-          <h1 className="text-5xl font-bold text-white mb-4">Customer Success Stories</h1>
-          <p className="text-xl text-slate-300">See how leading companies transform their business with TaaS Grid</p>
+    <div className="min-h-screen bg-gradient-to-br from-zinc-950 via-neutral-900 to-zinc-950 p-8 relative overflow-hidden">
+      {/* Animated background elements */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-cyan-500/5 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute bottom-1/3 right-1/4 w-96 h-96 bg-cyan-400/5 rounded-full blur-3xl animate-pulse" style={{animationDelay: '1s'}}></div>
+      </div>
+
+      <div className="max-w-7xl mx-auto relative z-10">
+        <div className="text-center mb-16">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-cyan-500/10 border border-cyan-500/20 mb-6">
+            <Sparkles className="w-4 h-4 text-cyan-400" />
+            <span className="text-sm font-medium text-cyan-400">Success Stories</span>
+          </div>
+          <h1 className="text-6xl font-bold mb-4 bg-gradient-to-r from-white via-cyan-100 to-white bg-clip-text text-transparent">
+            Transforming Business at Scale
+          </h1>
+          <p className="text-xl text-neutral-400 max-w-2xl mx-auto">
+            Discover how industry leaders leverage TaaS Grid to drive innovation and accelerate growth
+          </p>
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {cards.map((card) => (
             <div
               key={card.id}
-              className="group relative h-96 rounded-2xl overflow-hidden cursor-pointer shadow-2xl transition-all duration-500 hover:scale-105 hover:shadow-purple-500/30"
+              className="group relative h-96 rounded-2xl overflow-hidden cursor-pointer transition-all duration-500 hover:scale-[1.02]"
               onMouseEnter={() => setHoveredCard(card.id)}
               onMouseLeave={() => setHoveredCard(null)}
             >
@@ -114,15 +128,15 @@ const ServiceCards = () => {
                 className="absolute inset-0 bg-cover bg-center transition-all duration-700"
                 style={{ 
                   backgroundImage: `url(${card.image})`,
-                  filter: hoveredCard === card.id ? 'blur(8px) brightness(0.3)' : 'brightness(0.7)'
+                  filter: hoveredCard === card.id ? 'blur(8px) brightness(0.2)' : 'brightness(0.5)'
                 }}
               />
               
               {/* Gradient Overlay */}
               <div className={`absolute inset-0 bg-gradient-to-b transition-opacity duration-700 ${
                 hoveredCard === card.id 
-                  ? 'from-purple-900/90 via-purple-800/80 to-slate-900/95 opacity-100' 
-                  : 'from-transparent via-transparent to-slate-900/80 opacity-100'
+                  ? 'from-cyan-950/95 via-zinc-900/90 to-zinc-950/95 opacity-100' 
+                  : 'from-transparent via-zinc-900/40 to-zinc-950/90 opacity-100'
               }`} />
 
               {/* Content Container */}
@@ -131,7 +145,9 @@ const ServiceCards = () => {
                 <div className={`transition-all duration-500 ${
                   hoveredCard === card.id ? 'opacity-0 -translate-y-4' : 'opacity-100 translate-y-0'
                 }`}>
-                  <h3 className="text-2xl font-bold text-white drop-shadow-lg">{card.logo}</h3>
+                  <div className="inline-block px-3 py-1 rounded-lg bg-cyan-500/10 border border-cyan-500/20 backdrop-blur-sm">
+                    <h3 className="text-xl font-bold text-cyan-400">{card.logo}</h3>
+                  </div>
                 </div>
 
                 {/* Hover Content - Center */}
@@ -140,15 +156,16 @@ const ServiceCards = () => {
                     ? 'opacity-100 translate-y-0' 
                     : 'opacity-0 translate-y-8 pointer-events-none'
                 }`}>
+                  <div className="w-12 h-1 bg-gradient-to-r from-transparent via-cyan-400 to-transparent mb-4"></div>
                   <h3 className="text-3xl font-bold text-white mb-4 leading-tight">
                     {card.hoverTitle}
                   </h3>
-                  <p className="text-lg text-slate-200 leading-relaxed italic">
-                    &ldquo;{card.hoverDescription}&rdquo;
+                  <p className="text-base text-neutral-300 leading-relaxed">
+                    {card.hoverDescription}
                   </p>
-                  <div className="mt-6 pt-6 border-t border-white/20">
-                    <p className="text-white font-semibold text-lg">{card.author}</p>
-                    <p className="text-slate-300 text-sm">{card.authorRole}</p>
+                  <div className="mt-6 pt-6 border-t border-cyan-500/20">
+                    <p className="text-white font-semibold text-base">{card.author}</p>
+                    <p className="text-cyan-400 text-sm font-medium">{card.authorRole}</p>
                   </div>
                 </div>
 
@@ -156,30 +173,35 @@ const ServiceCards = () => {
                 <div className={`transition-all duration-500 ${
                   hoveredCard === card.id ? 'opacity-0 translate-y-4' : 'opacity-100 translate-y-0'
                 }`}>
-                  <div className="flex items-end justify-between">
+                  <div className="flex items-end justify-between gap-4">
                     <div className="flex-1">
                       <h4 className="text-xl font-bold text-white leading-tight mb-1">
                         {card.title}
                       </h4>
-                      <p className="text-base text-slate-200 font-medium">
+                      <p className="text-sm text-cyan-400 font-medium">
                         {card.description}
                       </p>
                     </div>
                     <button 
-                      className="ml-4 flex-shrink-0 w-14 h-14 rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center transition-all duration-300 hover:bg-white hover:scale-110 hover:shadow-xl group-hover:bg-purple-500 group-hover:shadow-purple-500/50"
+                      className="flex-shrink-0 w-14 h-14 rounded-full bg-gradient-to-br from-cyan-400 to-cyan-500 flex items-center justify-center transition-all duration-300 hover:scale-110 hover:shadow-lg hover:shadow-cyan-500/50 group-hover:from-cyan-300 group-hover:to-cyan-400"
                       aria-label="Play video"
                     >
-                      <Play className="w-6 h-6 text-slate-900 fill-slate-900 ml-1 group-hover:text-white group-hover:fill-white transition-colors duration-300" />
+                      <Play className="w-6 h-6 text-zinc-950 fill-zinc-950 ml-1 transition-transform duration-300 group-hover:scale-110" />
                     </button>
                   </div>
                 </div>
               </div>
 
-              {/* Decorative Border */}
-              <div className={`absolute inset-0 rounded-2xl border-2 transition-all duration-500 ${
+              {/* Glow Border */}
+              <div className={`absolute inset-0 rounded-2xl transition-all duration-500 ${
                 hoveredCard === card.id 
-                  ? 'border-purple-400 shadow-lg shadow-purple-500/50' 
-                  : 'border-transparent'
+                  ? 'shadow-lg shadow-cyan-500/30 ring-2 ring-cyan-500/50' 
+                  : 'ring-1 ring-white/5'
+              }`} />
+              
+              {/* Corner accent */}
+              <div className={`absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-cyan-500/20 to-transparent rounded-bl-full transition-opacity duration-500 ${
+                hoveredCard === card.id ? 'opacity-100' : 'opacity-0'
               }`} />
             </div>
           ))}

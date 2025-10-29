@@ -414,7 +414,7 @@ const HeroSection = () => {
                     <div
                       className={`relative w-32 h-32 rounded-2xl bg-gradient-to-br ${module.color} shadow-xl flex flex-col items-center justify-center transition-all duration-1000 ease-out ${
                         isActive ? 'ring-4 ring-white ring-offset-4 ring-offset-slate-100' : ''
-                      } group-hover:-translate-y-4 group-hover:scale-110 group-hover:ring-4 group-hover:ring-white group-hover:ring-offset-4 group-hover:ring-offset-slate-100 ${
+                      } group-hover:-translate-y-1 group-hover:scale-110 group-hover:ring-4 group-hover:ring-white group-hover:ring-offset-4 group-hover:ring-offset-slate-100 ${
                         moduleIsYellow ? 'group-hover:shadow-2xl group-hover:shadow-amber-500/50' : 'group-hover:shadow-2xl group-hover:shadow-blue-500/50'
                       }`}
                     >
@@ -430,67 +430,14 @@ const HeroSection = () => {
                         </span>
                       </div>
                     </div>
-                    {/* <div className="absolute -bottom-12 left-1/2 transform -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-all duration-700 group-hover:-translate-y-1">
-                      <p className={`text-xs font-semibold whitespace-nowrap bg-white px-4 py-2 rounded-xl backdrop-blur-sm border-2 shadow-lg ${
-                        moduleIsYellow 
-                          ? 'border-amber-300 text-amber-700' 
-                          : 'border-blue-300 text-blue-700'
-                      }`}>
-                        {module.keywords}
-                      </p>
-                    </div> */}
                   </div>
                 </div>
               );
             })}
 
-            {/* Connecting Lines with Glow */}
-            {/* <svg className="absolute inset-0 w-full h-full pointer-events-none">
-              <defs>
-                <filter id="glow">
-                  <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
-                  <feMerge>
-                    <feMergeNode in="coloredBlur"/>
-                    <feMergeNode in="SourceGraphic"/>
-                  </feMerge>
-                </filter>
-              </defs>
-              {modules.map((module, index) => {
-                if (index === displayModule) {
-                  const pos = getModulePosition(module.angle, 180);
-                  return (
-                    <line
-                      key={index}
-                      x1="50%"
-                      y1="50%"
-                      x2={`calc(50% + ${pos.x}px)`}
-                      y2={`calc(50% + ${pos.y}px)`}
-                      stroke={isYellow ? "#f59e0b" : "#3b82f6"}
-                      strokeWidth="4"
-                      className="animate-pulse"
-                      filter="url(#glow)"
-                      opacity="0.7"
-                    />
-                  );
-                }
-                return null;
-              })}
-            </svg> */}
-
-            {/* Orbit Rings */}
-            {/* <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-              <div className={`w-[360px] h-[360px] rounded-full border-2 animate-pulse ${
-                isYellow ? 'border-amber-300/30' : 'border-blue-300/30'
-              }`} style={{ animationDuration: '3s' }}></div>
-              <div className={`absolute w-[400px] h-[400px] rounded-full border animate-pulse ${
-                isYellow ? 'border-amber-200/20' : 'border-blue-200/20'
-              }`} style={{ animationDuration: '4s' }}></div>
-            </div> */}
           </div>
         </div>
       </div>
-
-      {/* Floating Particles - REMOVED */}
     </div>
   );
 };

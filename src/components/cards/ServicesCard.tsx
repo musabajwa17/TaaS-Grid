@@ -144,8 +144,8 @@ const Services = () => {
   const visibleIndices = getVisibleModules();
 
   return (
-    <section className="relative min-h-screen w-full overflow-hidden bg-[#f4f8fd] py-20 px-4">
-      <div className="relative z-10 max-w-7xl mx-auto">
+    <section className="relative min-h-screen w-full overflow-hidden bg-[#f4f8fd] px-4">
+      <div className="relative z-10 max-w-7xl mx-auto mb-10">
         {/* Heading */}
         <div className="text-center mb-16 space-y-4">
           <h2 className="text-5xl md:text-6xl font-bold bg-gradient-to-b from-green-600 to-emerald-600 bg-clip-text text-transparent">
