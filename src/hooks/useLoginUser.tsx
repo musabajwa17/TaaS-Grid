@@ -10,20 +10,14 @@ export const useLoginUser = () => {
   const [loading, setLoading] = useState(false);
   const [userLogin, setUserLogin] = useState<Record<string, unknown> | null>(null);
   const loginUser = async (email: string, password: string) => {
-    console.log("Login Credentials", email, password);
+    // Removed logging of credentials for security
     setLoading(true);
     try {
-      console.log("Login Credentials 1");
       const response = await axios.post("http://localhost:3001/api/user/login", {
         email,
         password,
       });
-      
-// Log the full JSON
-console.log("Login Response:", response.data);
-
-// Set the entire JSON object to your state
-setUserLogin(response.data);
+      setUserLogin(response.data as Record<string, unknown>);
       const { user, accessToken, refreshToken } = response.data;
       // setUser(user);
       // console.log("User Login", user);

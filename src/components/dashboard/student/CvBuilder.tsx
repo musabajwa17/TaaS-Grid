@@ -3,6 +3,7 @@ import React, { useState, FormEvent } from "react";
 import { Plus } from "lucide-react";
 // import FinalizedResume from "./FinalizedResume";
 import FinalizedResume from "../../resume/FinalizedResume";
+import FinalizedStudentResume from "./FinalizedStudentResume";
 interface Education {
   degree: string;
   institution: string;
@@ -112,7 +113,7 @@ const NewResume: React.FC = () => {
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
-    console.log("Submitted Resume Data:", formData);
+  // Submitted Resume Data
     setShowPreview(true); // Show finalized resume
   };
 
@@ -137,7 +138,7 @@ const NewResume: React.FC = () => {
   );
 
   if (showPreview) {
-    return <FinalizedResume parsedData={formData} />;
+    return <FinalizedStudentResume parsedData={formData} />;
   }
 
   return (

@@ -12,11 +12,12 @@ import {
   User,
 } from "lucide-react";
 import Link from "next/link";
-import StudentDashboard from "./dashboard/student/Dashboard";
-import CvForge from "./dashboard/student/CvForge";
-import NewResume from "./dashboard/student/CvBuilder";
+import dynamic from "next/dynamic";
+const StudentDashboard = dynamic(() => import("./dashboard/student/Dashboard"), { ssr: false });
+const CvForge = dynamic(() => import("./dashboard/student/CvForge"), { ssr: false });
+const NewResume = dynamic(() => import("./dashboard/student/CvBuilder"), { ssr: false });
 import { useAuth } from "@/context/AuthContext";
-import BookMarks from "./dashboard/student/BookMarks";
+const BookMarks = dynamic(() => import("./dashboard/student/BookMarks"), { ssr: false });
 import Image from "next/image";
 
 interface Stage {

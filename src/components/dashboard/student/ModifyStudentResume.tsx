@@ -64,16 +64,13 @@ export interface CvTemplateProps {
   parsedData: ParsedData;
 }
 
-export default function ModifyResume() {
+export default function ModifyStudentResume() {
   const { uploadCV } = useUploadCV();
    const router = useRouter();
   const [formData, setFormData] = useState<ParsedData | null>(null);
   const [suggestions, setSuggestions] = useState<Suggestions | null>(null);
   const [inputs, setInputs] = useState<Record<string, Record<number, string>>>({});
   const [showPreview, setShowPreview] = useState(false);
-// inputs logged
-  // 🧠 Load enriched data from localStorage
-   // 🔹 Load from localStorage
   useEffect(() => {
     const storedData = localStorage.getItem("enrichedData");
     if (storedData) {
@@ -82,8 +79,6 @@ export default function ModifyResume() {
       setSuggestions(parsed.suggestions || {});
     }
   }, []);
-
-  // 🔹 Check condition and redirect
   useEffect(() => {
     // Wait a tick for state to populate
     const timer = setTimeout(() => {
@@ -91,16 +86,11 @@ export default function ModifyResume() {
         router.push("/cvbuilder");
       }
     }, 300);
-
     return () => clearTimeout(timer);
   }, [formData, showPreview, router]);
-
-  // 🔹 Prevent rendering if redirecting
   if (!formData && !showPreview) {
     return null;
   }
-
-  // 🛠 Handle regular resume field changes
   const handleChange = (
     section: keyof ParsedData,
     index: number,
@@ -125,8 +115,6 @@ export default function ModifyResume() {
       return updated as ParsedData;
     });
   };
-
-  // 🧠 Handle AI suggestion input changes
   const handleSuggestionChange = (
     category: string,
     index: number,
@@ -140,8 +128,6 @@ export default function ModifyResume() {
       },
     }));
   };
-
-  // 💾 On Submit — save & preview
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     // Convert object of objects → object of arrays
@@ -160,6 +146,7 @@ export default function ModifyResume() {
     localStorage.removeItem("parsedData");
     // 💾 Save locally (for offline preview)
     localStorage.setItem("combinedData", JSON.stringify(combinedData));
+    
   // Save combined resume data locally for preview
     try {
       // 🔥 Upload CV to backend
@@ -172,12 +159,13 @@ export default function ModifyResume() {
       alert("Error uploading CV. Please try again.");
     }
   };
+  
 
   if (!formData)
     return <p className="text-center mt-10 text-gray-600">Loading data...</p>;
   // 🧾 Resume Editing Form
   return (
-    <div className="max-w-5xl mx-auto p-8 bg-white shadow-xl border rounded-2xl my-20">
+    <div className="max-w-5xl mx-auto p-8 bg-white shadow-xl border rounded-2xl my-5">
       <h1 className="text-3xl font-bold text-center text-green-600 mb-3">
         Modify Your Resume
       </h1>

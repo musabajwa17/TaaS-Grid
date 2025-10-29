@@ -1,15 +1,16 @@
 "use client";
 
 import { Toaster } from "react-hot-toast";
-import ServiceCards from "@/components/cards/ServiceCards";
+import dynamic from "next/dynamic";
+const ServiceCards = dynamic(() => import("@/components/cards/ServiceCards"), { ssr: false });
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
-import HeroSection from "@/components/HeroSection";
-import Services from "@/components/cards/ServicesCard";
-import StatsSection from "@/components/StatsSection";
-import TalentServices from "@/components/TalentServices";
-import TestimonialCarousel from "@/components/TestimonialCarousel";
-import UserTypesSection from "@/components/UserTypes";
+const HeroSection = dynamic(() => import("@/components/HeroSection"), { ssr: false });
+const Services = dynamic(() => import("@/components/cards/ServicesCard"), { ssr: false });
+const StatsSection = dynamic(() => import("@/components/StatsSection"), { ssr: false });
+const TalentServices = dynamic(() => import("@/components/TalentServices"), { ssr: false });
+const TestimonialCarousel = dynamic(() => import("@/components/TestimonialCarousel"), { ssr: false });
+const UserTypesSection = dynamic(() => import("@/components/UserTypes"), { ssr: false });
 
 export default function Home() {
   return (
@@ -47,4 +48,4 @@ export default function Home() {
       />
     </>
   );
-}
+    }

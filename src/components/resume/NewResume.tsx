@@ -97,7 +97,7 @@ const NewResume: React.FC = () => {
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
-    console.log("Submitted Resume Data:", formData);
+  // Submitted Resume Data
     setShowPreview(true); // Show finalized resume
   };
 

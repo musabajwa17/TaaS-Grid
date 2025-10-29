@@ -63,7 +63,6 @@ const EmployeeResumeBuilder: React.FC = () => {
     skills: [""],
   });
 const { uploadCV, loading, error, success } = useUploadCV();
-console.log("Employee Resume Builder Rendered");
   const [showPreview, setShowPreview] = useState(false);
 
  const handleChange = <K extends keyof ResumeFormData>(
@@ -122,11 +121,8 @@ const addItem = <K extends keyof ResumeFormData>(
 
 const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    console.log("Submitted Resume Data:", formData);
-
     try {
       const response = await uploadCV(formData);
-      console.log("Server Response:", response);
       setShowPreview(true); // ✅ Show finalized resume after upload
     } catch (err) {
       console.error("Error during resume submission:", err);

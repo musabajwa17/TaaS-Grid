@@ -34,11 +34,10 @@ export default function Login() {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-       console.log("Login Api")
      await loginUser(email, password);
       route.push("/dashboard");
     } catch (err) {
-      console.log("Error login", err)
+      // error handling is done in the hook; keep UI simple here
     }
   };
 

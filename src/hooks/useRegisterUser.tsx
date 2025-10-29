@@ -25,7 +25,7 @@ export const useRegisterUser = () => {
     //   const response = await axios.post(`${BASE_URL}/register`, formData, {
       const response = await axios.post("http://localhost:3001/api/user/register", formData);
 
-      console.log("✅ Registration Success:", response.data);
+  // Registration success
       toast.success(response.data.message)
       setSuccess(true);
       return response.data;

@@ -8,7 +8,6 @@ export const useUploadCV = () => {
   const [success, setSuccess] = useState<string | null>(null);
 
   const uploadCV = async (formData: any) => {
-    console.log("Uploading Resume:", formData);
     setLoading(true);
     setError(null);
     setSuccess(null);
@@ -20,7 +19,7 @@ export const useUploadCV = () => {
       const userId = parsedUser?._id;
 
       if (!userId) {
-        throw new Error("User ID not found in localStorage. Please log in again.");
+        throw new Error("User ID not found. Please log in again.");
       }
 
       // ✅ Merge userId into the payload
@@ -33,14 +32,14 @@ export const useUploadCV = () => {
         { headers: { "Content-Type": "application/json" } }
       );
 
-      console.log("✅ CV Upload Success:", response.data);
+  // CV upload success
       const msg = response.data.message || "Resume uploaded successfully!";
       setSuccess(msg);
       toast.success(msg); // ✅ Success toast
       return response.data;
-    } catch (err: unknown) {
+    } catch (err: any) {
       console.error("❌ Error uploading CV:", err);
-
+      // toast.success(err.response?.data?.message || "An error occurred.");
       let message = "Something went wrong while uploading the resume.";
       if (axios.isAxiosError(err) && err.response?.data) {
         message = String(err.response.data?.message || err.response.data);

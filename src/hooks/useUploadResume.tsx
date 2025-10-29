@@ -39,7 +39,7 @@ const endpoint =
 
       clearTimeout(timeout);
       setParsedData(res.data);
-      console.log(res)
+    // response logged
       toast.success("Resume parsed successfully!");
     } catch (err: unknown) {
       let message = "An unknown error occurred.";

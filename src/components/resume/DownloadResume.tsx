@@ -1,10 +1,9 @@
 "use client";
-import { Page, Text, View, Document, StyleSheet, pdf } from "@react-pdf/renderer";
 import { saveAs } from "file-saver";
-import React from "react";
+import React, { useEffect, useState } from "react";
 
-// 🧩 Styles similar to your html2pdf layout
-const styles = StyleSheet.create({
+// Lightweight plain styles (avoid calling StyleSheet.create at module load)
+const plainStyles = {
   page: {
     backgroundColor: "#ffffff",
     color: "#000000",
@@ -46,74 +45,133 @@ const styles = StyleSheet.create({
     padding: "3px 6px",
     margin: 2,
   },
-});
-
-// 🧠 PDF Document Component
-type CVData = {
-  name?: string;
-  title?: string;
-  email?: string;
-  phone?: string;
-  experience?: string[];
-  education?: string[];
-  skills?: string[];
 };
 
-const ResumePDF: React.FC<{ data?: CVData | null }> = ({ data }) => (
-  <Document>
-    <Page size="A4" style={styles.page}>
-      {/* HEADER */}
-      <View style={styles.header}>
-        <Text style={styles.name}>{data?.name || "Your Name"}</Text>
-        {data?.title && <Text>{data.title}</Text>}
-        {data?.email && <Text>{data.email}</Text>}
-        {data?.phone && <Text>{data.phone}</Text>}
-      </View>
+import { CVData } from "../../types/CVData";
 
-      {/* EXPERIENCE */}
-      {data?.experience && (
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Experience</Text>
-          {data.experience.map((exp: string, i: number) => (
-            <Text key={i} style={styles.text}>
-              {exp}
-            </Text>
-          ))}
+// Default export is a small wrapper that lazy-loads the heavy react-pdf renderer
+export default function ResumePDFWrapper({ data }: { data?: CVData | null }) {
+  const [PdfComponents, setPdfComponents] = useState<any>(null);
+
+  useEffect(() => {
+    let mounted = true;
+    import("@react-pdf/renderer").then((mod) => {
+      if (mounted) setPdfComponents(mod);
+    });
+    return () => {
+      mounted = false;
+    };
+  }, []);
+
+  if (!PdfComponents) return null; // or a small loader
+
+  const { Document, Page, Text, View } = PdfComponents;
+
+  return (
+    <Document>
+      <Page size="A4" style={plainStyles.page as any}>
+        <View style={plainStyles.header as any}>
+          <Text style={plainStyles.name as any}>{data?.name || "Your Name"}</Text>
+          {data?.title && <Text>{data.title}</Text>}
+          <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', gap: 10 } as any}>
+            {data?.email && <Text>{data.email}</Text>}
+            {data?.phone && <Text>• {data.phone}</Text>}
+            {data?.location && <Text>• {data.location}</Text>}
+          </View>
+          {(data?.github || data?.linkedin) && (
+            <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', gap: 10, marginTop: 5 } as any}>
+              {data.linkedin && <Text>{data.linkedin}</Text>}
+              {data.github && data.linkedin && <Text>•</Text>}
+              {data.github && <Text>{data.github}</Text>}
+            </View>
+          )}
         </View>
-      )}
 
-      {/* EDUCATION */}
-      {data?.education && (
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Education</Text>
-          {data.education.map((edu: string, i: number) => (
-            <Text key={i} style={styles.text}>
-              {edu}
-            </Text>
-          ))}
-        </View>
-      )}
+        {data?.summary && (
+          <View style={plainStyles.section as any}>
+            <Text style={plainStyles.sectionTitle as any}>Professional Summary</Text>
+            <Text style={plainStyles.text as any}>{data.summary}</Text>
+          </View>
+        )}
 
-      {/* SKILLS */}
-      {data?.skills && data.skills.length > 0 && (
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Skills</Text>
-          <View style={styles.skillGrid}>
-            {data.skills.map((skill: string, i: number) => (
-              <Text key={i} style={styles.skillBox}>
-                {skill}
+        {data?.experience && data.experience.length > 0 && (
+          <View style={plainStyles.section as any}>
+            <Text style={plainStyles.sectionTitle as any}>Experience</Text>
+            {data.experience.map((exp: string, i: number) => (
+              <Text key={i} style={plainStyles.text as any}>
+                {exp}
               </Text>
             ))}
           </View>
-        </View>
-      )}
-    </Page>
-  </Document>
-);
+        )}
 
-export async function downloadPDF(cvData : CVData) {
-  const blob = await pdf(<ResumePDF data={cvData} />).toBlob();
-  saveAs(blob, `${(cvData?.name || "resume").replace(/\s+/g, "_")}.pdf`);
+        {data?.education && data.education.length > 0 && (
+          <View style={plainStyles.section as any}>
+            <Text style={plainStyles.sectionTitle as any}>Education</Text>
+            {data.education.map((edu: string, i: number) => (
+              <Text key={i} style={plainStyles.text as any}>
+                {edu}
+              </Text>
+            ))}
+          </View>
+        )}
+
+        {data?.skills && data.skills.length > 0 && (
+          <View style={plainStyles.section as any}>
+            <Text style={plainStyles.sectionTitle as any}>Skills</Text>
+            <View style={plainStyles.skillGrid as any}>
+              {data.skills.map((skill: string, i: number) => (
+                <Text key={i} style={plainStyles.skillBox as any}>
+                  {skill}
+                </Text>
+              ))}
+            </View>
+          </View>
+        )}
+
+        {data?.projects && data.projects.length > 0 && (
+          <View style={plainStyles.section as any}>
+            <Text style={plainStyles.sectionTitle as any}>Projects</Text>
+            {data.projects.map((proj, i) => (
+              <View key={i} style={{ marginBottom: 8 } as any}>
+                <Text style={{ fontWeight: 'bold' } as any}>{proj.name}</Text>
+                <Text style={plainStyles.text as any}>{proj.description}</Text>
+                {proj.domain && (
+                  <Text style={{ fontSize: 10 } as any}>
+                    Tech: {proj.domain.join(', ')}
+                  </Text>
+                )}
+                {proj.link && (
+                  <Text style={{ fontSize: 10, textDecoration: 'underline' } as any}>
+                    {proj.link}
+                  </Text>
+                )}
+              </View>
+            ))}
+          </View>
+        )}
+
+        {data?.certifications && data.certifications.length > 0 && (
+          <View style={plainStyles.section as any}>
+            <Text style={plainStyles.sectionTitle as any}>Certifications</Text>
+            {data.certifications.map((cert: string, i: number) => (
+              <Text key={i} style={plainStyles.text as any}>
+                {cert}
+              </Text>
+            ))}
+          </View>
+        )}
+      </Page>
+    </Document>
+  );
 }
 
-export default ResumePDF;
+export async function downloadPDF(cvData: CVData) {
+  // dynamically import pdf builder to avoid bundling it in initial loads
+  const mod = await import("@react-pdf/renderer");
+  const { pdf } = mod as any;
+  // create element using React
+  const element = React.createElement(ResumePDFWrapper, { data: cvData });
+  const blob = await pdf(element).toBlob();
+  saveAs(blob, `${(cvData?.name || "resume").replace(/\s+/g, "_")}.pdf`);
+}

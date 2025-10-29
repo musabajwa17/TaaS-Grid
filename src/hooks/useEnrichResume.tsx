@@ -25,8 +25,7 @@ export function useEnrichResume() {
         }),
       });
 
-      const data = await response.json();
-      console.log("Raw API Response:", data);
+  const data = await response.json();
 
       if (!response.ok) {
         throw new Error(data.detail || "Failed to enrich resume");

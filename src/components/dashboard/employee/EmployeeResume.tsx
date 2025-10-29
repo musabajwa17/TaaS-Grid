@@ -219,7 +219,7 @@ import toast, { Toaster } from "react-hot-toast";
 
 import { useUploadResume } from "@/hooks/useUploadResume";
 import { useUploadCV } from "@/hooks/useUploadCV"; // ✅ Import your CV upload hook
-import EmployeeResumeTemplate, { EmployeeParsedData } from "./EmployeeResumeTemplate";
+import EmployeeResumeTemplate from "./EmployeeResumeTemplate";
 
 export default function EmployeeResume() {
   const router = useRouter();
@@ -281,7 +281,6 @@ export default function EmployeeResume() {
       const response = await uploadCV(parsedData);
       toast.dismiss();
       toast.success("Resume uploaded successfully!");
-      console.log("📤 Uploaded Resume Response:", response);
     } catch (err) {
       toast.dismiss();
       toast.error("Failed to upload resume.");
@@ -415,7 +414,7 @@ export default function EmployeeResume() {
 
             {/* Resume Content */}
             <EmployeeResumeTemplate
-              parsedData={parsedData as EmployeeParsedData}
+              parsedData={parsedData}
             />
 
             {/* Upload Another */}

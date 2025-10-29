@@ -20,9 +20,7 @@ import type {
   Experience,
   Education,
   Skill,
-  ProfessionalTraining,
-  Reference,
-  Achievements,
+  ProfessionalTraining
 } from "@/types/CvTypes";
 
 const CvTemplate: React.FC<CvTemplateProps> = ({ parsedData }) => {
@@ -270,19 +268,55 @@ const CvTemplate: React.FC<CvTemplateProps> = ({ parsedData }) => {
         )}
 
         {/* RESEARCH PUBLICATIONS / PROJECTS / BOOKS */}
-        {hasArray(parsedData.researchPublications) && (
-          <Section
-            title="Research Publications"
-            icon={<BookOpen className="w-6 h-6 text-white" />}
-            gradient="from-indigo-600 to-purple-600"
-          >
-            <ul className="list-disc list-inside text-gray-700">
-              {parsedData.researchPublications?.map((r: string, i: number) => (
-                <li key={i}>{r}</li>
-              ))}
-            </ul>
-          </Section>
+        {Array.isArray(parsedData.researchPublications) && (
+          <>
+            {/* If entries are objects (journal/workshop), render them */}
+            {parsedData.researchPublications.some(
+              (r) => typeof r === "object" && (r as any).journal || (r as any).workshop
+            ) && (
+              <Section
+                title="Research Publications"
+                icon={<BookOpen className="w-6 h-6 text-white" />}
+                gradient="from-indigo-600 to-purple-600"
+              >
+                <ul className="list-disc list-inside text-gray-700">
+                  {parsedData.researchPublications
+                    .filter((r: any) => typeof r === "object" && (r.journal || r.workshop))
+                    .map((r: any, i: number) => (
+                      <li key={i}>
+                        {r.journal && <span className="font-semibold">{r.journal}</span>}
+                        {r.workshop && (
+                          <>
+                            {" — "}
+                            <span className="italic text-gray-600">{r.workshop}</span>
+                          </>
+                        )}
+                      </li>
+                    ))}
+                </ul>
+              </Section>
+            )}
+
+            {/* If entries are plain strings (books/publications), render them separately */}
+            {parsedData.researchPublications.some((r) => typeof r === "string") && (
+              <Section
+                title="Publications & Books"
+                icon={<BookOpen className="w-6 h-6 text-white" />}
+                gradient="from-indigo-600 to-purple-600"
+              >
+                <ul className="list-disc list-inside text-gray-700">
+                  {parsedData.researchPublications
+                    .filter((r: any) => typeof r === "string")
+                    .map((s: string, i: number) => (
+                      <li key={i}>{s}</li>
+                    ))}
+                </ul>
+              </Section>
+            )}
+          </>
         )}
+
+
 
         {hasArray(parsedData.researchProjects) && (
           <Section
@@ -299,21 +333,28 @@ const CvTemplate: React.FC<CvTemplateProps> = ({ parsedData }) => {
         )}
 
         {/* MEMBERSHIPS */}
-        {hasArray(parsedData.membershipsAndAssociations) && (
-          <Section
-            title="Memberships & Associations"
-            icon={<Users className="w-6 h-6 text-white" />}
-            gradient="from-blue-600 to-cyan-600"
-          >
-            <ul className="list-disc list-inside text-gray-700">
-              {parsedData.membershipsAndAssociations?.map(
-                (m: string, i: number) => (
-                  <li key={i}>{m}</li>
-                )
-              )}
-            </ul>
-          </Section>
-        )}
+       {Array.isArray(parsedData.membershipsAndAssociations) && parsedData.membershipsAndAssociations.length > 0 && (
+  <Section
+    title="Memberships & Associations"
+    icon={<Users className="w-6 h-6 text-white" />}
+    gradient="from-blue-600 to-cyan-600"
+  >
+    <ul className="list-disc list-inside text-gray-700">
+      {parsedData.membershipsAndAssociations.map((m: any, i: number) => (
+        <li key={i}>
+          {m?.heading && <span className="font-semibold">{m.heading}</span>}
+          {m?.desc && (
+            <>
+              {" — "}
+              <span className="text-gray-600">{m.desc}</span>
+            </>
+          )}
+        </li>
+      ))}
+    </ul>
+  </Section>
+)}
+
 
         {Array.isArray(parsedData.references) &&
           parsedData.references.some(

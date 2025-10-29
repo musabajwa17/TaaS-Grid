@@ -52,7 +52,6 @@ export default function SignUp() {
     e.preventDefault();
 
     const formData = { fullName, email, password, role };
-    console.log("Form Data to send:", formData);
 
     await registerUser(formData);
   route.push("/login")
