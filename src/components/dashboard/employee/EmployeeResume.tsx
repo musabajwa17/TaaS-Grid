@@ -219,7 +219,7 @@ import toast, { Toaster } from "react-hot-toast";
 
 import { useUploadResume } from "@/hooks/useUploadResume";
 import { useUploadCV } from "@/hooks/useUploadCV"; // ✅ Import your CV upload hook
-import EmployeeResumeTemplate from "./EmployeeResumeTemplate";
+// import EmployeeResumeTemplate from "./EmployeeResumeTemplate";
 
 export default function EmployeeResume() {
   const router = useRouter();
