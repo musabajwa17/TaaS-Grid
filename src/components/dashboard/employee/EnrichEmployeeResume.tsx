@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useEnrichResume } from "@/hooks/useEnrichResume";
-import ModifyStudentResume from "./ModifyStudentResume";
+import ModifyEmployeeResume from "./ModifyEmployeeResume";
 
 export default function EnrichEmployeeResume() {
   const [role, setRole] = useState("");
@@ -61,7 +61,7 @@ export default function EnrichEmployeeResume() {
     setShowModifyResume(true);
   };
   if (showModifyResume) {
-  return <ModifyStudentResume />;
+  return <ModifyEmployeeResume />;
 }
 
   return (

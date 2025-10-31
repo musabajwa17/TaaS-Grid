@@ -7,16 +7,14 @@ import {
   CheckCircle,
   BookText,
 } from "lucide-react";
-import { useRouter } from "next/navigation";
 import toast, { Toaster } from "react-hot-toast";
-
 import { useUploadResume } from "@/hooks/useUploadResume";
-import { useUploadCV } from "@/hooks/useUploadCV"; // ✅ Import your CV upload hook
-// import EmployeeResumeTemplate from "./EmployeeResumeTemplate";
+import { useUploadCV } from "@/hooks/useUploadCV";
 import EmployeeCvTemplate from "./EmployeeCvTemplate";
+import EnrichEmployeeResume from "./EnrichEmployeeResume";
 
 export default function EmployeeCvForge() {
-  const router = useRouter();
+  const [showFinalized, setShowFinalized] = useState(false);
   const [, setFile] = useState<File | null>(null);
   const [dragActive, setDragActive] = useState(false);
 
@@ -24,7 +22,7 @@ export default function EmployeeCvForge() {
   const { loading, error, parsedData, handleUpload, setParsedData, setError } =
     useUploadResume();
   const { uploadCV, loading: uploadingCV } = useUploadCV();
-
+ console.log("Uploading CV:", parsedData);
   // Handle file selection
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files?.[0];
@@ -69,7 +67,6 @@ export default function EmployeeCvForge() {
       toast.error("No resume data found to submit!");
       return;
     }
-
     try {
       toast.loading("Uploading your resume...");
       const response = await uploadCV(parsedData);
@@ -83,12 +80,22 @@ export default function EmployeeCvForge() {
 
   const enrichCv = () => {
     localStorage.setItem("parsedData", JSON.stringify(parsedData));
-    router.push("/enrichcv");
+    setShowFinalized(true);
   };
 
+    if (showFinalized) {
+      return (
+        <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 p-6">
+          <div className="max-w-6xl mx-auto">
+            {/* <FinalizedStudentResume /> */}
+            <EnrichEmployeeResume />
+          </div>
+        </div>
+      );
+    }
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 p-6">
-      <Toaster position="top-right" />
+      <Toaster position="top-center" />
 
       <div className="max-w-5xl mx-auto">
         {/* Error */}

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 const DownloadStudentResume = dynamic(() => import("./DownloadStudentResume"), { ssr: false });
 import { useUploadCV } from "@/hooks/useUploadCV";
+import { useUploadStdCV } from "@/hooks/useUploadStudentResume";
 const FinalizedStudentResume = ({ parsedData }) => {
   const [cvData, setCvData] = useState(parsedData);
   const [showDownload, setShowDownload] = useState(false);
@@ -27,7 +28,7 @@ const FinalizedStudentResume = ({ parsedData }) => {
     }
   }, []);
   // Download CV as a real PDF using html2pdf.js
-  const { uploadCV } = useUploadCV();
+  const {uploadCV} = useUploadStdCV();
 
   const handleNewSubmit = async () => {
   // parsedData uploaded
@@ -72,7 +73,7 @@ const FinalizedStudentResume = ({ parsedData }) => {
   return (
     <>
       <div
-        className="flex justify-end space-x-3 mb-4 text-black font-sans max-w-4xl mx-auto"
+        className="flex justify-end space-x-3 mb-4 text-black font-sans max-w-4xl mx-auto my-5"
       >
         <button
           onClick={handleNewSubmit}

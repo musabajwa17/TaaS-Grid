@@ -27,7 +27,7 @@ export const useUploadStdCV = () => {
 
       // ✅ Send POST request to backend
       const response = await axios.post(
-        "http://localhost:3001/api/resume/stdresume",
+        "http://localhost:3001/api/student/stdresume",
         payload,
         { headers: { "Content-Type": "application/json" } }
       );

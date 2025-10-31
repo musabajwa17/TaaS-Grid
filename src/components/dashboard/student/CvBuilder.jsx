@@ -26,35 +26,29 @@ const NewResume = () => {
 
   const [showPreview, setShowPreview] = useState(false);
 
- const handleChange = (section, field, value, index = null) => {
-  setFormData((prevFormData) => {
-    const updated = { ...prevFormData };
-
-    if (index === null) {
-      // handle simple fields (name, email, etc.)
-      updated[section];
+const handleChange = (section, index, field, value) => {
+  setFormData((prev) => {
+    const updated = { ...prev };
+    if (index === null || index === undefined) {
+      // handle single fields
+      updated[section] = value;
     } else {
-      // handle array sections (education, experience, etc.)
-      const sectionData = updated[section];
-
-      if (Array.isArray(sectionData)) {
-        const newSection = [...sectionData];
-        const item = newSection[index];
-        newSection[index] = { ...item, [field]: value };
-        updated[section] = newSection;
-      }
+      const sectionData = [...updated[section]];
+      sectionData[index] = { ...sectionData[index], [field]: value };
+      updated[section] = sectionData;
     }
-
     return updated;
   });
 };
 
 
-  const addItem = (section, emptyItem) => {
-    setFormData({
-      ...formData,
-      [section]: [...(formData[section]), emptyItem],
-    });
+
+  const addItem = (section) => {
+    setFormData((prev) => ({
+  ...prev,
+  [section]: [...prev[section], emptyItem],
+}));
+
   };
 
   const handleSkillChange = (index, value) => {
@@ -67,7 +61,7 @@ const NewResume = () => {
     setFormData({ ...formData, skills: [...formData.skills, ""] });
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = (e) => {
     e.preventDefault();
   // Submitted Resume Data
     setShowPreview(true); // Show finalized resume
@@ -93,9 +87,10 @@ const NewResume = () => {
     </div>
   );
 
-  if (showPreview) {
-    return <FinalizedStudentResume parsedData={formData} />;
-  }
+ if (showPreview) {
+  return <FinalizedStudentResume parsedData={formData} />;
+}
+
 
   return (
     <div className="max-w-5xl mx-auto p-8 bg-white shadow-xl border border-gray-200 rounded-2xl my-5 ">
@@ -124,14 +119,7 @@ const NewResume = () => {
               type="text"
               placeholder={field.charAt(0).toUpperCase() + field.slice(1)}
               value={(formData )[field] || ""}
-              onChange={(e) =>
-                handleChange(
-                  field ,
-                  null,
-                  "",
-                  e.target.value
-                )
-              }
+              onChange={(e) => handleChange(field, null, null, e.target.value)}
               className="border p-2 rounded-md w-full"
             />
           ))}

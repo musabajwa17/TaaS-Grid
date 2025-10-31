@@ -175,7 +175,7 @@ const modules = [
 const HeroSection = () => {
   const [activeModule, setActiveModule] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
-  const [hoveredModule, setHoveredModule] = useState<number | null>(null);
+  const [hoveredModule, setHoveredModule] = useState(null);
   const [animationPhase, setAnimationPhase] = useState(0);
   useEffect(() => {
     if (animationPhase < modules.length) {
@@ -200,7 +200,7 @@ const HeroSection = () => {
   
   const isYellow = currentModule.color.includes('yellow');
 
-  const getModulePosition = (number) => {
+  const getModulePosition = (angle, radius) => {
     const radian = (angle - 90) * (Math.PI / 180);
     return {
       x: radius * Math.cos(radian),

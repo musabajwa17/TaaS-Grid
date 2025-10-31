@@ -27,7 +27,7 @@ export const useUploadCV = () => {
 
       // ✅ Send POST request to backend
       const response = await axios.post(
-        "http://localhost:3001/api/cv/resume",
+        "http://localhost:3001/api/employee/resume",
         payload,
         { headers: { "Content-Type": "application/json" } }
       );

@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Briefcase,
   FileText,
@@ -52,6 +52,19 @@ export default function EmployeeDashboard() {
     { task: "Interview (InnovaSoft)", due: "Nov 3" },
     { task: "Update LinkedIn Portfolio", due: "Nov 5" },
   ];
+  const [fullName, setFullName] = useState("");
+  
+    useEffect(() => {
+      const userString = localStorage.getItem("user");
+      if (userString) {
+        try {
+          const user = JSON.parse(userString);
+          setFullName(user.fullName.toUpperCase()); // optional chaining in case fullName is missing
+        } catch (error) {
+          console.error("Failed to parse user from localStorage", error);
+        }
+      }
+    }, []);
 
   return (
     <div className="min-h-screen bg-gray-50 px-6 py-10">
@@ -59,7 +72,7 @@ export default function EmployeeDashboard() {
       <div className="flex flex-col md:flex-row justify-between items-center mb-8">
         <div>
           <h1 className="text-3xl font-bold text-gray-800">
-            Welcome Back, <span className="text-[#00bb98]">Professional</span> 👋
+            Welcome Back, <span className="text-[#00bb98]">{fullName}</span> 👋
           </h1>
           <p className="text-gray-500 mt-1">
             Manage your career progress, job applications, and AI-enhanced resume tools.

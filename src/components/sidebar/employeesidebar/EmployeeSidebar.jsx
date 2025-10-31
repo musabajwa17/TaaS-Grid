@@ -21,10 +21,10 @@ import EmployeeCvBuilder from "@/components/dashboard/employee/EmployeeCvBuilder
 
 export default function EmployeeSidebar() {
   const { logout } = useAuth();
-  const [selected, setSelected] = useState<string>("Dashboard Overview");
-  const [menuOpen, setMenuOpen] = useState<boolean>(false);
-  const [userEmail, setUserEmail] = useState<string | null>(null);
-  const menuRef = useRef<HTMLDivElement>(null);
+  const [selected, setSelected] = useState("Dashboard Overview");
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [userEmail, setUserEmail] = useState(null);
+  const menuRef = useRef(null);
   const router = useRouter();
 
   // ✅ Load user from localStorage on mount
@@ -43,7 +43,7 @@ export default function EmployeeSidebar() {
   // ✅ Handle outside click for profile menu
   useEffect(() => {
     const handleClickOutside = () => {
-      if (menuRef.current && !menuRef.current.contains()) {
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
         setMenuOpen(false);
       }
     };

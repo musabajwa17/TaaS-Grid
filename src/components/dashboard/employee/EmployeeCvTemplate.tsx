@@ -14,13 +14,17 @@ import {
   Users,
   Wrench,
   Target,
+  Newspaper,
+  Book,
+  ClipboardList,
+  UserCheck,
 } from "lucide-react";
 import type {
   CvTemplateProps,
   Experience,
   Education,
   Skill,
-  ProfessionalTraining
+  ProfessionalTraining,
 } from "@/types/CvTypes";
 
 const EmployeeCvTemplate: React.FC<CvTemplateProps> = ({ parsedData }) => {
@@ -28,6 +32,7 @@ const EmployeeCvTemplate: React.FC<CvTemplateProps> = ({ parsedData }) => {
     Array.isArray(arr) &&
     arr.length > 0 &&
     arr.some((a) => a !== null && a !== undefined);
+
 
   return (
     <div
@@ -118,91 +123,114 @@ const EmployeeCvTemplate: React.FC<CvTemplateProps> = ({ parsedData }) => {
             </p>
           </Section>
         )}
-
         {/* WORK EXPERIENCE */}
-        {hasArray(parsedData.experience) && (
-          <Section
-            title="Work Experience"
-            icon={<Briefcase className="w-6 h-6 text-white" />}
-            gradient="from-purple-600 to-pink-600"
-          >
-            {parsedData.experience?.map((exp: Experience, idx: number) => (
-              <div key={idx} className="mb-5">
-                <h3 className="text-xl font-bold text-gray-800">{exp.role}</h3>
-                <p className="text-sm text-gray-500">{exp.company}</p>
-                {exp.years && (
-                  <p className="text-sm text-gray-500">{exp.years}</p>
-                )}
-                {Array.isArray(exp.description) && (
-                  <ul className="list-disc list-inside text-gray-700 mt-2">
-                    {exp.description.map((d: string, i: number) => (
-                      <li key={i}>{d}</li>
-                    ))}
-                  </ul>
-                )}
-                {typeof exp.description === "string" && (
-                  <p className="text-gray-700 mt-2">{exp.description}</p>
-                )}
-              </div>
+        {Array.isArray(parsedData.experience) && parsedData.experience.length > 0 && (
+  <Section
+    title="Work Experience"
+    icon={<Briefcase className="w-6 h-6 text-white" />}
+    gradient="from-purple-600 to-pink-600"
+  >
+    {parsedData.experience.map((exp: Experience, idx: number) => (
+      <div key={idx} className="mb-5">
+        {exp.role && (
+          <h3 className="text-xl font-bold text-gray-800">{exp.role}</h3>
+        )}
+        {exp.company && (
+          <p className="text-sm text-gray-500">{exp.company}</p>
+        )}
+        {exp.years && (
+          <p className="text-sm text-gray-500">{exp.years}</p>
+        )}
+
+        {Array.isArray(exp.description) && exp.description.length > 0 && (
+          <ul className="list-disc list-inside text-gray-700 mt-2">
+            {exp.description.map((d: string, i: number) => (
+              <li key={i}>{d}</li>
             ))}
-          </Section>
+          </ul>
         )}
 
+        {typeof exp.description === "string" && exp.description.trim() !== "" && (
+          <p className="text-gray-700 mt-2">{exp.description}</p>
+        )}
+      </div>
+    ))}
+  </Section>
+)}
         {/* EDUCATION */}
-        {hasArray(parsedData.education) && (
-          <Section
-            title="Education"
-            icon={<GraduationCap className="w-6 h-6 text-white" />}
-            gradient="from-pink-600 to-orange-600"
-          >
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {parsedData.education?.map((edu: Education, idx: number) => (
-                <div
-                  key={idx}
-                  className="bg-gradient-to-br from-pink-50 to-orange-50 rounded-xl p-5 border-l-4 border-pink-600"
-                >
-                  <h3 className="text-lg font-bold text-gray-800 mb-1">
-                    {edu.degree}
-                  </h3>
-                  <p className="font-semibold text-pink-700">
-                    {edu.institution}
-                  </p>
-                  <p className="text-sm text-gray-600">{edu.year}</p>
-                </div>
-              ))}
-            </div>
-          </Section>
-        )}
-
+       {Array.isArray(parsedData.education) && parsedData.education.length > 0 && (
+  <Section
+    title="Education"
+    icon={<GraduationCap className="w-6 h-6 text-white" />}
+    gradient="from-pink-600 to-orange-600"
+  >
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      {parsedData.education.map((edu: Education, idx: number) => (
+        <div
+          key={idx}
+          className="bg-gradient-to-br from-pink-50 to-orange-50 rounded-xl p-5 border-l-4 border-pink-600"
+        >
+          {edu.degree && (
+            <h3 className="text-lg font-bold text-gray-800 mb-1">
+              {edu.degree}
+            </h3>
+          )}
+          {edu.institution && (
+            <p className="font-semibold text-pink-700">{edu.institution}</p>
+          )}
+          {edu.year && (
+            <p className="text-sm text-gray-600">{edu.year}</p>
+          )}
+        </div>
+      ))}
+    </div>
+  </Section>
+)}
         {/* TECHNICAL SKILLS */}
-        {hasArray(parsedData.technicalSkills) && (
-          <Section
-            title="Technical Skills"
-            icon={<Wrench className="w-6 h-6 text-white" />}
-            gradient="from-cyan-600 to-blue-600"
-          >
-            <div className="flex flex-wrap gap-3">
-              {parsedData.technicalSkills?.map(
-                (skill: Skill | string, idx: number) => {
-                  const skillName =
-                    typeof skill === "string"
-                      ? skill
-                      : skill?.name || skill?.title || "";
-                  if (!skillName) return null;
-                  return (
-                    <span
-                      key={idx}
-                      className="px-5 py-2.5 bg-gradient-to-r from-indigo-500 to-purple-500 text-white rounded-full font-semibold shadow-md"
-                      role="listitem"
-                    >
-                      {skillName}
-                    </span>
-                  );
-                }
-              )}
-            </div>
-          </Section>
-        )}
+     {Array.isArray(parsedData.technicalSkills) &&
+  parsedData.technicalSkills.some(
+    (skill) =>
+      skill &&
+      Object.values(skill).some(
+        (v) => v && String(v).trim() !== ""
+      )
+  ) && (
+    <Section
+      title="Technical Skills"
+      icon={<Wrench className="w-6 h-6 text-white" />}
+      gradient="from-cyan-600 to-blue-600"
+    >
+      <div className="flex flex-wrap gap-3">
+        {parsedData.technicalSkills
+          .filter(
+            (skill) =>
+              skill &&
+              Object.values(skill).some(
+                (v) => v && String(v).trim() !== ""
+              )
+          )
+          .map((skill, idx) => {
+            const skillName =
+              skill.category ||
+              skill.details ||
+              skill.title ||
+              skill.name ||
+              "";
+            if (!skillName.trim()) return null;
+            return (
+              <span
+                key={idx}
+                className="px-4 py-2.5 bg-gradient-to-r from-indigo-500 to-purple-500 text-white rounded-full font-semibold shadow"
+              >
+                {skillName}
+              </span>
+            );
+          })}
+      </div>
+    </Section>
+  )}
+
+
 
         {/* ACHIEVEMENTS */}
         {Array.isArray(parsedData.achievements) &&
@@ -246,33 +274,34 @@ const EmployeeCvTemplate: React.FC<CvTemplateProps> = ({ parsedData }) => {
               </ul>
             </Section>
           )}
-
         {/* PROFESSIONAL TRAINING */}
-        {hasArray(parsedData.professionalTraining) && (
-          <Section
-            title="Professional Training"
-            icon={<ClipboardCheck className="w-6 h-6 text-white" />}
-            gradient="from-green-600 to-emerald-600"
-          >
-            <ul className="list-disc list-inside text-gray-700">
-              {parsedData.professionalTraining?.map(
-                (p: ProfessionalTraining, i: number) => (
-                  <li key={i}>
-                    {p.name || p.title || ""}{" "}
-                    {p.institution && `— ${p.institution}`}
-                  </li>
-                )
-              )}
-            </ul>
-          </Section>
-        )}
-
+        {Array.isArray(parsedData.professionalTraining) &&
+          parsedData.professionalTraining.length > 0 && (
+            <Section
+              title="Professional Training"
+              icon={<ClipboardCheck className="w-6 h-6 text-white" />}
+              gradient="from-green-600 to-emerald-600"
+            >
+              <ul className="list-disc list-inside text-gray-700">
+                {parsedData.professionalTraining.map(
+                  (p: ProfessionalTraining, i: number) => (
+                    <li key={i}>
+                      {p.name || p.title || ""}
+                      {p.institution && ` — ${p.institution}`}
+                    </li>
+                  )
+                )}
+              </ul>
+            </Section>
+          )}
         {/* RESEARCH PUBLICATIONS / PROJECTS / BOOKS */}
         {Array.isArray(parsedData.researchPublications) && (
           <>
             {/* If entries are objects (journal/workshop), render them */}
             {parsedData.researchPublications.some(
-              (r) => typeof r === "object" && (r as any).journal || (r as any).workshop
+              (r) =>
+                (typeof r === "object" && (r as any).journal) ||
+                (r as any).workshop
             ) && (
               <Section
                 title="Research Publications"
@@ -281,14 +310,21 @@ const EmployeeCvTemplate: React.FC<CvTemplateProps> = ({ parsedData }) => {
               >
                 <ul className="list-disc list-inside text-gray-700">
                   {parsedData.researchPublications
-                    .filter((r: any) => typeof r === "object" && (r.journal || r.workshop))
+                    .filter(
+                      (r: any) =>
+                        typeof r === "object" && (r.journal || r.workshop)
+                    )
                     .map((r: any, i: number) => (
                       <li key={i}>
-                        {r.journal && <span className="font-semibold">{r.journal}</span>}
+                        {r.journal && (
+                          <span className="font-semibold">{r.journal}</span>
+                        )}
                         {r.workshop && (
                           <>
                             {" — "}
-                            <span className="italic text-gray-600">{r.workshop}</span>
+                            <span className="italic text-gray-600">
+                              {r.workshop}
+                            </span>
                           </>
                         )}
                       </li>
@@ -298,7 +334,9 @@ const EmployeeCvTemplate: React.FC<CvTemplateProps> = ({ parsedData }) => {
             )}
 
             {/* If entries are plain strings (books/publications), render them separately */}
-            {parsedData.researchPublications.some((r) => typeof r === "string") && (
+            {parsedData.researchPublications.some(
+              (r) => typeof r === "string"
+            ) && (
               <Section
                 title="Publications & Books"
                 icon={<BookOpen className="w-6 h-6 text-white" />}
@@ -316,78 +354,249 @@ const EmployeeCvTemplate: React.FC<CvTemplateProps> = ({ parsedData }) => {
           </>
         )}
 
+{/* {Array.isArray(parsedData.mssupervised) &&
+  parsedData.mssupervised.length > 0 && (
+    <Section
+      title="M.S. Students Supervised"
+      icon={<GraduationCap className="w-6 h-6 text-white" />}
+      gradient="from-green-600 to-emerald-600"
+    >
+      <ul className="list-disc list-inside text-gray-700">
+        {parsedData.mssupervised.map((s, i) => (
+          <li key={i}>
+            <strong>{s.studentName}</strong>
+            {s.thesisTitle && <span> — {s.thesisTitle}</span>}
+            {s.year && <span className="italic text-gray-600"> ({s.year})</span>}
+          </li>
+        ))}
+      </ul>
+    </Section>
+  )}
 
 
-        {hasArray(parsedData.researchProjects) && (
-          <Section
-            title="Research Projects"
-            icon={<Target className="w-6 h-6 text-white" />}
-            gradient="from-purple-600 to-pink-600"
-          >
-            <ul className="list-disc list-inside text-gray-700">
-              {parsedData.researchProjects?.map((p: string, i: number) => (
-                <li key={i}>{p}</li>
-              ))}
-            </ul>
-          </Section>
-        )}
 
-        {/* MEMBERSHIPS */}
-       {Array.isArray(parsedData.membershipsAndAssociations) && parsedData.membershipsAndAssociations.length > 0 && (
-  <Section
-    title="Memberships & Associations"
-    icon={<Users className="w-6 h-6 text-white" />}
-    gradient="from-blue-600 to-cyan-600"
-  >
-    <ul className="list-disc list-inside text-gray-700">
-      {parsedData.membershipsAndAssociations.map((m: any, i: number) => (
-        <li key={i}>
-          {m?.heading && <span className="font-semibold">{m.heading}</span>}
-          {m?.desc && (
-            <>
-              {" — "}
-              <span className="text-gray-600">{m.desc}</span>
-            </>
-          )}
-        </li>
+{Array.isArray(parsedData.phdstudentsupervised) &&
+  parsedData.phdstudentsupervised.length > 0 && (
+    <Section
+      title="PhD Students Supervised"
+      icon={<GraduationCap className="w-6 h-6 text-white" />}
+      gradient="from-purple-600 to-pink-600"
+    >
+      <ul className="list-disc list-inside text-gray-700">
+        {parsedData.phdstudentsupervised.map((s, i) => (
+          <li key={i}>
+            <strong>{s.studentName}</strong>
+            {s.thesisTitle && <span> — {s.thesisTitle}</span>}
+            {s.year && <span className="italic text-gray-600"> ({s.year})</span>}
+          </li>
+        ))}
+      </ul>
+    </Section>
+  )} */}
+
+
+
+{Array.isArray(parsedData.journalGuestEditor) &&
+  parsedData.journalGuestEditor.length > 0 && (
+    <Section
+      title="Journal Guest Editor"
+      icon={<Newspaper className="w-6 h-6 text-white" />}
+      gradient="from-sky-600 to-indigo-600"
+    >
+      {parsedData.journalGuestEditor.map((j, i) => (
+        <div key={i} className="mb-2">
+          <p className="font-semibold">{j.title}</p>
+          <p className="text-sm text-gray-700">
+            {j.section && <span>{j.section}, </span>}
+            {j.publisher}
+          </p>
+        </div>
       ))}
-    </ul>
-  </Section>
-)}
+    </Section>
+  )}
 
 
-        {Array.isArray(parsedData.references) &&
-          parsedData.references.some(
-            (r) => r.prof || r.designation || r.email || r.phone
-          ) && (
+
+
+{Array.isArray(parsedData.bookAuthorship) &&
+  parsedData.bookAuthorship.length > 0 && (
+    <Section
+      title="Book Authorship"
+      icon={<Book className="w-6 h-6 text-white" />}
+      gradient="from-purple-600 to-pink-600"
+    >
+      <ul className="list-disc list-inside text-gray-700">
+        {parsedData.bookAuthorship.map((b, i) => (
+          <li key={i}>
+            <strong>{b.title}</strong> — {b.publisher}
+          </li>
+        ))}
+      </ul>
+    </Section>
+  )}
+
+{Array.isArray(parsedData.professionalActivities) &&
+  parsedData.professionalActivities.length > 0 && (
+    <Section
+      title="Professional Activities"
+      icon={<Briefcase className="w-6 h-6 text-white" />}
+      gradient="from-blue-600 to-cyan-600"
+    >
+      <ul className="list-disc list-inside text-gray-700">
+        {parsedData.professionalActivities.map((p, i) => (
+          <li key={i}>
+            <strong>{p.heading}</strong>
+            {p.desc && <span> — {p.desc}</span>}
+            {p.year && (
+              <span className="text-gray-600 italic"> ({p.year})</span>
+            )}
+          </li>
+        ))}
+      </ul>
+    </Section>
+  )}
+
+
+
+
+{Array.isArray(parsedData.professionalTraining) &&
+  parsedData.professionalTraining.length > 0 && (
+    <Section
+      title="Professional Training"
+      icon={<ClipboardList className="w-6 h-6 text-white" />}
+      gradient="from-amber-600 to-yellow-600"
+    >
+      <ul className="list-disc list-inside text-gray-700">
+        {parsedData.professionalTraining.map((t, i) => (
+          <li key={i}>
+            <strong>{t.title || t.name}</strong>
+            {t.description && <span> — {t.description}</span>}
+            {t.year && <span> ({t.year})</span>}
+          </li>
+        ))}
+      </ul>
+    </Section>
+  )}
+
+
+
+
+{Array.isArray(parsedData.membershipsAndOtherAssociations) &&
+  parsedData.membershipsAndOtherAssociations.length > 0 && (
+    <Section
+      title="Memberships & Other Associations"
+      icon={<Users className="w-6 h-6 text-white" />}
+      gradient="from-teal-600 to-green-600"
+    >
+      <ul className="list-disc list-inside text-gray-700">
+        {parsedData.membershipsAndOtherAssociations.map((m, i) => (
+          <li key={i}>
+            <strong>{m.heading}</strong>
+            {m.desc && <span> — {m.desc}</span>}
+            {m.year && (
+              <span className="text-gray-600 italic"> ({m.year})</span>
+            )}
+          </li>
+        ))}
+      </ul>
+    </Section>
+  )}
+
+
+
+
+
+
+
+      
+        {Array.isArray(parsedData.researchProjects) &&
+          parsedData.researchProjects.length > 0 && (
             <Section
-              title="References"
-              icon={<Users className="w-6 h-6 text-white" />}
-              gradient="from-indigo-600 to-purple-600"
+              title="Research Projects"
+              icon={<Target className="w-6 h-6 text-white" />}
+              gradient="from-purple-600 to-pink-600"
             >
-              {parsedData.references.map((r, i) => {
-                // Skip empty references
-                if (!r.prof && !r.designation && !r.email && !r.phone)
-                  return null;
-                return (
-                  <div key={i} className="mb-2">
-                    {r.prof && (
-                      <p className="font-semibold text-gray-800">{r.prof}</p>
+              <ul className="list-disc list-inside text-gray-700">
+                {parsedData.researchProjects.map((p: any, i: number) => (
+                  <li key={i}>
+                    {p.title && (
+                      <span className="font-semibold">{p.title}</span>
                     )}
-                    {r.designation && (
-                      <p className="text-sm text-gray-600">{r.designation}</p>
+                    {p.description && (
+                      <span className="block text-sm text-gray-600">
+                        {p.description}
+                      </span>
                     )}
-                    {r.email && (
-                      <p className="text-sm text-gray-600">{r.email}</p>
-                    )}
-                    {r.phone && (
-                      <p className="text-sm text-gray-600">{r.phone}</p>
-                    )}
-                  </div>
-                );
-              })}
+                  </li>
+                ))}
+              </ul>
             </Section>
           )}
+        {/* MEMBERSHIPS */}
+        {Array.isArray(parsedData.membershipsAndAssociations) &&
+          parsedData.membershipsAndAssociations.length > 0 && (
+            <Section
+              title="Memberships & Associations"
+              icon={<Users className="w-6 h-6 text-white" />}
+              gradient="from-blue-600 to-cyan-600"
+            >
+              <ul className="list-disc list-inside text-gray-700">
+                {parsedData.membershipsAndAssociations.map(
+                  (m: any, i: number) => (
+                    <li key={i}>
+                      {m?.heading && (
+                        <span className="font-semibold">{m.heading}</span>
+                      )}
+                      {m?.desc && (
+                        <>
+                          {" — "}
+                          <span className="text-gray-600">{m.desc}</span>
+                        </>
+                      )}
+                    </li>
+                  )
+                )}
+              </ul>
+            </Section>
+          )}
+
+      {Array.isArray(parsedData.reference) &&
+  parsedData.reference.some(
+    (r) =>
+      r &&
+      Object.values(r).some(
+        (v) => v && String(v).trim() !== ""
+      )
+  ) && (
+    <Section
+      title="References"
+      icon={<UserCheck className="w-6 h-6 text-white" />}
+      gradient="from-gray-700 to-gray-900"
+    >
+      {parsedData.reference
+        .filter(
+          (r) =>
+            r &&
+            Object.values(r).some(
+              (v) => v && String(v).trim() !== ""
+            )
+        )
+        .map((r, i) => (
+          <div key={i} className="mb-3">
+            {r.prof && <p className="font-semibold">{r.prof}</p>}
+            {r.designation && (
+              <p className="text-sm text-gray-700">{r.designation}</p>
+            )}
+            {r.mail && <p className="text-sm text-gray-700">{r.mail}</p>}
+            {r.phone && <p className="text-sm text-gray-700">{r.phone}</p>}
+          </div>
+        ))}
+    </Section>
+  )}
+
+
+
+
       </div>
     </div>
   );
