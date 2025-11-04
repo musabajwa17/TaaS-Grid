@@ -89,12 +89,12 @@ const FinalizedEmployeeResume: React.FC<CvTemplateProps> = ({ parsedData }) => {
         >
           Submit
         </button>
-        <button
+        {/* <button
           onClick={handleDownloadClick}
           className="border border-gray-700 px-4 py-1 text-sm hover:bg-gray-100"
         >
           Download PDF
-        </button>
+        </button> */}
       </div>
       <div className="bg-white my-5 text-black font-sans p-10 max-w-4xl mx-auto border border-gray-300 shadow-lg">
         <div id="cv-content">

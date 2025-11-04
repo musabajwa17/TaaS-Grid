@@ -2,8 +2,6 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useUploadCV } from "@/hooks/useUploadCV";
-// import { useUploadCV } from "@/hooks/useUploadCV";
-
 export default function ModifyEmployeeResume() {
   const { uploadCV } = useUploadCV();
   const router = useRouter();
@@ -11,6 +9,7 @@ export default function ModifyEmployeeResume() {
   const [suggestions, setSuggestions] = useState(null);
   const [inputs, setInputs] = useState({});
   const [showPreview, setShowPreview] = useState(false);
+  console.log("ModifyEmployeeResume rendered", formData);
   useEffect(() => {
     const storedData = localStorage.getItem("enrichedData");
     if (storedData) {
@@ -70,6 +69,7 @@ export default function ModifyEmployeeResume() {
     }));
   };
   const handleSubmit = async (e) => {
+    console.log("Submitting form data...", formData);
     e.preventDefault();
     // Convert object of objects → object of arrays
     const filledSuggestions = {};
