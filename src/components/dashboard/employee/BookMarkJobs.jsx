@@ -88,7 +88,7 @@ const bookmarkedJobs = [
 ];
 
 export default function BookmarkedJobs() {
-  const plan: string = "Basic"; // replace later with dynamic logic
+  const plan = "Basic"; // replace later with dynamic logic
 
   return (
     <div className="bg-white rounded-2xl shadow-md p-6 mx-4 my-10 border border-gray-100">

@@ -19,19 +19,13 @@ import {
   ClipboardList,
   UserCheck,
 } from "lucide-react";
-import type {
-  CvTemplateProps,
-  Experience,
-  Education,
-  Skill,
-  ProfessionalTraining,
-} from "@/types/CvTypes";
 
-const EmployeeCvTemplate: React.FC<CvTemplateProps> = ({ parsedData }) => {
-  const hasArray = <T,>(arr: T[] | undefined): arr is T[] =>
-    Array.isArray(arr) &&
-    arr.length > 0 &&
-    arr.some((a) => a !== null && a !== undefined);
+const EmployeeCvTemplate = ({ parsedData }) => {
+  const hasArray = (arr) =>
+  Array.isArray(arr) &&
+  arr.length > 0 &&
+  arr.some((a) => a !== null && a !== undefined);
+
 
 
   return (
@@ -130,7 +124,7 @@ const EmployeeCvTemplate: React.FC<CvTemplateProps> = ({ parsedData }) => {
     icon={<Briefcase className="w-6 h-6 text-white" />}
     gradient="from-purple-600 to-pink-600"
   >
-    {parsedData.experience.map((exp: Experience, idx: number) => (
+    {parsedData.experience.map((exp, idx) => (
       <div key={idx} className="mb-5">
         {exp.role && (
           <h3 className="text-xl font-bold text-gray-800">{exp.role}</h3>
@@ -144,7 +138,7 @@ const EmployeeCvTemplate: React.FC<CvTemplateProps> = ({ parsedData }) => {
 
         {Array.isArray(exp.description) && exp.description.length > 0 && (
           <ul className="list-disc list-inside text-gray-700 mt-2">
-            {exp.description.map((d: string, i: number) => (
+            {exp.description.map((d, i) => (
               <li key={i}>{d}</li>
             ))}
           </ul>
@@ -165,7 +159,7 @@ const EmployeeCvTemplate: React.FC<CvTemplateProps> = ({ parsedData }) => {
     gradient="from-pink-600 to-orange-600"
   >
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-      {parsedData.education.map((edu: Education, idx: number) => (
+      {parsedData.education.map((edu, idx) => (
         <div
           key={idx}
           className="bg-gradient-to-br from-pink-50 to-orange-50 rounded-xl p-5 border-l-4 border-pink-600"
@@ -238,7 +232,7 @@ const EmployeeCvTemplate: React.FC<CvTemplateProps> = ({ parsedData }) => {
             (a) =>
               typeof a === "string" ||
               (typeof a !== "string" &&
-                ((a as any).award || (a as any).issuer || (a as any).year))
+                ((a).award || (a).issuer || (a).year))
           ) && (
             <Section
               title="Achievements"
@@ -246,7 +240,7 @@ const EmployeeCvTemplate: React.FC<CvTemplateProps> = ({ parsedData }) => {
               gradient="from-yellow-500 to-amber-600"
             >
               <ul className="list-disc list-inside text-gray-700">
-                {parsedData.achievements.map((a: any, i: number) => {
+                {parsedData.achievements.map((a, i) => {
                   // If it's a plain string, render it directly
                   if (typeof a === "string") return <li key={i}>{a}</li>;
 
@@ -284,7 +278,7 @@ const EmployeeCvTemplate: React.FC<CvTemplateProps> = ({ parsedData }) => {
             >
               <ul className="list-disc list-inside text-gray-700">
                 {parsedData.professionalTraining.map(
-                  (p: ProfessionalTraining, i: number) => (
+                  (p, i) => (
                     <li key={i}>
                       {p.name || p.title || ""}
                       {p.institution && ` — ${p.institution}`}
@@ -300,8 +294,8 @@ const EmployeeCvTemplate: React.FC<CvTemplateProps> = ({ parsedData }) => {
             {/* If entries are objects (journal/workshop), render them */}
             {parsedData.researchPublications.some(
               (r) =>
-                (typeof r === "object" && (r as any).journal) ||
-                (r as any).workshop
+                (typeof r === "object" && (r).journal) ||
+                (r).workshop
             ) && (
               <Section
                 title="Research Publications"
@@ -311,10 +305,10 @@ const EmployeeCvTemplate: React.FC<CvTemplateProps> = ({ parsedData }) => {
                 <ul className="list-disc list-inside text-gray-700">
                   {parsedData.researchPublications
                     .filter(
-                      (r: any) =>
+                      (r) =>
                         typeof r === "object" && (r.journal || r.workshop)
                     )
-                    .map((r: any, i: number) => (
+                    .map((r, i) => (
                       <li key={i}>
                         {r.journal && (
                           <span className="font-semibold">{r.journal}</span>
@@ -344,8 +338,8 @@ const EmployeeCvTemplate: React.FC<CvTemplateProps> = ({ parsedData }) => {
               >
                 <ul className="list-disc list-inside text-gray-700">
                   {parsedData.researchPublications
-                    .filter((r: any) => typeof r === "string")
-                    .map((s: string, i: number) => (
+                    .filter((r) => typeof r === "string")
+                    .map((s, i) => (
                       <li key={i}>{s}</li>
                     ))}
                 </ul>
@@ -517,7 +511,7 @@ const EmployeeCvTemplate: React.FC<CvTemplateProps> = ({ parsedData }) => {
               gradient="from-purple-600 to-pink-600"
             >
               <ul className="list-disc list-inside text-gray-700">
-                {parsedData.researchProjects.map((p: any, i: number) => (
+                {parsedData.researchProjects.map((p, i) => (
                   <li key={i}>
                     {p.title && (
                       <span className="font-semibold">{p.title}</span>
@@ -542,7 +536,7 @@ const EmployeeCvTemplate: React.FC<CvTemplateProps> = ({ parsedData }) => {
             >
               <ul className="list-disc list-inside text-gray-700">
                 {parsedData.membershipsAndAssociations.map(
-                  (m: any, i: number) => (
+                  (m, i) => (
                     <li key={i}>
                       {m?.heading && (
                         <span className="font-semibold">{m.heading}</span>
@@ -608,11 +602,6 @@ const Section = ({
   icon,
   gradient = "from-indigo-600 to-purple-600",
   children,
-}: {
-  title: string;
-  icon: React.ReactNode;
-  gradient?: string;
-  children: React.ReactNode;
 }) => (
   <div className="mb-10">
     <div className="flex items-center mb-6">

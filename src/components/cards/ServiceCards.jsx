@@ -2,19 +2,7 @@
 import React, { useState } from 'react';
 import { Play, Sparkles } from 'lucide-react';
 
-interface Card {
-  id: number;
-  image: string;
-  logo: string;
-  title: string;
-  description: string;
-  hoverTitle: string;
-  hoverDescription: string;
-  author: string;
-  authorRole: string;
-}
-
-const cards: Card[] = [
+const cards = [
   {
     id: 1,
     image: "https://images.unsplash.com/photo-1598316560453-0246d4611979?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTZ8fGNvbXB1dGVyJTIwdGVjaHxlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&q=60&w=600",

@@ -1,50 +1,9 @@
 "use client";
 import React, { useState, FormEvent } from "react";
 import { Plus } from "lucide-react";
-import FinalizedResume from "./FinalizedResume";
-interface Education {
-  degree: string;
-  institution: string;
-  year: string;
-}
-
-interface Experience {
-  role: string;
-  company: string;
-  years: string;
-}
-
-interface Project {
-  name: string;
-  technologies: string;
-  description: string;
-  link: string;
-}
-
-interface Certification {
-  title: string;
-  organization: string;
-  year: string;
-}
-interface ResumeFormData {
-  name: string;
-  email: string;
-  phone: string;
-  location: string;
-  linkedin: string;
-  github: string;
-  title: string;
-  summary: string;
-  education: Education[];
-  experience: Experience[];
-  projects: Project[];
-  certifications: Certification[];
-  skills: string[];
-}
-
-
+import FinalizedEmployeeResume from "./FinalizedEmployeeResume";
 // NewResume Form Component
-const NewResume: React.FC = () => {
+const EmployeeCvBuilder = () => {
   const [formData, setFormData] = useState<ResumeFormData>({
     name: "",
     email: "",
@@ -63,29 +22,38 @@ const NewResume: React.FC = () => {
 
   const [showPreview, setShowPreview] = useState(false);
 
-  const handleChange = (
-    section: keyof ResumeFormData,
-    index: number | null,
-    field: string,
-    value: string
-  ) => {
-    if (index === null) {
-      setFormData({ ...formData, [section]: value });
-    } else {
-      const updatedSection = [...(formData[section] as any)];
-      updatedSection[index][field] = value;
-      setFormData({ ...formData, [section]: updatedSection });
-    }
-  };
+ const handleChange = () => {
+  setFormData((prevFormData) => {
+    const updated = { ...prevFormData };
 
-  const addItem = (section: keyof ResumeFormData, emptyItem: any) => {
+    if (index === null) {
+      // handle simple fields (name, email, etc.)
+      updated[section] = value ;
+    } else {
+      // handle array sections (education, experience, etc.)
+      const sectionData = updated[section];
+
+      if (Array.isArray(sectionData)) {
+        const newSection = [...sectionData];
+        const item = newSection[index];
+        newSection[index] = { ...item, [field]: value } ;
+        updated[section] = newSection ;
+      }
+    }
+
+    return updated;
+  });
+};
+
+
+  const addItem = (section, emptyItem) => {
     setFormData({
       ...formData,
-      [section]: [...(formData[section] as any), emptyItem],
+      [section]: [...(formData[section]), emptyItem],
     });
   };
 
-  const handleSkillChange = (index: number, value: string) => {
+  const handleSkillChange = (index, value) => {
     const updatedSkills = [...formData.skills];
     updatedSkills[index] = value;
     setFormData({ ...formData, skills: updatedSkills });
@@ -95,16 +63,13 @@ const NewResume: React.FC = () => {
     setFormData({ ...formData, skills: [...formData.skills, ""] });
   };
 
-  const handleSubmit = (e: FormEvent) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
   // Submitted Resume Data
     setShowPreview(true); // Show finalized resume
   };
 
   const renderSectionHeader = (
-    title: string,
-    onAdd?: () => void,
-    addText?: string
   ) => (
     <div className="flex items-center justify-between mb-3 border-b border-black pb-1">
       <h2 className="text-xl font-semibold">{title}</h2>
@@ -122,11 +87,11 @@ const NewResume: React.FC = () => {
   );
 
   if (showPreview) {
-    return <FinalizedResume parsedData={formData} />;
+    return <FinalizedEmployeeResume parsedData={formData} />;
   }
 
   return (
-    <div className="max-w-5xl mx-auto p-8 bg-white shadow-xl border rounded-2xl my-20">
+    <div className="max-w-5xl mx-auto p-8 bg-white shadow-xl border border-gray-200 rounded-2xl my-5 ">
       <h1 className="text-3xl font-bold text-center text-green-600 mb-3">
         Create a New Resume
       </h1>
@@ -151,10 +116,10 @@ const NewResume: React.FC = () => {
               key={field}
               type="text"
               placeholder={field.charAt(0).toUpperCase() + field.slice(1)}
-              value={(formData as any)[field]}
+              value={(formData)[field] || ""}
               onChange={(e) =>
                 handleChange(
-                  field as keyof ResumeFormData,
+                  field,
                   null,
                   "",
                   e.target.value
@@ -381,4 +346,4 @@ const NewResume: React.FC = () => {
   );
 };
 
-export default NewResume;
+export default EmployeeCvBuilder;

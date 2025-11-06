@@ -232,7 +232,7 @@ export default function EmployeeResume() {
   const { uploadCV, loading: uploadingCV } = useUploadCV();
 
   // Handle file selection
-  const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = (e) => {
     const selectedFile = e.target.files?.[0];
     if (selectedFile) {
       const maxSize = 2 * 1024 * 1024; // 2 MB
@@ -254,14 +254,14 @@ export default function EmployeeResume() {
   };
 
   // Drag events
-  const handleDrag = (e: DragEvent<HTMLDivElement>) => {
+  const handleDrag = (e) => {
     e.preventDefault();
     e.stopPropagation();
     if (e.type === "dragenter" || e.type === "dragover") setDragActive(true);
     else if (e.type === "dragleave") setDragActive(false);
   };
 
-  const handleDrop = (e: DragEvent<HTMLDivElement>) => {
+  const handleDrop = (e) => {
     e.preventDefault();
     e.stopPropagation();
     setDragActive(false);

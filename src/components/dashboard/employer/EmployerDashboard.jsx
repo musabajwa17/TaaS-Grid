@@ -481,7 +481,7 @@ import {
 import Link from "next/link";
 
 export default function EmployerDashboard() {
-  const plan: string = "Premium";
+  const plan = "Premium";
 
   const [fullName, setFullName] = useState("");
 
@@ -624,12 +624,6 @@ const StatCard = ({
   value,
   subtitle,
   gradient,
-}: {
-  icon: React.ReactNode;
-  title: string;
-  value: string;
-  subtitle: string;
-  gradient: string;
 }) => (
   <div
     className={`p-6 bg-gradient-to-r ${gradient} text-white rounded-2xl shadow-lg flex items-center gap-4`}
@@ -650,13 +644,6 @@ const FeatureCard = ({
   desc,
   href,
   linkText,
-}: {
-  icon: React.ReactNode;
-  title: string;
-  color: string;
-  desc: string;
-  href: string;
-  linkText: string;
 }) => (
   <div className="bg-white rounded-2xl shadow-md p-6 border border-gray-100 hover:shadow-lg transition-all duration-300">
     <div className="flex items-center gap-3 mb-3">
@@ -677,10 +664,6 @@ const JobPostSection = ({
   icon,
   title,
   jobs,
-}: {
-  icon: React.ReactNode;
-  title: string;
-  jobs: { title: string; applicants: number; status: string }[];
 }) => (
   <div className="bg-white rounded-2xl shadow-md p-6">
     <h2 className="text-xl font-semibold text-gray-800 mb-4 flex items-center gap-2">
@@ -715,10 +698,6 @@ const ApplicantSection = ({
   icon,
   title,
   applicants,
-}: {
-  icon: React.ReactNode;
-  title: string;
-  applicants: { name: string; role: string; status: string }[];
 }) => (
   <div className="bg-white rounded-2xl shadow-md p-6">
     <h2 className="text-xl font-semibold text-gray-800 mb-4 flex items-center gap-2">

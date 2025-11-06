@@ -10,19 +10,11 @@ export default function EnrichEmployeeResume() {
   const [experience, setExperience] = useState("");
   const [tone, setTone] = useState("");
   const [showModifyResume, setShowModifyResume] = useState(false);
- const [parsedData, setParsedData] = useState<Record<string, unknown> | null>(null);
+ const [parsedData, setParsedData] = useState(null);
 
   const { enrichResume, enrichedData, loading, error } = useEnrichResume();
 
-  type Suggestions = {
-    summary_improvement?: string;
-    missing_sections?: string[];
-    missing_details?: string[];
-    suggested_additions?: string[];
-    tone_recommendation?: string;
-  };
-
-  const suggestions = enrichedData ? (enrichedData as { suggestions?: Suggestions }).suggestions : undefined;
+  const suggestions = enrichedData ? (enrichedData).suggestions : undefined;
   useEffect(() => {
     const stored = localStorage.getItem("parsedData");
     if (stored) setParsedData(JSON.parse(stored));
@@ -144,11 +136,11 @@ export default function EnrichEmployeeResume() {
       )}
 
       {/* Missing Sections */}
-  {Array.isArray(suggestions?.missing_sections) && suggestions!.missing_sections!.length > 0 && (
+  {Array.isArray(suggestions?.missing_sections) && suggestions?.missing_sections?.length > 0 && (
         <div className="bg-white p-5 rounded-xl border border-gray-100 shadow-sm">
           <h3 className="text-lg font-semibold text-gray-800 mb-2">📂 Missing Sections</h3>
           <ul className="list-disc list-inside text-gray-600 space-y-1">
-            {suggestions!.missing_sections!.map((section: string, i: number) => (
+            {suggestions?.missing_sections?.map((section, i) => (
               <li key={i}>{section}</li>
             ))}
           </ul>
@@ -156,11 +148,11 @@ export default function EnrichEmployeeResume() {
       )}
 
       {/* Missing Details */}
-  {Array.isArray(suggestions?.missing_details) && suggestions!.missing_details!.length > 0 && (
+  {Array.isArray(suggestions?.missing_details) && suggestions?.missing_details?.length > 0 && (
         <div className="bg-white p-5 rounded-xl border border-gray-100 shadow-sm">
           <h3 className="text-lg font-semibold text-gray-800 mb-2">⚠️ Missing Details</h3>
           <ul className="list-disc list-inside text-gray-600 space-y-1">
-            {suggestions!.missing_details!.map((detail: string, i: number) => (
+            {suggestions?.missing_details?.map((detail, i) => (
               <li key={i}>{detail}</li>
             ))}
           </ul>
@@ -168,11 +160,11 @@ export default function EnrichEmployeeResume() {
       )}
 
       {/* Suggested Additions */}
-  {Array.isArray(suggestions?.suggested_additions) && suggestions!.suggested_additions!.length > 0 && (
+  {Array.isArray(suggestions?.suggested_additions) && suggestions?.suggested_additions?.length > 0 && (
         <div className="bg-white p-5 rounded-xl border border-gray-100 shadow-sm">
           <h3 className="text-lg font-semibold text-gray-800 mb-2">💡 Suggested Additions</h3>
           <ul className="list-disc list-inside text-gray-600 space-y-1">
-            {suggestions!.suggested_additions!.map((addition: string, i: number) => (
+            {suggestions?.suggested_additions?.map((addition, i) => (
               <li key={i}>{addition}</li>
             ))}
           </ul>
@@ -201,11 +193,6 @@ function Dropdown({
   value,
   onChange,
   options,
-}: {
-  label: string;
-  value: string;
-  onChange: (val: string) => void;
-  options: string[];
 }) {
   return (
     <div>

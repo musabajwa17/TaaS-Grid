@@ -15,39 +15,23 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 
-interface Job {
-  title: string;
-  company: string;
-  status: "open" | "applied" | "closed";
-}
-
-interface SkillProgress {
-  skill: string;
-  level: number;
-}
-
-interface Deadline {
-  task: string;
-  due: string;
-}
-
 export default function EmployeeDashboard() {
-  const plan: string = "Basic";
+  const plan = "Basic";
 
   // Dummy Data
-  const jobs: Job[] = [
+  const jobs = [
     { title: "Frontend Developer (React)", company: "Techify Labs", status: "open" },
     { title: "Backend Engineer (Node.js)", company: "InnovaSoft", status: "applied" },
     { title: "AI Engineer", company: "CognitiveX", status: "closed" },
   ];
 
-  const skills: SkillProgress[] = [
+  const skills = [
     { skill: "React + Next.js", level: 75 },
     { skill: "Node.js + Express", level: 65 },
     { skill: "AI Resume Optimization", level: 45 },
   ];
 
-  const deadlines: Deadline[] = [
+  const deadlines = [
     { task: "Submit Resume for Techify Labs", due: "Tomorrow" },
     { task: "Interview (InnovaSoft)", due: "Nov 3" },
     { task: "Update LinkedIn Portfolio", due: "Nov 5" },
@@ -211,11 +195,6 @@ const StatCard = ({
   title,
   value,
   gradient,
-}: {
-  icon: React.ReactNode;
-  title: string;
-  value: string;
-  gradient: string;
 }) => (
   <div
     className={`p-6 bg-gradient-to-r ${gradient} text-white rounded-2xl shadow-lg flex items-center gap-4`}
@@ -235,13 +214,6 @@ const FeatureCard = ({
   desc,
   href,
   linkText,
-}: {
-  icon: React.ReactNode;
-  title: string;
-  color: string;
-  desc: string;
-  href: string;
-  linkText: string;
 }) => (
   <div className="bg-white rounded-2xl shadow-md p-6 border border-gray-100 hover:shadow-lg transition-all duration-300">
     <div className="flex items-center gap-3 mb-3">
@@ -262,10 +234,6 @@ const JobListSection = ({
   icon,
   title,
   jobs,
-}: {
-  icon: React.ReactNode;
-  title: string;
-  jobs: Job[];
 }) => (
   <div className="bg-white rounded-2xl shadow-md p-6">
     <h2 className="text-xl font-semibold text-gray-800 mb-4 flex items-center gap-2">
@@ -302,10 +270,6 @@ const DeadlineSection = ({
   icon,
   title,
   data,
-}: {
-  icon: React.ReactNode;
-  title: string;
-  data: Deadline[];
 }) => (
   <div className="bg-white rounded-2xl shadow-md p-6">
     <h2 className="text-xl font-semibold text-gray-800 mb-4 flex items-center gap-2">

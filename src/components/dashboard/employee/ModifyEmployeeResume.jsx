@@ -29,37 +29,28 @@ export default function ModifyEmployeeResume() {
   if (!formData && !showPreview) {
     return null;
   }
-  const handleChange = (
-    section: keyof ParsedData,
-    index: number,
-    field: string,
-    value: string
-  ) => {
-    setFormData((prev) => {
-      if (!prev) return prev;
-      // shallow copy as a generic record to allow indexed updates
-      const updated = { ...prev } as Record<string, unknown>;
-      const sec = updated[section as string];
-      if (Array.isArray(sec)) {
-        const arr = sec as unknown[];
-        // ensure array item exists and is a record
-        const item = {
-          ...((arr[index] as Record<string, unknown>) || {}),
-        } as Record<string, unknown>;
-        item[field] = value;
-        updated[section as string] = [...arr];
-        (updated[section as string] as unknown[])[index] = item;
-      } else {
-        updated[section as string] = value;
-      }
-      return updated as ParsedData;
-    });
-  };
-  const handleSuggestionChange = (
-    category: string,
-    index: number,
-    value: string
-  ) => {
+const handleChange = () => {
+  setFormData((prev) => {
+    if (!prev) return prev;
+
+    // Use let so we can reassign later if needed
+    let updated = { ...prev };
+
+    if (Array.isArray(updated)) {
+      const arr = [...updated]; // make a shallow copy of the array
+      const item = { ...(arr[index] || {}) };
+      item[field] = value;
+      arr[index] = item;
+      updated = arr; // reassign safely
+    } else {
+      updated[section] = value;
+    }
+
+    return updated;
+  });
+};
+
+  const handleSuggestionChange = () => {
     setInputs((prev) => ({
       ...prev,
       [category]: {
@@ -93,7 +84,7 @@ export default function ModifyEmployeeResume() {
       await uploadCV(combinedData);
       setFormData(combinedData);
       setShowPreview(true);
-    } catch (err: unknown) {
+    } catch (err) {
       console.error("CV upload failed:", err);
     }
   };
@@ -298,7 +289,7 @@ export default function ModifyEmployeeResume() {
       Achievements
     </h2>
 
-    {formData.achievements.map((achievement: string, i: number) => (
+    {formData.achievements.map((achievement, i) => (
       <div key={i} className="mb-3">
         <input
           type="text"
@@ -568,7 +559,7 @@ export default function ModifyEmployeeResume() {
                   Suggested Additions
                 </h3>
                 {suggestions.suggested_additions.map(
-                  (add: string, i: number) => (
+                  (add, i) => (
                     <div key={i} className="flex flex-col mb-3">
                       <label className="text-sm text-gray-600 mb-1">
                         {add}

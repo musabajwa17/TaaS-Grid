@@ -24,6 +24,7 @@ import Applicants from "@/components/dashboard/employer/Applicants";
 import CompanyDashboard from "@/components/dashboard/company/CompanyDashboard";
 import CompanyJobs from "@/components/dashboard/company/CompanyJobs";
 import CompanyInternships from "@/components/dashboard/company/CompanyInternship";
+import FypPosting from "@/components/dashboard/company/FypPosting";
 
 
 
@@ -73,7 +74,7 @@ export default function UserSidebar() {
     { name: "Dashboard Overview", icon: Layers, color: "emerald" },
     { name: "Job Post", icon: FileText, color: "emerald" },
     { name: "Internships", icon: MapPin, color: "emerald" },
-    { name: "Saved Opportunities", icon: Droplet, color: "emerald" },
+    { name: "Fyp Posting", icon: Droplet, color: "emerald" },
   ];
 
   return (
@@ -174,6 +175,8 @@ export default function UserSidebar() {
                 ? "Post and manage job listings"
                 : selected === "Internships"
                 ? "View all the applicants for your jobs"
+                : selected === "Fyp Posting"
+                ? "Post and manage FYP opportunities"
                 : "Save and manage your opportunities"}
             </p>
           </div>
@@ -216,7 +219,7 @@ export default function UserSidebar() {
           {selected === "Dashboard Overview" && <CompanyDashboard />}
           {selected === "Job Post" && <CompanyJobs />}
           {selected === "Internships" && <CompanyInternships />}
-          {selected === "Saved Opportunities" && <BookMarks />}
+          {selected === "Fyp Posting" && <FypPosting />}
         </div>
       </main>
     </div>

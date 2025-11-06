@@ -2,17 +2,17 @@
   "compilerOptions": {
     "target": "ES2017",
     "lib": ["dom", "dom.iterable", "esnext"],
-    "allowJs": true,
-    "checkJs": false,
-    "skipLibCheck": true,
-    "strict": true,
-    "noEmit": true,
-    "esModuleInterop": true,
+    "allowJs": true,                // ✅ Allow JS and JSX files
+    "checkJs": false,               // ✅ Disable type-checking for JS/JSX
+    "skipLibCheck": true,           // ✅ Skip library type checks
+    "strict": false,                // ✅ Turn off strict TypeScript rules
+    "noEmit": true,                 // ✅ Don’t emit compiled files
+    "esModuleInterop": true,        // ✅ Enable import/export interop
     "module": "esnext",
     "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "jsx": "preserve",
+    "jsx": "preserve",              // ✅ Keep JSX as-is (for Next.js)
     "incremental": true,
     "plugins": [
       {
@@ -27,6 +27,7 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
+    "**/*.js",
     "**/*.jsx",
     ".next/types/**/*.ts",
     "src/**/*"

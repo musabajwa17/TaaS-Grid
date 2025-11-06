@@ -1,8 +1,6 @@
 "use client";
 import React, { useState, FormEvent } from "react";
 import { Plus } from "lucide-react";
-// import FinalizedResume from "./FinalizedResume";
-import FinalizedResume from "../../resume/FinalizedResume";
 import FinalizedStudentResume from "./FinalizedStudentResume";
 
 

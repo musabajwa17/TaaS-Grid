@@ -2,7 +2,6 @@
 import { saveAs } from "file-saver";
 import React, { useEffect, useState } from "react";
 
-// Lightweight plain styles (avoid calling StyleSheet.create at module load)
 const plainStyles = {
   page: {
     backgroundColor: "#ffffff",
@@ -47,8 +46,7 @@ const plainStyles = {
   },
 };
 
-// Default export is a small wrapper that lazy-loads the heavy react-pdf renderer
-export default function ResumePDFWrapper({ data }) {
+export default function DownloadEmployeeResumeWrapper({ data }) {
   const [PdfComponents, setPdfComponents] = useState<any>(null);
 
   useEffect(() => {
@@ -61,7 +59,7 @@ export default function ResumePDFWrapper({ data }) {
     };
   }, []);
 
-  if (!PdfComponents) return null; // or a small loader
+  if (!PdfComponents) return null;
 
   const { Document, Page, Text, View } = PdfComponents;
 
@@ -71,28 +69,11 @@ export default function ResumePDFWrapper({ data }) {
         <View style={plainStyles.header}>
           <Text style={plainStyles.name}>{data?.name || "Your Name"}</Text>
           {data?.title && <Text>{data.title}</Text>}
-          <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', gap: 10 }}>
-            {data?.email && <Text>{data.email}</Text>}
-            {data?.phone && <Text>• {data.phone}</Text>}
-            {data?.location && <Text>• {data.location}</Text>}
-          </View>
-          {(data?.github || data?.linkedin) && (
-            <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', gap: 10, marginTop: 5 }}>
-              {data.linkedin && <Text>{data.linkedin}</Text>}
-              {data.github && data.linkedin && <Text>•</Text>}
-              {data.github && <Text>{data.github}</Text>}
-            </View>
-          )}
+          {data?.email && <Text>{data.email}</Text>}
+          {data?.phone && <Text>{data.phone}</Text>}
         </View>
 
-        {data?.summary && (
-          <View style={plainStyles.section}>
-            <Text style={plainStyles.sectionTitle}>Professional Summary</Text>
-            <Text style={plainStyles.text}>{data.summary}</Text>
-          </View>
-        )}
-
-        {data?.experience && data.experience.length > 0 && (
+        {data?.experience && (
           <View style={plainStyles.section}>
             <Text style={plainStyles.sectionTitle}>Experience</Text>
             {data.experience.map((exp, i) => (
@@ -103,7 +84,7 @@ export default function ResumePDFWrapper({ data }) {
           </View>
         )}
 
-        {data?.education && data.education.length > 0 && (
+        {data?.education && (
           <View style={plainStyles.section}>
             <Text style={plainStyles.sectionTitle}>Education</Text>
             {data.education.map((edu, i) => (
@@ -126,50 +107,15 @@ export default function ResumePDFWrapper({ data }) {
             </View>
           </View>
         )}
-
-        {data?.projects && data.projects.length > 0 && (
-          <View style={plainStyles.section}>
-            <Text style={plainStyles.sectionTitle}>Projects</Text>
-            {data.projects.map((proj, i) => (
-              <View key={i} style={{ marginBottom: 8 }}>
-                <Text style={{ fontWeight: 'bold' }}>{proj.name}</Text>
-                <Text style={plainStyles.text}>{proj.description}</Text>
-                {proj.domain && (
-                  <Text style={{ fontSize: 10 }}>
-                    Tech: {proj.domain.join(', ')}
-                  </Text>
-                )}
-                {proj.link && (
-                  <Text style={{ fontSize: 10, textDecoration: 'underline' }}>
-                    {proj.link}
-                  </Text>
-                )}
-              </View>
-            ))}
-          </View>
-        )}
-
-        {data?.certifications && data.certifications.length > 0 && (
-          <View style={plainStyles.section}>
-            <Text style={plainStyles.sectionTitle}>Certifications</Text>
-            {data.certifications.map((cert, i) => (
-              <Text key={i} style={plainStyles.text}>
-                {cert}
-              </Text>
-            ))}
-          </View>
-        )}
       </Page>
     </Document>
   );
 }
 
 export async function downloadPDF(cvData) {
-  // dynamically import pdf builder to avoid bundling it in initial loads
   const mod = await import("@react-pdf/renderer");
   const { pdf } = mod;
-  // create element using React
-  const element = React.createElement(ResumePDFWrapper, { data: cvData });
+  const element = React.createElement(DownloadEmployeeResumeWrapper, { data: cvData });
   const blob = await pdf(element).toBlob();
   saveAs(blob, `${(cvData?.name || "resume").replace(/\s+/g, "_")}.pdf`);
 }

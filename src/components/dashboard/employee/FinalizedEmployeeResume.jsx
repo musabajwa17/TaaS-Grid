@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
-const ResumePDF = dynamic(() => import("./DownloadResume"), { ssr: false });
-const FinalizedResume = ({ parsedData }) => {
-  const [cvData, setCvData] = useState<ParsedData>(parsedData);
+// const DownloadEmployeeResume = dynamic(() => import("./DownloadEmployeeResume"), { ssr: false });
+import DownloadEmployeeResume from "./DownloadEmployeeResume";
+import { useUploadCV } from "@/hooks/useUploadCV";
+const FinalizedEmployeeResume = ({ parsedData }) => {
+  const [cvData, setCvData] = useState(parsedData);
   const [showDownload, setShowDownload] = useState(false);
   // Save to localStorage & clear old keys
   useEffect(() => {
@@ -13,7 +15,7 @@ const FinalizedResume = ({ parsedData }) => {
       localStorage.removeItem("modifyData");
       localStorage.removeItem("parsedData");
 
-  // saved combinedData
+      console.log("✅ combinedData saved to localStorage:", combinedData);
     }
   }, [parsedData]);
   // Fetch CV from localStorage
@@ -22,32 +24,26 @@ const FinalizedResume = ({ parsedData }) => {
     if (stored) {
       const data = JSON.parse(stored);
       setCvData(data);
-  // loaded CV from localStorage
+      console.log("📄 Loaded CV from localStorage:", data);
     }
   }, []);
   // Download CV as a real PDF using html2pdf.js
-  // Convert ParsedData experience array to string[] for PDF
-  const toCVData = (data) => {
-    const certStrings = data.certifications
-      ? data.certifications
-          .map(cert =>
-            typeof cert === "string"
-              ? cert
-              : cert.title ?? cert.name ?? cert.description ?? ""
-          )
-          .filter(s => s !== "")
-      : undefined;
+  const { uploadCV } = useUploadCV();
 
-    return {
-      ...data,
-      experience: data.experience?.map(exp =>
-        `${exp.role} at ${exp.company} (${exp.years})${exp.description ? `\n${Array.isArray(exp.description) ? exp.description.join("\n") : exp.description}` : ""}`
-      ),
-      education: data.education?.map(edu =>
-        `${edu.degree} from ${edu.institution} (${edu.year})`
-      ),
-      certifications: certStrings,
-    };
+  const handleNewSubmit = async () => {
+  // parsedData uploaded
+    try {
+      if (!parsedData) {
+        return alert("No resume data available to upload.");
+      }
+
+      // ✅ Trigger the upload function returned by the hook
+      await uploadCV(parsedData);
+
+  // uploaded successfully
+    } catch (error) {
+      console.error("❌ Resume upload failed:", error);
+    }
   };
 
   const handleDownloadClick = () => {
@@ -68,7 +64,7 @@ const FinalizedResume = ({ parsedData }) => {
     github,
     linkedin,
     filledSuggestions = {},
-  } = cvData || ({});
+  } = cvData;
   const {
     missing_details = [],
     missing_sections = [],
@@ -78,14 +74,20 @@ const FinalizedResume = ({ parsedData }) => {
     <>
       <div
         className="flex justify-end space-x-3 mb-4
-    bg-white my-25 text-black font-sans max-w-4xl mx-auto"
+    bg-white my-10 text-black font-sans max-w-4xl mx-auto"
       >
         <button
+          onClick={handleNewSubmit}
+          className="border border-gray-700 px-4 py-1 text-sm hover:bg-gray-100"
+        >
+          Submit
+        </button>
+        {/* <button
           onClick={handleDownloadClick}
           className="border border-gray-700 px-4 py-1 text-sm hover:bg-gray-100"
         >
           Download PDF
-        </button>
+        </button> */}
       </div>
       <div className="bg-white my-5 text-black font-sans p-10 max-w-4xl mx-auto border border-gray-300 shadow-lg">
         <div id="cv-content">
@@ -308,9 +310,9 @@ const FinalizedResume = ({ parsedData }) => {
           )}
         </div>
       </div>
-  {showDownload && <ResumePDF data={toCVData(cvData)} />}
+      {showDownload && <DownloadEmployeeResume data={cvData} />}
     </>
   );
 };
 
-export default FinalizedResume;
+export default FinalizedEmployeeResume;
