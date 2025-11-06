@@ -92,14 +92,10 @@ const Header = () => {
                   <span className="relative z-10 transition-all duration-300 group-hover:scale-105 inline-block">
                     {item.name}
                   </span>
-
-                  {/* Animated Gradient Background */}
                   <div className="absolute inset-0 bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500 rounded-xl scale-0 group-hover:scale-100 transition-all duration-500 ease-out opacity-0 group-hover:opacity-15 blur-sm"></div>
-                  
-                  {/* Shine Effect */}
-                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-out rounded-xl"></div>
+  
+                  {/* <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-out rounded-xl"></div> */}
 
-                  {/* Active / Hover Underline with Gradient */}
                   <div
                     className={`absolute bottom-1 left-1/2 -translate-x-1/2 h-1 rounded-full transition-all duration-500 ease-out ${
                       pathname === item.href
@@ -116,7 +112,7 @@ const Header = () => {
               {isLoggedIn ? (
                 <Link
                   href="/dashboard"
-                  className="relative px-10 py-3.5 bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-600 text-white font-black text-base rounded-full hover:scale-105 transition-all duration-500 ease-out overflow-hidden group shadow-xl shadow-emerald-500/30 hover:shadow-2xl hover:shadow-emerald-500/40"
+                  className="relative px-10 py-3.5 bg-emerald-600 text-white font-black text-base rounded-full hover:scale-105 transition-all duration-500 ease-out overflow-hidden group"
                 >
                   <span className="relative z-10 flex items-center gap-2">
                     Dashboard

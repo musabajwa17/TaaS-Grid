@@ -79,7 +79,7 @@ const cards = [
 
 
 const ServiceCards = () => {
-  const [hoveredCard, setHoveredCard] = useState<number | null>(null);
+  const [hoveredCard, setHoveredCard] = useState(null);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-zinc-950 via-neutral-900 to-zinc-950 p-8 relative overflow-hidden">
