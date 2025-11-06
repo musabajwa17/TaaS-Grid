@@ -2,21 +2,13 @@
 import { useState } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
-// import api from "@/utils/axiosInstance";
-
-interface RegisterData {
-  fullName: string;
-  email: string;
-  password: string;
-  role: string;
-}
 // const BASE_URL = process.env.BASE_URL;
 export const useRegisterUser = () => {
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [success, setSuccess] = useState<boolean>(false);
+  const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(false);
 
-  const registerUser = async (formData: RegisterData) => {
+  const registerUser = async (formData) => {
     try {
       setLoading(true);
       setError(null);
@@ -29,7 +21,7 @@ export const useRegisterUser = () => {
       toast.success(response.data.message)
       setSuccess(true);
       return response.data;
-    } catch (err: unknown) {
+    } catch (err) {
       console.error("❌ Registration Error:", err);
       let errorMessage = "Something went wrong";
 

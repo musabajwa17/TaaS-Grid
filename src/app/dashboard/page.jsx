@@ -1,17 +1,13 @@
 "use client";
-
 import { useEffect, useState } from "react";
-// import EmployerDashboard from "@/components/dashboard/employer/EmployerDashboard";
 import CompanySidebar from "@/components/sidebar/companysidebar/CompanySidebar";
 import EmployeeSidebar from "@/components/sidebar/employeesidebar/EmployeeSidebar";
 import UserSidebar from "@/components/sidebar/usersidebar/UserSidebar";
-import EmployerDashboard from "@/components/dashboard/employer/EmployerDashboard";
-
+// import EmployerDashboard from "@/components/dashboard/employer/EmployerDashboard";
+import EmployerSidebar from "@/components/sidebar/employersidebar/EmployerSidebar";
 export default function Home() {
   const [user, setUser] = useState();
-
   useEffect(() => {
-    // Fetch user from localStorage (or from your auth context)
     const storedUser = localStorage.getItem("user");
     if (storedUser) {
       try {
@@ -21,8 +17,6 @@ export default function Home() {
       }
     }
   }, []);
-
-  // Render sidebar based on role
   const renderSidebar = () => {
     switch (user?.role) {
       case "student":
@@ -30,7 +24,7 @@ export default function Home() {
       case "company":
         return <CompanySidebar />;
       case "employer":
-        return <EmployerDashboard />;
+        return <EmployerSidebar />;
       case "employee":
         return <EmployeeSidebar />;
       default:

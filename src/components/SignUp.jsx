@@ -36,7 +36,7 @@ const features = [
 const roles = [
   { id: "employer", label: "Employer" },
   { id: "student", label: "Student" },
-  { id: "employee", label: "Employee" },
+  { id: "employee", label: "Job-Seeker" },
   { id: "company", label: "Company" },
 ];
 
@@ -48,7 +48,7 @@ export default function SignUp() {
   const route = useRouter();
   const { registerUser } = useRegisterUser();
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     const formData = { fullName, email, password, role };
