@@ -18,11 +18,11 @@ export default function CompanyDashboard() {
   const [companyName, setCompanyName] = useState("");
 
   useEffect(() => {
-    const companyString = localStorage.getItem("user");
+    const companyString = localStorage.getItem("company");
     if (companyString) {
       try {
         const company = JSON.parse(companyString);
-        setCompanyName(company.fullName?.toUpperCase() || "");
+        setCompanyName(company.companyName?.toUpperCase() || "");
       } catch (error) {
         console.error("Failed to parse company from localStorage", error);
       }

@@ -8,7 +8,7 @@ export default function CompanyInternships() {
   const [showModal, setShowModal] = useState(false);
   const [internships, setInternships] = useState([]);
   const [companyId, setCompanyId] = useState(null);
-
+  console.log(companyId)
   const [newInternship, setNewInternship] = useState({
     title: "",
     description: "",
@@ -22,7 +22,7 @@ export default function CompanyInternships() {
 
   // ✅ Get company ID
   useEffect(() => {
-    const storedUser = localStorage.getItem("user");
+    const storedUser = localStorage.getItem("company");
     if (storedUser) {
       try {
         const user = JSON.parse(storedUser);
@@ -47,6 +47,7 @@ const handleSubmit = async (e) => {
 
   try {
     const internshipData = { ...newInternship, postedBy: companyId };
+    console.log("Internship Data", internshipData)
     const res = await axios.post("http://localhost:3001/api/internships", internshipData);
 
     if (res.data.success) {
@@ -90,16 +91,19 @@ const handleDelete = async (id) => {
   }
 };
 
-// ✅ Fetch internships for this company
 useEffect(() => {
+  console.log("Fetching internships...");
   if (!companyId) return;
 
   const fetchInternships = async () => {
     try {
       const res = await axios.get("http://localhost:3001/api/internships");
+      console.log("Internships response:", res.data);
+
       if (res.data.success) {
         const filtered = res.data.internships.filter(
-          (internship) => internship.postedBy === companyId
+          (internship) =>
+            internship?.postedBy?._id?.toString() === companyId.toString()
         );
         setInternships(filtered);
       }
@@ -110,6 +114,8 @@ useEffect(() => {
 
   fetchInternships();
 }, [companyId]);
+
+
 
 
   return (

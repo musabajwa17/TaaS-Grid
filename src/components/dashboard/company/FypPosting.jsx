@@ -22,7 +22,7 @@ export default function FypPosting() {
 
   // ✅ Get company ID from localStorage
   useEffect(() => {
-    const storedUser = localStorage.getItem("user");
+    const storedUser = localStorage.getItem("company");
     if (storedUser) {
       try {
         const user = JSON.parse(storedUser);
@@ -33,26 +33,27 @@ export default function FypPosting() {
     }
   }, []);
 
-  // ✅ Fetch FYPs posted by this company
-  useEffect(() => {
-    if (!companyId) return;
+// ✅ Fetch FYPs posted by this company
+useEffect(() => {
+  if (!companyId) return;
 
-    const fetchFyps = async () => {
-      try {
-        const res = await axios.get("http://localhost:3001/api/fyps");
-        if (res.data.success) {
-          const filtered = res.data.fyps.filter(
-            (fyp) => fyp.postedBy === companyId
-          );
-          setFyps(filtered);
-        }
-      } catch (error) {
-        console.error("Error fetching FYPs:", error);
+  const fetchFyps = async () => {
+    try {
+      const res = await axios.get("http://localhost:3001/api/fyps");
+      if (res.data.success) {
+        const filtered = res.data.fyps.filter(
+          (fyp) => fyp?.postedBy?._id?.toString() === companyId.toString()
+        );
+        setFyps(filtered);
       }
-    };
+    } catch (error) {
+      console.error("Error fetching FYPs:", error);
+    }
+  };
 
-    fetchFyps();
-  }, [companyId]);
+  fetchFyps();
+}, [companyId]);
+
 
   // ✅ Handle input change
   const handleChange = (e) => {

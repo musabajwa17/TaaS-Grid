@@ -1,44 +1,63 @@
 import { useState } from "react";
 import toast from "react-hot-toast";
-// import api from "@/utils/axiosInstance";
 import axios from "axios";
 
-// const BASE_URL = "http://localhost:3001";
-// const BASE_URL = process.env.BASE_URL;
-
-export const useLoginUser = () => {
+export const useLogin = () => {
   const [loading, setLoading] = useState(false);
-  const [userLogin, setUserLogin] = useState(null);
-  const loginUser = async (email, password) => {
-    // Removed logging of credentials for security
+  const [loginData, setLoginData] = useState(null);
+
+  /**
+   * loginUser: logs in a user/company based on role
+   * @param {string} role - "student" | "employee" | "employer" | "company"
+   * @param {string} email
+   * @param {string} password
+   * @returns logged in user/company object
+   */
+  const loginUser = async (role, email, password) => {
     setLoading(true);
+
     try {
-      const response = await axios.post("http://localhost:3001/api/user/login", {
-        email,
-        password,
-      });
-      setUserLogin(response.data);
-      const { user, accessToken, refreshToken } = response.data;
-      // setUser(user);
-      // console.log("User Login", user);
-      // console.log("Login Response:", response.data);
-      localStorage.setItem("user", JSON.stringify(user)); // contains _id, fullName, role, email
+      let endpoint = "";
+
+      switch (role) {
+        case "student":
+        case "employee":
+          endpoint = "/api/user/login";
+          break;
+        case "employer":
+          endpoint = "/api/employer/login";
+          break;
+        case "company":
+          endpoint = "/api/company/login";
+          break;
+        default:
+          throw new Error("Invalid role selected");
+      }
+
+      const response = await axios.post(`http://localhost:3001${endpoint}`, { email, password });
+      setLoginData(response.data);
+
+      const { accessToken, refreshToken } = response.data;
+      const dataKey = role === "company" || role === "employer" ? "company" : "user";
+      const objectData = role === "company" || role === "employer" ? response.data.company || response.data.employer : response.data.user;
+
+      // Save to localStorage
+      localStorage.setItem(dataKey, JSON.stringify(objectData));
       localStorage.setItem("accessToken", accessToken);
       localStorage.setItem("refreshToken", refreshToken);
-      toast.success(response.data.message);
-      return user;
+
+      toast.success(response.data.message || "Logged in successfully!");
+      return objectData;
     } catch (error) {
       console.error("Login failed:", error);
-      let errorMessage = "Something went wrong";
 
-      if (axios.isAxiosError(error) && (error).response?.data) {
-        // best effort for axios error
-        errorMessage = String((error).response.data?.error || (error).response.data || errorMessage);
+      let errorMessage = "Something went wrong";
+      if (axios.isAxiosError(error) && error.response?.data) {
+        errorMessage = String(error.response.data?.error || error.response.data || errorMessage);
       } else if (error instanceof Error) {
         errorMessage = error.message;
       }
 
-      // ✅ show toast
       toast.error(errorMessage);
       throw error;
     } finally {
@@ -46,19 +65,29 @@ export const useLoginUser = () => {
     }
   };
 
-  const logout = async () => {
-    const storedUser = localStorage.getItem("user");
-    const user = storedUser ? JSON.parse(storedUser) : null;
+  /**
+   * logoutUser: logs out user/company based on stored role
+   */
+  const logoutUser = async () => {
+    const storedUser = localStorage.getItem("user") || localStorage.getItem("company");
+    const dataKey = localStorage.getItem("user") ? "user" : "company";
+    const storedObj = storedUser ? JSON.parse(storedUser) : null;
 
-    if (!user) return;
+    if (!storedObj) return;
 
     try {
-      await axios.post("http://localhost:3001/api/users/logout", { userId: user._id });
-      localStorage.removeItem("user");
+      const endpoint = dataKey === "company" ? "/api/company/logout" : "/api/users/logout";
+      const body = dataKey === "company" ? { companyId: storedObj._id } : { userId: storedObj._id };
+
+      await axios.post(`http://localhost:3001${endpoint}`, body);
+
+      localStorage.removeItem(dataKey);
+      localStorage.removeItem("accessToken");
+      localStorage.removeItem("refreshToken");
     } catch (err) {
-      console.error("Logout Error:", err);
+      console.error("Logout error:", err);
     }
   };
 
-  return { loginUser,userLogin, logout, loading };
+  return { loginUser, loginData, logoutUser, loading };
 };

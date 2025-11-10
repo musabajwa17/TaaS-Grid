@@ -8,24 +8,27 @@ export default function CompanyJobs() {
   const [showModal, setShowModal] = useState(false);
   const [jobs, setJobs] = useState([]);
   const [companyId, setCompanyId] = useState(null);
-
+  // ✅ Updated newJob state — includes all fields from the schema
   const [newJob, setNewJob] = useState({
     title: "",
     description: "",
     experience: "",
     qualification: "",
     location: "",
+    salary: "",
     requirements: "",
     type: "Full-time",
+    status: "Open",
+    postedByModel: "Company",
   });
 
   // ✅ Get company ID from localStorage
   useEffect(() => {
-    const storedUser = localStorage.getItem("user");
+    const storedUser = localStorage.getItem("company");
     if (storedUser) {
       try {
         const user = JSON.parse(storedUser);
-        setCompanyId(user._id); // or user.companyId depending on your model
+        setCompanyId(user._id);
       } catch (err) {
         console.error("Error parsing user:", err);
       }
@@ -33,42 +36,41 @@ export default function CompanyJobs() {
   }, []);
 
   // ✅ Fetch only jobs posted by this company
-  useEffect(() => {
-    if (!companyId) return;
+useEffect(() => {
+  if (!companyId) return;
 
-    const fetchJobs = async () => {
-      try {
-        const res = await axios.get("http://localhost:3001/api/jobs");
-        if (res.data.success) {
-          // Filter by company ID
-          const filtered = res.data.jobs.filter(
-            (job) => job.postedBy === companyId
-          );
-          setJobs(filtered);
-          console.log("Company jobs:", filtered);
-        }
-      } catch (error) {
-        console.error("Error fetching jobs:", error);
+  const fetchJobs = async () => {
+    try {
+      const res = await axios.get("http://localhost:3001/api/jobs");
+      if (res.data.success) {
+        const filtered = res.data.jobs.filter(
+          (job) => job.postedBy && job.postedBy._id === companyId
+        );
+        setJobs(filtered);
       }
-    };
+    } catch (error) {
+      console.error("Error fetching jobs:", error);
+    }
+  };
 
-    fetchJobs();
-  }, [companyId]);
+  fetchJobs();
+}, [companyId]);
 
-  // ✅ Handle field change
+  // ✅ Handle input field changes
   const handleChange = (e) => {
     const { name, value } = e.target;
     setNewJob((prev) => ({ ...prev, [name]: value }));
   };
 
-  // ✅ Submit new job (linked to this company)
+  // ✅ Submit new job
   const handleSubmit = async (e) => {
+    console.log("Hello", newJob)
     e.preventDefault();
-
     if (!newJob.title.trim() || !companyId) return;
 
     try {
       const jobData = { ...newJob, postedBy: companyId };
+      console.log(jobData)
       const res = await axios.post("http://localhost:3001/api/jobs", jobData);
 
       if (res.data.success) {
@@ -79,8 +81,11 @@ export default function CompanyJobs() {
           experience: "",
           qualification: "",
           location: "",
+          salary: "",
           requirements: "",
           type: "Full-time",
+          status: "Open",
+          postedByModel: "Company",
         });
         setShowModal(false);
         alert("✅ Job posted successfully!");
@@ -154,28 +159,54 @@ export default function CompanyJobs() {
                 </h3>
               </div>
 
-              <p className="text-gray-600 text-sm mb-3">{job.description}</p>
+              <p className="text-gray-600 text-sm mb-3 line-clamp-3">
+                {job.description}
+              </p>
 
               <div className="space-y-1 text-sm text-gray-500">
                 <p>
-                  <span className="font-semibold text-gray-700">Experience:</span>{" "}
-                  {job.experience}
+                  <span className="font-semibold text-gray-700">
+                    Experience:
+                  </span>{" "}
+                  {job.experience || "—"}
                 </p>
                 <p>
-                  <span className="font-semibold text-gray-700">Qualification:</span>{" "}
-                  {job.qualification}
+                  <span className="font-semibold text-gray-700">
+                    Qualification:
+                  </span>{" "}
+                  {job.qualification || "—"}
                 </p>
                 <p>
-                  <span className="font-semibold text-gray-700">Location:</span>{" "}
+                  <span className="font-semibold text-gray-700">
+                    Location:
+                  </span>{" "}
                   {job.location}
                 </p>
                 <p>
-                  <span className="font-semibold text-gray-700">Requirements:</span>{" "}
-                  {job.requirements}
+                  <span className="font-semibold text-gray-700">Salary:</span>{" "}
+                  {job.salary || "—"}
+                </p>
+                <p>
+                  <span className="font-semibold text-gray-700">
+                    Requirements:
+                  </span>{" "}
+                  {job.requirements || "—"}
                 </p>
                 <p>
                   <span className="font-semibold text-gray-700">Type:</span>{" "}
                   {job.type}
+                </p>
+                <p>
+                  <span className="font-semibold text-gray-700">Status:</span>{" "}
+                  <span
+                    className={`${
+                      job.status === "Open"
+                        ? "text-emerald-600 font-semibold"
+                        : "text-red-500 font-semibold"
+                    }`}
+                  >
+                    {job.status}
+                  </span>
                 </p>
               </div>
             </div>
@@ -199,6 +230,7 @@ export default function CompanyJobs() {
             </h2>
 
             <form onSubmit={handleSubmit} className="space-y-4">
+              {/* Job Title */}
               <div>
                 <label className="text-sm font-medium text-gray-700">
                   Job Title
@@ -213,6 +245,7 @@ export default function CompanyJobs() {
                 />
               </div>
 
+              {/* Description */}
               <div>
                 <label className="text-sm font-medium text-gray-700">
                   Description
@@ -222,14 +255,16 @@ export default function CompanyJobs() {
                   value={newJob.description}
                   onChange={handleChange}
                   rows={3}
+                  required
                   className="w-full mt-1 border rounded-lg px-3 py-2 focus:ring-2 focus:ring-[#00bb98] focus:outline-none"
                 ></textarea>
               </div>
 
+              {/* Experience + Qualification */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label className="text-sm font-medium text-gray-700">
-                    Experience Required
+                    Experience
                   </label>
                   <input
                     type="text"
@@ -253,6 +288,7 @@ export default function CompanyJobs() {
                 </div>
               </div>
 
+              {/* Location + Salary */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label className="text-sm font-medium text-gray-700">
@@ -263,9 +299,27 @@ export default function CompanyJobs() {
                     name="location"
                     value={newJob.location}
                     onChange={handleChange}
+                    required
                     className="w-full mt-1 border rounded-lg px-3 py-2 focus:ring-2 focus:ring-[#00bb98]"
                   />
                 </div>
+                <div>
+                  <label className="text-sm font-medium text-gray-700">
+                    Salary (Optional)
+                  </label>
+                  <input
+                    type="text"
+                    name="salary"
+                    value={newJob.salary}
+                    onChange={handleChange}
+                    placeholder="e.g., 60,000 PKR / month"
+                    className="w-full mt-1 border rounded-lg px-3 py-2 focus:ring-2 focus:ring-[#00bb98]"
+                  />
+                </div>
+              </div>
+
+              {/* Type + Status */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label className="text-sm font-medium text-gray-700">
                     Job Type
@@ -281,8 +335,24 @@ export default function CompanyJobs() {
                     <option>Contract</option>
                   </select>
                 </div>
+
+                <div>
+                  <label className="text-sm font-medium text-gray-700">
+                    Status
+                  </label>
+                  <select
+                    name="status"
+                    value={newJob.status}
+                    onChange={handleChange}
+                    className="w-full mt-1 border rounded-lg px-3 py-2 focus:ring-2 focus:ring-[#00bb98]"
+                  >
+                    <option>Open</option>
+                    <option>Closed</option>
+                  </select>
+                </div>
               </div>
 
+              {/* Requirements */}
               <div>
                 <label className="text-sm font-medium text-gray-700">
                   Requirements
@@ -292,10 +362,12 @@ export default function CompanyJobs() {
                   name="requirements"
                   value={newJob.requirements}
                   onChange={handleChange}
+                  placeholder="e.g., Good communication, team player..."
                   className="w-full mt-1 border rounded-lg px-3 py-2 focus:ring-2 focus:ring-[#00bb98]"
                 />
               </div>
 
+              {/* Submit */}
               <button
                 type="submit"
                 className="w-full bg-gradient-to-r from-[#00bb98] to-[#00d4ae] text-white py-2 rounded-lg font-semibold shadow hover:opacity-90 transition"
