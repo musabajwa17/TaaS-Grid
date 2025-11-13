@@ -733,7 +733,7 @@ const HeroSection = () => {
               </div> */}
 
               {/* Animated Headline */}
-              <h1 className="text-5xl lg:text-6xl font-bold text-slate-900 leading-tight tracking-tight">
+              <h1 className="text-3xl lg:text-5xl font-bold text-slate-900 leading-tight tracking-tight">
                 {currentModule.content.description.split(' ').map((word, i) => (
                   <span
                     key={i}

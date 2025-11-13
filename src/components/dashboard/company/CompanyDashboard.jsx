@@ -12,9 +12,10 @@ import {
   ChevronRight,
 } from "lucide-react";
 import Link from "next/link";
+import axios from "axios";
 
 export default function CompanyDashboard() {
-  const plan = "Premium";
+  const plan = "Basic";
   const [companyName, setCompanyName] = useState("");
 
   useEffect(() => {
@@ -29,11 +30,46 @@ export default function CompanyDashboard() {
     }
   }, []);
 
-  const analytics = [
-    { metric: "Total Internships", value: "18", growth: "+12%" },
-    { metric: "Active Jobs", value: "9", growth: "+8%" },
-    { metric: "FYP Ideas Shared", value: "27", growth: "+15%" },
-  ];
+ const [analytics, setAnalytics] = useState([
+    { metric: "Total Internships", value: "-", growth: "+0%" },
+    { metric: "Active Jobs", value: "-", growth: "+0%" },
+    { metric: "FYP Ideas Shared", value: "-", growth: "+0%" },
+  ]);
+
+  const [loading, setLoading] = useState(true);
+
+useEffect(() => {
+  const fetchDashboard = async () => {
+    setLoading(true);
+    try {
+      const company = JSON.parse(localStorage.getItem("company"));
+      console.log(company)
+      if (!company || !company._id) return;
+   
+      const res = await axios.get(`http://localhost:3001/api/company/${company._id}/dashboard`)
+
+      if (res.data.success) {
+        const { counts, topJobs } = res.data.data;
+
+        setAnalytics([
+          { metric: "Total Internships", value: counts.internships, growth: "+12%" },
+          { metric: "Active Jobs", value: counts.jobs, growth: "+8%" },
+          { metric: "FYP Ideas Shared", value: counts.fyps, growth: "+15%" },
+        ]);
+      }
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  fetchDashboard();
+}, []);
+
+
+
+
 
   const features = [
     {
@@ -110,8 +146,11 @@ export default function CompanyDashboard() {
       </div>
 
       {/* ANALYTICS */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {analytics.map((a, i) => (
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 p-6">
+      {loading ? (
+        <p>Loading analytics...</p>
+      ) : (
+        analytics.map((a, i) => (
           <StatCard
             key={i}
             icon={<BarChart3 className="w-10 h-10" />}
@@ -120,8 +159,9 @@ export default function CompanyDashboard() {
             subtitle={a.growth}
             gradient="from-[#00bb98] to-[#00d4ae]"
           />
-        ))}
-      </div>
+        ))
+      )}
+    </div>
 
       {/* FEATURES */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6 my-10">
@@ -143,7 +183,9 @@ export default function CompanyDashboard() {
 // ===== SMALL COMPONENTS =====
 
 const StatCard = ({ icon, title, value, subtitle, gradient }) => (
-  <div className={`p-6 bg-gradient-to-r ${gradient} text-white rounded-2xl shadow-lg flex items-center gap-4`}>
+  <div
+    className={`p-6 bg-gradient-to-r ${gradient} text-white rounded-2xl shadow-lg flex items-center gap-4`}
+  >
     {icon}
     <div>
       <p className="text-sm opacity-80">{title}</p>
@@ -152,6 +194,9 @@ const StatCard = ({ icon, title, value, subtitle, gradient }) => (
     </div>
   </div>
 );
+
+// export default StatCard;
+
 
 const FeatureCard = ({ icon, title, color, desc, href, linkText }) => (
   <div className="bg-white rounded-2xl shadow-md p-6 border border-gray-100 hover:shadow-lg transition-all duration-300">

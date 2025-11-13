@@ -119,7 +119,7 @@ useEffect(() => {
         <h1 className="text-3xl font-bold text-gray-800">Final Year Projects</h1>
         <button
           onClick={() => setShowModal(true)}
-          className="flex items-center gap-2 bg-gradient-to-r from-teal-600 to-green-600 text-white px-5 py-2 rounded-xl font-semibold shadow hover:opacity-90 transition"
+          className="flex items-center gap-2 bg-gradient-to-r from-[#00bb98] to-[#00d4ae] text-white px-5 py-2 rounded-xl font-semibold shadow hover:opacity-90 transition"
         >
           <Plus className="w-5 h-5" /> Post New FYP
         </button>

@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Save, Edit3 } from "lucide-react";
+import toast from "react-hot-toast";
 
 export default function CompanyProfile() {
   const [companyId, setCompanyId] = useState(null);
@@ -78,10 +79,12 @@ export default function CompanyProfile() {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+    console.log("Name", name)
     setCompany((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSave = async () => {
+    console.log("Hello")
     if (!companyId) {
       setError("Company ID is missing.");
       return;
@@ -99,13 +102,13 @@ export default function CompanyProfile() {
         description: company.description,
         industry: company.industry,
         size: company.size,
-        plan: company.plan,
-        establishedYear: company.establishedYear || undefined,
+        plan: company.plan
       };
 
       const res = await axios.put(`http://localhost:3001/api/company/${companyId}`, payload);
-
+      console.log(res)
       if (res.data?.success) {
+        toast.success(res.data?.message)
         setCompany((prev) => ({ ...prev, ...res.data.company }));
         setIsEditing(false);
       } else {
@@ -224,7 +227,7 @@ export default function CompanyProfile() {
           className="w-full mt-1 border rounded-md p-2 text-gray-800 disabled:bg-gray-100"
         />
 
-        <label className="block text-sm text-gray-600">Established Year</label>
+        {/* <label className="block text-sm text-gray-600">Established Year</label>
         <input
           name="establishedYear"
           value={company.establishedYear || ""}
@@ -232,7 +235,7 @@ export default function CompanyProfile() {
           disabled={!isEditing}
           type="number"
           className="w-full mt-1 border rounded-md p-2 text-gray-800 disabled:bg-gray-100"
-        />
+        /> */}
 
         <label className="block text-sm text-gray-600">Description</label>
         <textarea

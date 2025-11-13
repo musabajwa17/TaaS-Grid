@@ -53,11 +53,11 @@ export const useLogin = () => {
 
       let errorMessage = "Something went wrong";
       if (axios.isAxiosError(error) && error.response?.data) {
-        errorMessage = String(error.response.data?.error || error.response.data || errorMessage);
+        errorMessage = String(error.response.data?.error || error.response.data.message || errorMessage);
       } else if (error instanceof Error) {
         errorMessage = error.message;
       }
-
+     console.log(errorMessage)
       toast.error(errorMessage);
       throw error;
     } finally {

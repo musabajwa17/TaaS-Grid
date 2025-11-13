@@ -39,7 +39,7 @@ export default function UserSidebar() {
 
   // ✅ Load user from localStorage on mount
   useEffect(() => {
-    const user = localStorage.getItem("user");
+    const user = localStorage.getItem("company");
     if (user) {
       try {
         const parsed = JSON.parse(user);
@@ -198,13 +198,13 @@ export default function UserSidebar() {
             </button>
             {menuOpen && (
               <div className="absolute right-0 mt-2 w-52 bg-white border border-gray-200 shadow-xl rounded-xl overflow-hidden z-20">
-                <button
+                {/* <button
                   type="button"
                   className="flex items-center gap-2 w-full px-4 py-2 text-gray-700 hover:bg-gray-50"
                   onClick={() => setMenuOpen(false)}
                 >
                   <Settings size={16} /> Settings
-                </button>
+                </button> */}
                 <button
                   type="button"
                   onClick={handleLogout}
