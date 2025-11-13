@@ -74,7 +74,6 @@ export default function UserSidebar() {
   const stages = [
     { name: "Dashboard Overview", icon: Layers, color: "emerald" },
     { name: "Job Post", icon: FileText, color: "emerald" },
-    { name: "Internships", icon: MapPin, color: "emerald" },
     { name: "Fyp Posting", icon: Droplet, color: "emerald" },
     { name: "Profile", icon: User, color: "emerald" }
   ];
@@ -175,8 +174,6 @@ export default function UserSidebar() {
                 ? "Overview and insights"
                 : selected === "Job Post"
                 ? "Post and manage job listings"
-                : selected === "Internships"
-                ? "View all the applicants for your jobs"
                 : selected === "Fyp Posting"
                 ? "Post and manage FYP opportunities"
                 : selected === "Profile"
@@ -222,7 +219,7 @@ export default function UserSidebar() {
         <div className="flex-1 overflow-y-auto bg-white">
           {selected === "Dashboard Overview" && <CompanyDashboard />}
           {selected === "Job Post" && <CompanyJobs />}
-          {selected === "Internships" && <CompanyInternships />}
+          {/* {selected === "Internships" && <CompanyInternships />} */}
           {selected === "Fyp Posting" && <FypPosting />}
           {selected === "Profile" && <CompanyProfile />}
         </div>
