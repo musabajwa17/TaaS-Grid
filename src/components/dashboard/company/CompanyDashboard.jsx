@@ -32,7 +32,7 @@ export default function CompanyDashboard() {
 
  const [analytics, setAnalytics] = useState([
     { metric: "Total Internships", value: "-", growth: "+0%" },
-    { metric: "Active Jobs", value: "-", growth: "+0%" },
+    { metric: "Total Jobs", value: "-", growth: "+0%" },
     { metric: "FYP Ideas Shared", value: "-", growth: "+0%" },
   ]);
 
@@ -47,13 +47,13 @@ useEffect(() => {
       if (!company || !company._id) return;
    
       const res = await axios.get(`http://localhost:3001/api/company/${company._id}/dashboard`)
-
+      console.log(res)
       if (res.data.success) {
         const { counts, topJobs } = res.data.data;
 
         setAnalytics([
           { metric: "Total Internships", value: counts.internships, growth: "+12%" },
-          { metric: "Active Jobs", value: counts.jobs, growth: "+8%" },
+          { metric: "Total Jobs", value: counts.jobs, growth: "+8%" },
           { metric: "FYP Ideas Shared", value: counts.fyps, growth: "+15%" },
         ]);
       }
@@ -66,10 +66,6 @@ useEffect(() => {
 
   fetchDashboard();
 }, []);
-
-
-
-
 
   const features = [
     {

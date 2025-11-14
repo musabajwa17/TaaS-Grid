@@ -29,7 +29,7 @@ import {
  * - localStorage key expected: "company" (JSON with _id)
  */
 
-const API = "http://localhost:3001";
+const API ="http://localhost:3001";
 
 export default function FypDashboard() {
   const [fyps, setFyps] = useState([]);
