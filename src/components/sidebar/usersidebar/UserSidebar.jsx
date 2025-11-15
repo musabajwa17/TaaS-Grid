@@ -15,7 +15,7 @@ import Link from "next/link";
 import StudentDashboard from "@/components/dashboard/student/Dashboard";
 import CvForge from "@/components/dashboard/student/CvForge";
 import NewResume from "@/components/dashboard/student/CvBuilder";
-import { useAuth } from "@/context/AuthContext";
+import { useAuth } from "../../../auth/AuthContext";
 import BookMarks from "@/components/dashboard/student/BookMarks";
 import Image from "next/image";
 

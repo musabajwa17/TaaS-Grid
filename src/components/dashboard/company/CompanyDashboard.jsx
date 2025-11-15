@@ -42,23 +42,23 @@ useEffect(() => {
   const fetchDashboard = async () => {
     setLoading(true);
     try {
-      const company = JSON.parse(localStorage.getItem("company"));
-      console.log(company)
-      if (!company || !company._id) return;
-   
-      const res = await axios.get(`http://localhost:3001/api/company/${company._id}/dashboard`)
-      console.log(res)
+      // No need to get company from localStorage
+      const res = await axios.get(
+        "http://localhost:3001/api/company/dashboard",
+        { withCredentials: true } // ensures cookies are sent
+      );
+
       if (res.data.success) {
-        const { counts, topJobs } = res.data.data;
+        const { totals } = res.data.data;
 
         setAnalytics([
-          { metric: "Total Internships", value: counts.internships, growth: "+12%" },
-          { metric: "Total Jobs", value: counts.jobs, growth: "+8%" },
-          { metric: "FYP Ideas Shared", value: counts.fyps, growth: "+15%" },
+          { metric: "Total Internships", value: totals.internships, growth: "+12%" },
+          { metric: "Total Jobs", value: totals.jobs, growth: "+8%" },
+          { metric: "FYP Ideas Shared", value: totals.fyps, growth: "+15%" },
         ]);
       }
     } catch (err) {
-      console.error(err);
+      console.error("Dashboard fetch error:", err);
     } finally {
       setLoading(false);
     }
@@ -66,6 +66,7 @@ useEffect(() => {
 
   fetchDashboard();
 }, []);
+
 
   const features = [
     {

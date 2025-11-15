@@ -1,93 +1,65 @@
 import { useState } from "react";
-import toast from "react-hot-toast";
 import axios from "axios";
+import toast from "react-hot-toast";
 
 export const useLogin = () => {
   const [loading, setLoading] = useState(false);
-  const [loginData, setLoginData] = useState(null);
+  const [user, setUser] = useState(null);
 
-  /**
-   * loginUser: logs in a user/company based on role
-   * @param {string} role - "student" | "employee" | "employer" | "company"
-   * @param {string} email
-   * @param {string} password
-   * @returns logged in user/company object
-   */
   const loginUser = async (role, email, password) => {
     setLoading(true);
 
     try {
-      let endpoint = "";
+      const endpointMap = {
+        student: "/api/user/login",
+        employee: "/api/user/login",
+        employer: "/api/employer/login",
+        company: "/api/company/login",
+      };
 
-      switch (role) {
-        case "student":
-        case "employee":
-          endpoint = "/api/user/login";
-          break;
-        case "employer":
-          endpoint = "/api/employer/login";
-          break;
-        case "company":
-          endpoint = "/api/company/login";
-          break;
-        default:
-          throw new Error("Invalid role selected");
-      }
+      if (!endpointMap[role]) throw new Error("Invalid role");
 
-      const response = await axios.post(`http://localhost:3001${endpoint}`, { email, password });
-      setLoginData(response.data);
+      const res = await axios.post(
+        `http://localhost:3001${endpointMap[role]}`,
+        { email, password },
+        { withCredentials: true } // important for refresh cookie
+      );
 
-      const { accessToken, refreshToken } = response.data;
-      const dataKey = role === "company" || role === "employer" ? "company" : "user";
-      const objectData = role === "company" || role === "employer" ? response.data.company || response.data.employer : response.data.user;
+      const { accessToken, data } = res.data;
 
-      // Save to localStorage
-      localStorage.setItem(dataKey, JSON.stringify(objectData));
-      localStorage.setItem("accessToken", accessToken);
-      localStorage.setItem("refreshToken", refreshToken);
+      // Store access token in memory ONLY
+      setUser({
+        ...data,
+        role,
+        accessToken,
+      });
 
-      toast.success(response.data.message || "Logged in successfully!");
-      return objectData;
-    } catch (error) {
-      console.error("Login failed:", error);
+      toast.success("Login successful");
+      return data;
 
-      let errorMessage = "Something went wrong";
-      if (axios.isAxiosError(error) && error.response?.data) {
-        errorMessage = String(error.response.data?.error || error.response.data.message || errorMessage);
-      } else if (error instanceof Error) {
-        errorMessage = error.message;
-      }
-     console.log(errorMessage)
-      toast.error(errorMessage);
-      throw error;
+    } catch (err) {
+      console.error(err);
+      const msg = err.response?.data?.message || "Login failed";
+      toast.error(msg);
+      throw err;
     } finally {
       setLoading(false);
     }
   };
 
-  /**
-   * logoutUser: logs out user/company based on stored role
-   */
   const logoutUser = async () => {
-    const storedUser = localStorage.getItem("user") || localStorage.getItem("company");
-    const dataKey = localStorage.getItem("user") ? "user" : "company";
-    const storedObj = storedUser ? JSON.parse(storedUser) : null;
-
-    if (!storedObj) return;
-
     try {
-      const endpoint = dataKey === "company" ? "/api/company/logout" : "/api/users/logout";
-      const body = dataKey === "company" ? { companyId: storedObj._id } : { userId: storedObj._id };
+      await axios.post(
+        "http://localhost:3001/api/auth/logout",
+        {},
+        { withCredentials: true }
+      );
 
-      await axios.post(`http://localhost:3001${endpoint}`, body);
-
-      localStorage.removeItem(dataKey);
-      localStorage.removeItem("accessToken");
-      localStorage.removeItem("refreshToken");
+      setUser(null);
     } catch (err) {
-      console.error("Logout error:", err);
+      console.error("Logout failed", err);
     }
   };
 
-  return { loginUser, loginData, logoutUser, loading };
+  return { loginUser, logoutUser, user, loading };
 };
