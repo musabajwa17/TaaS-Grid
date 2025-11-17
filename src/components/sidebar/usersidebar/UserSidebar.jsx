@@ -20,27 +20,21 @@ import BookMarks from "@/components/dashboard/student/BookMarks";
 import Image from "next/image";
 
 
-
 export default function UserSidebar() {
-  const { logout } = useAuth();
+  const { logout , user} = useAuth();
   const [selected, setSelected] = useState("Dashboard Overview");
   const [menuOpen, setMenuOpen] = useState(false);
   const [userEmail, setUserEmail] = useState(null);
   const menuRef = useRef(null);
   const router = useRouter();
 
-  // ✅ Load user from localStorage on mount
-  useEffect(() => {
-    const user = localStorage.getItem("user");
-    if (user) {
-      try {
-        const parsed = JSON.parse(user);
-        setUserEmail(parsed.email);
-      } catch {
-        setUserEmail(null);
-      }
-    }
-  }, []);
+useEffect(() => {
+  if (!user) {
+    setUserEmail(null);
+    return;
+  }
+  setUserEmail(user.email || null);
+}, [user]); // updates whenever the logged-in user changes
 
   // ✅ Handle outside click for profile menu
   useEffect(() => {

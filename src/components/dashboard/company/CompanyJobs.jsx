@@ -11,62 +11,65 @@ import {
   Loader2,
 } from "lucide-react";
 import axios from "axios";
+import { useAuth } from "@/auth/AuthContext";
 
 export default function CompanyJobs() {
+  const { user } = useAuth();
   const [showModal, setShowModal] = useState(false);
   const [showDetails, setShowDetails] = useState(false);
   const [selectedJob, setSelectedJob] = useState(null);
   const [jobs, setJobs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [companyId, setCompanyId] = useState(null);
-  const [newJob, setNewJob] = useState({
-    title: "",
-    description: "",
-    experience: "",
-    qualification: "",
-    location: "",
-    salary: "",
-    requirements: "",
-    jobType: "",
-    status: "",
-    postedByModel: "Company",
-  });
+ // STEP STATE
+const [step, setStep] = useState(1);
 
-  // ✅ Load company ID from localStorage
-  useEffect(() => {
-    const storedUser = localStorage.getItem("company");
-    if (storedUser) {
-      try {
-        const user = JSON.parse(storedUser);
-        setCompanyId(user._id);
-      } catch (err) {
-        console.error("Error parsing user:", err);
+// JOB FORM STATE
+const [newJob, setNewJob] = useState({
+  title: "",
+  description: "",
+  experience: "",
+  qualification: "",
+  location: "",
+  salary: "",
+  jobType: "",
+  workType: "",
+  requirements: "",
+  status: "Active",
+  scheduleDate: "",
+  closingDate: "",
+});
+
+// CHANGE HANDLER
+const handleSteps = (e) => {
+  const { name, value } = e.target;
+  setNewJob((prev) => ({ ...prev, [name]: value }));
+};
+
+
+useEffect(() => {
+  if (!user?._id) return;
+
+  const fetchJobs = async () => {
+    try {
+      const res = await axios.get("http://localhost:3001/api/jobs", {
+        withCredentials: true,
+      });
+      if (res.data.success) {
+        const filtered = res.data.jobs.filter(
+          (job) => job.postedBy && job.postedBy._id === user._id
+        );
+        setJobs(filtered);
       }
+    } catch (error) {
+      console.error("Error fetching jobs:", error);
+    } finally {
+      setLoading(false);
     }
-  }, []);
+  };
 
-  // ✅ Fetch jobs posted by this company
-  useEffect(() => {
-    if (!companyId) return;
-
-    const fetchJobs = async () => {
-      try {
-        const res = await axios.get("http://localhost:3001/api/jobs");
-        if (res.data.success) {
-          const filtered = res.data.jobs.filter(
-            (job) => job.postedBy && job.postedBy._id === companyId
-          );
-          setJobs(filtered);
-        }
-      } catch (error) {
-        console.error("Error fetching jobs:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchJobs();
-  }, [companyId]);
+  fetchJobs();
+}, [user?._id]);
 
   // ✅ Handle input changes
   const handleChange = (e) => {
@@ -75,47 +78,91 @@ export default function CompanyJobs() {
   };
 
   // ✅ Submit new job
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!newJob.title.trim() || !companyId) return;
+const handleSubmit = async (e) => {
+  e.preventDefault();
 
-    try {
-      const jobData = { ...newJob, postedBy: companyId };
-      const res = await axios.post("http://localhost:3001/api/jobs", jobData);
+  // --- HARD VALIDATION ---
+  if (!user?._id) {
+    alert("User not authenticated!");
+    return;
+  }
 
-      if (res.data.success) {
-        setJobs((prev) => [...prev, res.data.job]);
-        setNewJob({
-          title: "",
-          description: "",
-          experience: "",
-          qualification: "",
-          location: "",
-          salary: "",
-          requirements: "",
-          jobType: "",
-          status: "",
-          postedByModel: "Company",
-        });
-        setShowModal(false);
-        alert("✅ Job posted successfully!");
-      }
-    } catch (error) {
-      console.error("Error posting job:", error);
+  if (!newJob.title.trim()) {
+    alert("Title is required");
+    return;
+  }
+
+  // Convert requirements string → array if needed
+  const formattedRequirements = Array.isArray(newJob.requirements)
+    ? newJob.requirements
+    : newJob.requirements
+        .split(",")
+        .map((req) => req.trim())
+        .filter((req) => req.length > 0);
+
+  const payload = {
+    title: newJob.title,
+    description: newJob.description,
+    experience: newJob.experience,
+    qualification: newJob.qualification,
+    location: newJob.location,
+    salary: newJob.salary,
+    jobType: newJob.jobType,
+    workType: newJob.workType,
+    requirements: formattedRequirements,
+    status: newJob.status || "Active",
+    postedBy: user._id, // IMPORTANT
+  };
+
+  try {
+    const res = await axios.post(
+      "http://localhost:3001/api/jobs",
+      payload,
+      { withCredentials: true }
+    );
+
+    if (res.data.success) {
+      setJobs((prev) => [...prev, res.data.job]);
+
+      // Reset form properly
+      setNewJob({
+        title: "",
+        description: "",
+        experience: "",
+        qualification: "",
+        location: "",
+        salary: "",
+        jobType: "",
+        workType: "",
+        requirements: "",
+        status: "Active",
+      });
+
+      setShowModal(false);
+      alert("✅ Job posted successfully!");
+    }
+  } catch (error) {
+    console.error("❌ Error posting job:", error);
+
+    if (error.response?.data?.message) {
+      alert("❌ " + error.response.data.message);
+    } else {
       alert("❌ Failed to post job. Please try again.");
     }
-  };
+  }
+};
+
 
   // ✅ Delete job
-  const handleDelete = async (id) => {
-    if (!confirm("Are you sure you want to delete this job?")) return;
-    try {
-      await axios.delete(`http://localhost:3001/api/jobs/${id}`);
-      setJobs((prev) => prev.filter((job) => job._id !== id));
-    } catch (error) {
-      console.error("Error deleting job:", error);
-    }
-  };
+  // const handleDelete = async (id) => {
+  //   if (!confirm("Are you sure you want to delete this job?")) return;
+  //   try {
+  //     await axios.delete(`http://localhost:3001/api/jobs/${id}`);
+  //     setJobs((prev) => prev.filter((job) => job._id !== id));
+  //   } catch (error) {
+  //     console.error("Error deleting job:", error);
+  //   }
+  // };
 
   return (
     <div className="min-h-screen bg-gray-50 px-6 py-10">
@@ -210,13 +257,13 @@ export default function CompanyJobs() {
                     >
                       <Users className="w-4 h-4" />
                     </button>
-                    <button
+                    {/* <button
                       onClick={() => handleDelete(job._id)}
                       className="p-2 rounded-lg bg-red-50 hover:bg-red-100 text-red-500 transition"
                       title="Delete Job"
                     >
                       <X className="w-4 h-4" />
-                    </button>
+                    </button> */}
                   </td>
                 </tr>
               ))}
@@ -225,122 +272,197 @@ export default function CompanyJobs() {
         </div>
       )}
 
-      {/* ===== CREATE JOB MODAL ===== */}
-      {showModal && (
-        <div className="fixed inset-0 bg-black/40 flex justify-center items-center z-50">
-          <div className="bg-white rounded-2xl w-full max-w-lg shadow-xl p-6 relative animate-fadeIn">
-            <button
-              onClick={() => setShowModal(false)}
-              className="absolute top-3 right-3 text-gray-500 hover:text-gray-700"
+  {/* ===== CREATE JOB MODAL ===== */}
+{showModal && (
+  <div className="fixed inset-0 bg-black/40 flex justify-center items-center z-50">
+    <div className="bg-white rounded-2xl w-full max-w-lg shadow-xl p-6 relative animate-fadeIn">
+      
+      {/* CLOSE BUTTON */}
+      <button
+        onClick={() => { setShowModal(false); setStep(1); }}
+        className="absolute top-3 right-3 text-gray-500 hover:text-gray-700"
+      >
+        <X className="w-5 h-5" />
+      </button>
+
+      {/* STEP TITLE */}
+      <h2 className="text-2xl font-semibold mb-4 text-gray-800">
+        {step === 1 ? "Post a New Job" : "Job Schedule & Status"}
+      </h2>
+
+      {/* ================= STEP 1 ================= */}
+      {step === 1 && (
+        <form
+          onSubmit={(e) => { e.preventDefault(); setStep(2); }}
+          className="space-y-4"
+        >
+
+          {/* TEXT + TEXTAREA FIELDS */}
+          {[["title","Job Title","text"],["description","Description","textarea"]]
+            .map(([name,label,type]) => (
+              <div key={name}>
+                <label className="text-sm font-medium text-gray-700">{label}</label>
+
+                {type === "textarea" ? (
+                  <textarea
+                    name={name}
+                    value={newJob[name]}
+                    onChange={handleChange}
+                    rows={4}
+                    required
+                    placeholder={`Enter ${label.toLowerCase()}`}
+                    className="w-full mt-1 border rounded-lg px-3 py-2 focus:ring-2 focus:ring-[#00bb98]"
+                  />
+                ) : (
+                  <input
+                    type="text"
+                    name={name}
+                    value={newJob[name]}
+                    onChange={handleChange}
+                    required
+                    placeholder={`Enter ${label.toLowerCase()}`}
+                    className="w-full mt-1 border rounded-lg px-3 py-2 focus:ring-2 focus:ring-[#00bb98]"
+                  />
+                )}
+              </div>
+          ))}
+
+          {/* MULTI-SELECT FIELDS */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+            {/* EXPERIENCE / QUALIFICATION / SALARY / JOBTYPE / WORKTYPE / LOCATION */}
+            {[
+              ["experience", "Experience", ["Fresher", "1-2 years", "3-4 years", "5-6 years", "6+ years"]],
+              ["qualification", "Qualification", ["High School", "Diploma", "Bachelor's", "Master's", "Doctorate"]],
+              ["location", "Location", []],
+              ["salary", "Salary", ["30-40k", "40-60k", "60-80k", "80-100k", "100-200k"]],
+              ["jobType", "Job Type", ["Full-time", "Part-time", "Contract", "Internship"]],
+              ["workType", "Work Type", ["On-Site", "Hybrid", "Remote"]],
+            ].map(([name, label, options]) => (
+              <div key={name}>
+                <label className="text-sm font-medium text-gray-700">{label}</label>
+
+                {options.length ? (
+                  <select
+                    name={name}
+                    value={newJob[name]}
+                    onChange={handleChange}
+                    required
+                    className="w-full mt-1 border rounded-lg px-3 py-2 focus:ring-2 focus:ring-[#00bb98]"
+                  >
+                    <option value="">Select {label}</option>
+                    {options.map((opt) => (
+                      <option key={opt} value={opt}>{opt}</option>
+                    ))}
+                  </select>
+                ) : (
+                  <input
+                    type="text"
+                    name={name}
+                    value={newJob[name]}
+                    onChange={handleChange}
+                    required
+                    placeholder={`Enter ${label.toLowerCase()}`}
+                    className="w-full mt-1 border rounded-lg px-3 py-2 focus:ring-2 focus:ring-[#00bb98]"
+                  />
+                )}
+              </div>
+            ))}
+          </div>
+
+          {/* REQUIREMENTS */}
+          <div>
+            <label className="text-sm font-medium text-gray-700">Requirements / Skills</label>
+            <input
+              type="text"
+              name="requirements"
+              value={newJob.requirements}
+              onChange={handleChange}
+              required
+              placeholder="e.g., React, Node.js, Teamwork..."
+              className="w-full mt-1 border rounded-lg px-3 py-2 focus:ring-2 focus:ring-[#00bb98]"
+            />
+          </div>
+
+          {/* NEXT BUTTON */}
+          <button
+            type="submit"
+            className="w-full bg-gradient-to-r from-[#00bb98] to-[#00d4ae] text-white py-2 rounded-lg font-semibold shadow hover:opacity-90 transition"
+          >
+            Next →
+          </button>
+        </form>
+      )}
+
+      {/* ================= STEP 2 ================= */}
+      {step === 2 && (
+        <form onSubmit={handleSubmit} className="space-y-4">
+
+          {/* STATUS (Backend-compliant only) */}
+          <div>
+            <label className="text-sm font-medium text-gray-700">Status</label>
+            <select
+              name="status"
+              value={newJob.status}
+              onChange={handleChange}
+              className="w-full border rounded-lg px-3 py-2 mt-1 focus:ring-2 focus:ring-[#00bb98]"
             >
-              <X className="w-5 h-5" />
+              <option value="Active">Active</option>
+              <option value="Pending">Pending</option>
+              <option value="Closed">Closed</option>
+            </select>
+          </div>
+
+          {/* SCHEDULE DATE */}
+          <div>
+            <label className="text-sm font-medium text-gray-700">Schedule Activation Date</label>
+            <input
+              type="date"
+              name="scheduleDate"
+              value={newJob.scheduleDate}
+              onChange={handleChange}
+              className="w-full border rounded-lg px-3 py-2 mt-1 focus:ring-2 focus:ring-[#00bb98]"
+            />
+          </div>
+
+          {/* CLOSING DATE */}
+          <div>
+            <label className="text-sm font-medium text-gray-700">Closing Date</label>
+            <input
+              type="date"
+              name="closingDate"
+              value={newJob.closingDate}
+              onChange={handleChange}
+              required
+              className="w-full border rounded-lg px-3 py-2 mt-1 focus:ring-2 focus:ring-[#00bb98]"
+            />
+          </div>
+
+          {/* ACTION BUTTONS */}
+          <div className="flex justify-between gap-3">
+            <button
+              type="button"
+              onClick={() => setStep(1)}
+              className="w-1/2 border border-gray-300 py-2 rounded-lg font-semibold hover:bg-gray-100 transition"
+            >
+              ← Back
             </button>
 
-            <h2 className="text-2xl font-semibold mb-4 text-gray-800">
-              Post a New Job
-            </h2>
-
-            {/* Job Form */}
-            <form onSubmit={handleSubmit} className="space-y-4">
-              {[
-                ["title", "Job Title", "text"],
-                ["description", "Description", "textarea"],
-              ].map(([name, label, type]) => (
-                <div key={name}>
-                  <label className="text-sm font-medium text-gray-700">
-                    {label}
-                  </label>
-                  {type === "textarea" ? (
-                    <textarea
-                      name={name}
-                      value={newJob[name]}
-                      onChange={handleChange}
-                      rows={4}
-                      required
-                      placeholder="Enter details..."
-                      className="w-full mt-1 border rounded-lg px-3 py-2 focus:ring-2 focus:ring-[#00bb98]"
-                    />
-                  ) : (
-                    <input
-                      type="text"
-                      name={name}
-                      value={newJob[name]}
-                      onChange={handleChange}
-                      required
-                      placeholder={`Enter ${label.toLowerCase()}`}
-                      className="w-full mt-1 border rounded-lg px-3 py-2 focus:ring-2 focus:ring-[#00bb98]"
-                    />
-                  )}
-                </div>
-              ))}
-
-              {/* Select fields */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {[
-                  ["experience", "Experience", ["Fresher", "1-2 years", "3-4 years", "5-6 years", "6+ years"]],
-                  ["qualification", "Qualification", ["BS in CS", "MS in CS", "BS in IT", "MS in IT", "BS in SE", "MS in SE", "Other"]],
-                  ["location", "Location", []],
-                  ["salary", "Salary", ["30-40k", "40-60k", "60-80k", "80-100k", "100-200k", "200-300k", "300-400k", "400-500k"]],
-                  ["jobType", "Job Type", ["Full-time", "Part-time", "Contract", "Internship", "Other"]],
-                  ["status", "Status", ["Active", "Closed", "Pending"]],
-                ].map(([name, label, options]) => (
-                  <div key={name}>
-                    <label className="text-sm font-medium text-gray-700">{label}</label>
-                    {options.length ? (
-                      <select
-                        name={name}
-                        value={newJob[name]}
-                        onChange={handleChange}
-                        required
-                        className="w-full mt-1 border rounded-lg px-3 py-2 focus:ring-2 focus:ring-[#00bb98]"
-                      >
-                        <option value="">Select {label}</option>
-                        {options.map((opt) => (
-                          <option key={opt} value={opt}>
-                            {opt}
-                          </option>
-                        ))}
-                      </select>
-                    ) : (
-                      <input
-                        type="text"
-                        name={name}
-                        value={newJob[name]}
-                        onChange={handleChange}
-                        required
-                        placeholder={`Enter ${label.toLowerCase()}`}
-                        className="w-full mt-1 border rounded-lg px-3 py-2 focus:ring-2 focus:ring-[#00bb98]"
-                      />
-                    )}
-                  </div>
-                ))}
-              </div>
-
-              <div>
-                <label className="text-sm font-medium text-gray-700">
-                  Requirements / Skills
-                </label>
-                <input
-                  type="text"
-                  name="requirements"
-                  value={newJob.requirements}
-                  onChange={handleChange}
-                  required
-                  placeholder="e.g., React, Node.js, Teamwork..."
-                  className="w-full mt-1 border rounded-lg px-3 py-2 focus:ring-2 focus:ring-[#00bb98]"
-                />
-              </div>
-
-              <button
-                type="submit"
-                className="w-full bg-gradient-to-r from-[#00bb98] to-[#00d4ae] text-white py-2 rounded-lg font-semibold shadow hover:opacity-90 transition"
-              >
-                Post Job
-              </button>
-            </form>
+            <button
+              type="submit"
+              className="w-1/2 bg-gradient-to-r from-[#00bb98] to-[#00d4ae] text-white py-2 rounded-lg font-semibold shadow hover:opacity-90 transition"
+            >
+              Post Job
+            </button>
           </div>
-        </div>
+        </form>
       )}
+
+    </div>
+  </div>
+)}
+
+
 
       {/* ===== JOB DETAILS MODAL ===== */}
 {showDetails && selectedJob && (

@@ -13,22 +13,21 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import axios from "axios";
-
+import { useAuth } from "../../../auth/AuthContext"
 export default function CompanyDashboard() {
   const plan = "Basic";
   const [companyName, setCompanyName] = useState("");
 
-  useEffect(() => {
-    const companyString = localStorage.getItem("company");
-    if (companyString) {
-      try {
-        const company = JSON.parse(companyString);
-        setCompanyName(company.companyName?.toUpperCase() || "");
-      } catch (error) {
-        console.error("Failed to parse company from localStorage", error);
-      }
-    }
-  }, []);
+  const { user } = useAuth(); // get currently logged-in user
+
+useEffect(() => {
+  if (!user) return; // no user logged in yet
+  if (user.companyName) {
+    setCompanyName(user.companyName.toUpperCase());
+  } else {
+    setCompanyName(""); // fallback
+  }
+}, [user]);
 
  const [analytics, setAnalytics] = useState([
     { metric: "Total Internships", value: "-", growth: "+0%" },
@@ -66,7 +65,6 @@ useEffect(() => {
 
   fetchDashboard();
 }, []);
-
 
   const features = [
     {

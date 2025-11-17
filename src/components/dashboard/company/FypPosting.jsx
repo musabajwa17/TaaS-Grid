@@ -64,21 +64,23 @@ export default function FypDashboard() {
   const [fetching, setFetching] = useState(false);
 
   // Load company ID from localStorage
-  useEffect(() => {
+useEffect(() => {
+  const fetchCurrentUser = async () => {
     try {
-      const raw = localStorage.getItem("company") || localStorage.getItem("companyId");
-      if (!raw) return;
-      const parsed = JSON.parse(raw);
-      if (parsed && parsed._id) {
-        setCompanyId(parsed._id);
-      } else if (typeof raw === "string") {
-        // maybe stored directly as id string
-        setCompanyId(raw);
-      }
+      const res = await axios.get(`${API}/api/auth/me`, {
+        withCredentials: true, // important to send cookies
+      });
+
+      const user = res.data.user;
+      if (user && user._id) setCompanyId(user._id);
     } catch (err) {
-      console.error("Failed to parse company from localStorage:", err);
+      console.error("Failed to fetch current user:", err);
+      toast.error("You are not logged in.");
     }
-  }, []);
+  };
+
+  fetchCurrentUser();
+}, []);
 
   // Fetch FYPs for this company
   useEffect(() => {
@@ -158,57 +160,61 @@ export default function FypDashboard() {
     setShowFormModal(true);
   };
 
-  // Submit Create or Update
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!form.title.trim()) return toast.error("Title is required.");
-    if (!form.description.trim()) return toast.error("Description is required.");
-    if (!form.domain.trim()) return toast.error("Domain is required.");
-    if (!form.duration) return toast.error("Duration is required.");
-    if (!form.collaborationMode) return toast.error("Collaboration mode is required.");
-    if (!companyId) return toast.error("Company ID missing.");
+const handleSubmit = async (e) => {
+  e.preventDefault();
+   console.log(form)
+  if (!form.title.trim()) return toast.error("Title is required.");
+  if (!form.description.trim()) return toast.error("Description is required.");
+  if (!form.domain.trim()) return toast.error("Domain is required.");
+  if (!form.duration) return toast.error("Duration is required.");
+  if (!form.collaborationMode) return toast.error("Collaboration mode is required.");
+  if (!companyId) return toast.error("Company ID missing. Make sure you are logged in.");
 
-    const payload = { ...form, postedBy: companyId, postedByModel: "Company" };
+  const payload = { ...form, postedBy: companyId, postedByModel: "Company" };
 
-    try {
-      setSubmitting(true);
-      if (isEditMode && editId) {
-        await toast.promise(
-          axios.put(`${API}/api/fyps/${editId}`, payload),
-          {
-            loading: "Updating FYP...",
-            success: "FYP updated.",
-            error: "Failed to update FYP.",
-          }
-        );
-        // Update local list
-        setFyps((prev) => prev.map((f) => (f._id === editId ? { ...f, ...payload } : f)));
-        toast.success("FYP updated successfully.");
-      } else {
-        const res = await toast.promise(axios.post(`${API}/api/fyps`, payload), {
+  try {
+    setSubmitting(true);
+
+    if (isEditMode && editId) {
+      await toast.promise(
+        axios.put(`${API}/api/fyps/${editId}`, payload, { withCredentials: true }),
+        {
+          loading: "Updating FYP...",
+          success: "FYP updated.",
+          error: "Failed to update FYP.",
+        }
+      );
+      setFyps((prev) => prev.map((f) => (f._id === editId ? { ...f, ...payload } : f)));
+    } else {
+      const res = await toast.promise(
+        axios.post(`${API}/api/fyps`, payload, { withCredentials: true }),
+        {
           loading: "Posting FYP...",
           success: "FYP posted.",
           error: "Failed to post FYP.",
-        });
-        // Push created item
-        if (res.data?.success && res.data?.fyp) {
-          setFyps((prev) => [res.data.fyp, ...prev]);
-          toast.success("FYP posted successfully.");
-        } else {
-          toast.error("Unexpected response from server.");
         }
+      );
+
+      if (res.data?.success && res.data?.fyp) {
+        setFyps((prev) => [res.data.fyp, ...prev]);
+      } else {
+        toast.error("Unexpected response from server.");
       }
-      setShowFormModal(false);
-      setForm(emptyFyp);
-      setIsEditMode(false);
-      setEditId(null);
-    } catch (err) {
-      console.error(err);
-      toast.error("Operation failed.");
-    } finally {
-      setSubmitting(false);
     }
-  };
+
+    setShowFormModal(false);
+    setForm(emptyFyp);
+    setIsEditMode(false);
+    setEditId(null);
+
+  } catch (err) {
+    console.error(err);
+    toast.error("Operation failed.");
+  } finally {
+    setSubmitting(false);
+  }
+};
+
 
   // Delete FYP
   const handleDelete = async (id) => {
@@ -250,14 +256,14 @@ export default function FypDashboard() {
           >
             <Plus className="w-4 h-4" /> Post New FYP
           </button>
-          <button
+          {/* <button
             className="flex items-center gap-2 bg-white border px-3 py-2 rounded-lg hover:shadow-sm"
             onClick={fetchFyps}
             title="Refresh"
           >
             {fetching ? <Loader2 className="w-4 h-4 animate-spin" /> : <Check className="w-4 h-4" />}
             <span className="text-sm text-gray-700">Refresh</span>
-          </button>
+          </button> */}
         </div>
       </div>
 
@@ -391,7 +397,7 @@ export default function FypDashboard() {
 
       {/* ===== Post / Edit Modal ===== */}
       {showFormModal && (
-        <div className="fixed inset-0 bg-black/40 flex justify-center items-start pt-10 z-50">
+        <div className="fixed inset-0 bg-black/40 flex justify-center items-start pt-3 z-50">
           <div className="bg-white rounded-2xl w-full max-w-2xl shadow-xl p-6 relative">
             <button
               onClick={() => {

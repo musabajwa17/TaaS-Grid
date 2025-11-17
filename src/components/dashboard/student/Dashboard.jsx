@@ -13,7 +13,7 @@ import {
   Award,
 } from "lucide-react";
 import Link from "next/link";
-
+import {useAuth} from "../../../auth/AuthContext"
 // =================== TYPES ===================
 
 
@@ -40,18 +40,16 @@ const deadlines = [
 export default function StudentDashboard() {
   const plan = "Basic"; // can be dynamically fetched later
 const [fullName, setFullName] = useState("");
-
-  useEffect(() => {
-    const userString = localStorage.getItem("user");
-    if (userString) {
-      try {
-        const user = JSON.parse(userString);
-        setFullName(user.fullName.toUpperCase()); // optional chaining in case fullName is missing
-      } catch (error) {
-        console.error("Failed to parse user from localStorage", error);
-      }
-    }
-  }, []);
+ const { user } = useAuth(); // get currently logged-in user
+ console.log(user)
+useEffect(() => {
+  if (!user) return; // no user logged in yet
+  if (user.companyName) {
+    setFullName(user.fullName.toUpperCase());
+  } else {
+    setFullName(""); // fallback
+  }
+}, [user]);
   return (
     <div className="min-h-screen bg-gray-50 px-6 py-10">
       {/* ====== HERO HEADER ====== */}

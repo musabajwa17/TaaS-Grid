@@ -4,24 +4,44 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Image from "next/image";
+import axios from "axios";
 
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
-    };
-    
-    window.addEventListener('scroll', handleScroll);
-    
-    const token = typeof window !== 'undefined' ? localStorage.getItem("accessToken") : null;
-    setIsLoggedIn(!!token);
-    
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+ useEffect(() => {
+  const handleScroll = () => {
+    setIsScrolled(window.scrollY > 20);
+  };
+
+  window.addEventListener("scroll", handleScroll);
+
+  // Check logged-in user from server session
+  const checkLogin = async () => {
+    try {
+      const res = await axios.get("http://localhost:3001/api/auth/me", {
+        withCredentials: true, // send cookies
+      });
+      if (res.data.user) {
+        setIsLoggedIn(true);
+        // optionally save user data if needed
+        // setCurrentUser(res.data.user);
+      } else {
+        setIsLoggedIn(false);
+      }
+    } catch (err) {
+      console.error("Failed to fetch current user:", err);
+      setIsLoggedIn(false);
+    }
+  };
+
+  checkLogin();
+
+  return () => window.removeEventListener("scroll", handleScroll);
+}, []);
+
 
   const pathname = usePathname();
   

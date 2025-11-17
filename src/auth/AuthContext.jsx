@@ -1,5 +1,4 @@
 "use client";
-
 import { createContext, useContext, useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
@@ -37,11 +36,8 @@ useEffect(() => {
   const login = async (email, password) => {
     setLoading(true);
     try {
-      const res = await axios.post(
-        "http://localhost:3001/api/auth/login",
-        { email, password },
-        { withCredentials: true }
-      );
+      const res = await axios.post("http://localhost:3001/api/auth/login", { email, password }, { withCredentials: true })
+
 
       const loggedUser = res.data.user; // backend must return { user: { role, ... } }
       setUser(loggedUser);

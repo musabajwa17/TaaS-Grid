@@ -12,28 +12,33 @@ export default function CompanyProfile() {
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState(null);
 
-  // Read company id from localStorage (tries "company" then "user")
-  useEffect(() => {
+useEffect(() => {
+  const fetchCurrentUser = async () => {
     try {
-      const storedCompany = localStorage.getItem("company");
-      const storedUser = localStorage.getItem("user");
-      if (storedCompany) {
-        const parsed = JSON.parse(storedCompany);
-        if (parsed && parsed._id) setCompanyId(parsed._id);
-      } else if (storedUser) {
-        const parsed = JSON.parse(storedUser);
-        // if user may be an employer with companyId inside, try account _id
-        if (parsed && parsed._id) setCompanyId(parsed._id);
+      setLoading(true);
+
+      const res = await axios.get("http://localhost:3001/api/auth/me", {
+        withCredentials: true, // send cookies
+      });
+
+      const user = res.data.user;
+
+      if (user && user._id) {
+        setCompanyId(user._id);
       } else {
-        setError("No company found in localStorage.");
-        setLoading(false);
+        setError("You are not logged in as a company.");
       }
     } catch (err) {
-      console.error("Error reading localStorage:", err);
-      setError("Failed to read localStorage.");
+      console.error("Failed to fetch current user:", err);
+      setError("Failed to fetch logged-in company.");
+    } finally {
       setLoading(false);
     }
-  }, []);
+  };
+
+  fetchCurrentUser();
+}, []);
+
 
   // Fetch company data when companyId is available
   useEffect(() => {
