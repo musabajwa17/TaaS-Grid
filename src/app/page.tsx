@@ -2,9 +2,9 @@
 
 import { Toaster } from "react-hot-toast";
 import dynamic from "next/dynamic";
-const ServiceCards = dynamic(() => import("@/components/cards/ServiceCards"), { ssr: false });
-import Footer from "@/components/Footer";
 import Header from "@/components/Header";
+import Footer from "@/components/Footer";
+const ServiceCards = dynamic(() => import("@/components/cards/ServiceCards"), { ssr: false });
 const HeroSection = dynamic(() => import("@/components/HeroSection"), { ssr: false });
 const Services = dynamic(() => import("@/components/cards/ServicesCard"), { ssr: false });
 const StatsSection = dynamic(() => import("@/components/StatsSection"), { ssr: false });
@@ -15,7 +15,7 @@ const UserTypesSection = dynamic(() => import("@/components/UserTypes"), { ssr: 
 export default function Home() {
   return (
     <>
-      <Header />
+     <Header />
       <HeroSection />
       <StatsSection />
       <Services />
@@ -24,7 +24,6 @@ export default function Home() {
       <UserTypesSection />
       <TestimonialCarousel />
       <Footer />
-
       {/* ✅ React Hot Toast setup — top center */}
       <Toaster
         position="top-center"

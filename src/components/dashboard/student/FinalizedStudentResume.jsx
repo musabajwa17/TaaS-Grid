@@ -3,6 +3,8 @@ import dynamic from "next/dynamic";
 const DownloadStudentResume = dynamic(() => import("./DownloadStudentResume"), { ssr: false });
 import { useUploadCV } from "@/hooks/useUploadCV";
 import { useUploadStdCV } from "@/hooks/useUploadStudentResume";
+import { useAuth } from "@/auth/AuthContext";
+import toast from "react-hot-toast";
 const FinalizedStudentResume = ({ parsedData }) => {
   const [cvData, setCvData] = useState(parsedData);
   const [showDownload, setShowDownload] = useState(false);
@@ -28,23 +30,28 @@ const FinalizedStudentResume = ({ parsedData }) => {
     }
   }, []);
   // Download CV as a real PDF using html2pdf.js
-  const {uploadCV} = useUploadStdCV();
+   const { user } = useAuth();
+  const { uploadCV, loading } = useUploadStdCV(user);
+const handleNewSubmit = async () => {
+  if (loading) return; // prevent double-submit
 
-  const handleNewSubmit = async () => {
-  // parsedData uploaded
-    try {
-      if (!parsedData) {
-        return alert("No resume data available to upload.");
-      }
-
-      // ✅ Trigger the upload function returned by the hook
-      await uploadCV(parsedData);
-
-  // uploaded successfully
-    } catch (error) {
-      console.error("❌ Resume upload failed:", error);
+  try {
+    if (!parsedData) {
+      toast.error("No resume data available to upload.");
+      return;
     }
-  };
+
+    // 🔥 Upload parsed resume to backend
+    await uploadCV(parsedData);
+
+    // Optional: Do something after success (navigate, close modal, refresh page)
+    // router.refresh();
+  } catch (err) {
+    console.error("❌ Resume upload failed:", err);
+    toast.error(err.message || "Resume upload failed.");
+  }
+};
+
 
   const handleDownloadClick = () => {
     setShowDownload(true); // ✅ this will render the component

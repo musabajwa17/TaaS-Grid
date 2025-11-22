@@ -10,6 +10,7 @@ import {
   LogOut,
   Settings,
   User,
+  Info,
 } from "lucide-react";
 import Link from "next/link";
 import StudentDashboard from "@/components/dashboard/student/Dashboard";
@@ -18,6 +19,7 @@ import NewResume from "@/components/dashboard/student/CvBuilder";
 import { useAuth } from "../../../auth/AuthContext";
 import BookMarks from "@/components/dashboard/student/BookMarks";
 import Image from "next/image";
+import CVPreview from "@/components/dashboard/student/StdProfile";
 
 
 export default function UserSidebar() {
@@ -62,6 +64,7 @@ useEffect(() => {
     { name: "Resume Forge", icon: FileText, color: "emerald" },
     { name: "Resume Builder", icon: MapPin, color: "emerald" },
     { name: "Saved Opportunities", icon: Droplet, color: "emerald" },
+    { name: "Preview Resume", icon: Info, color: "emerald" },
   ];
 
   return (
@@ -162,6 +165,8 @@ useEffect(() => {
                 ? "Build and manage your resume"
                 : selected === "Resume Builder"
                 ? "Enhance your CV using AI"
+                : selected === "Preview Resume"
+                ? "Review your resume and make changes"
                 : "Save and manage your opportunities"}
             </p>
           </div>
@@ -205,6 +210,7 @@ useEffect(() => {
           {selected === "Resume Forge" && <CvForge />}
           {selected === "Resume Builder" && <NewResume />}
           {selected === "Saved Opportunities" && <BookMarks />}
+          {selected === "Preview Resume" && <CVPreview userId={user._id} />}
         </div>
       </main>
     </div>
