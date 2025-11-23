@@ -6,19 +6,35 @@ export const useResume = (userId) => {
   const [resume, setResume] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  const fetchResume = async () => {
-    if (!userId) return;
+const fetchResume = async () => {
+  if (!userId) return null;
 
-    try {
-      setLoading(true);
-      const res = await axios.get(`http://localhost:3001/api/student/stdresume/${userId}`);
-      setResume(res.data);
-    } catch (err) {
-      toast.error("Failed to fetch resume");
-    } finally {
-      setLoading(false);
+  try {
+    setLoading(true);
+
+    const res = await axios.get(
+      `http://localhost:3001/api/student/stdresume/${userId}`
+    );
+
+    // If resume doesn't exist
+    if (!res.data || res.data.exists === false) {
+      toast.error("No resume found for this user");
+      setResume(null);
+      return { exists: false };
     }
-  };
+
+    // Success
+    setResume(res.data);
+    return res.data;   // ✅ NOW it returns the resume
+
+  } catch (err) {
+    toast.error("Failed to fetch resume");
+    return null;       // prevent undefined
+  } finally {
+    setLoading(false);
+  }
+};
+
 
   const updateResume = async (data) => {
     if (!userId) return;
@@ -31,6 +47,7 @@ export const useResume = (userId) => {
       );
 
       toast.success("Updated Successfully!");
+      alert("Resume updated successfully!");
       setResume(res.data.updated);
     } catch (err) {
       toast.error("Update failed");

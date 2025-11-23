@@ -12,15 +12,17 @@ import { useUploadResume } from "@/hooks/useUploadResume";
 import EnrichStudentResume from "./EnrichStudentResume";
 import CvTemplate from "./CvTemplate";
 import { useUploadStdCV } from "@/hooks/useUploadStudentResume";
+import { useAuth } from "@/auth/AuthContext";
 
 export default function CvForge() {
-  const [, setFile] = useState(null);
+  const {user} = useAuth();
+  const [file, setFile] = useState(null);
   const [dragActive, setDragActive] = useState(false);
   const [showFinalized, setShowFinalized] = useState(false); // ✅ NEW STATE
   const { loading, error, parsedData, handleUpload, setParsedData, setError } =
-    useUploadResume();
+    useUploadResume(user);
   // const { uploadCV } = useUploadCV();
-  const {uploadCV} = useUploadStdCV();
+  const {uploadCV} = useUploadStdCV(user);
   console.log(parsedData)
 
   // File Upload Validation

@@ -3,7 +3,7 @@ import axios from "axios";
 import toast from "react-hot-toast";
 // import type { ParsedData } from "@/types/ParsedData";
 
-export function useUploadResume() {
+export function useUploadResume(user) {
   const [loading, setLoading] = useState(false);
   const [parsedData, setParsedData] = useState(null);
   const [error, setError] = useState(null);
@@ -17,21 +17,10 @@ export function useUploadResume() {
 
     const formData = new FormData();
     formData.append("file", uploadFile);
-let role = null;
-const storedUser = localStorage.getItem("user");
-
-if (storedUser) {
-  try {
-    const user = JSON.parse(storedUser);
-    role = user.role ?? null;
-  } catch (error) {
-    console.error("Error parsing user data from localStorage:", error);
-  }
-}
+    console.log("USer", user)
+const role = user?.role ?? null;
 
 console.log("User role:", role);
-
-
 const endpoint =
   role === "student" ? `${apiUrl}/parse-resume` : `${apiUrl}/employee-parser`;
 

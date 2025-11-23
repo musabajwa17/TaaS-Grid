@@ -1,17 +1,15 @@
 "use client";
-
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
-
+import axios from "axios";
 import useJobs from "../../hooks/useJobs";
 import useJobFilters from "../../hooks/useJobsFilter";
 import { useAuth } from "../../auth/AuthContext";
-
 import { prettyDate } from "../../utils/date";
 import { getStatusColor } from "../../utils/statusColors";
+import { useResume } from "@/hooks/useStdPreviewResume";
 import { getCategoryBadge } from "../../utils/categoryBadges";
-
 import {
   Search,
   MapPin,
@@ -32,20 +30,14 @@ import {
 
 export default function JobView() {
   const router = useRouter();
-  const { user } = useAuth(); // ✅ safe use inside AuthProvider
-
+  const { user } = useAuth(); 
   const [titleFilter, setTitleFilter] = useState("");
   const [locationFilter, setLocationFilter] = useState("");
   const [activeCategory, setActiveCategory] = useState("all");
   const [jobTypeFilter, setJobTypeFilter] = useState("");
-
+  const [appliedJobs, setAppliedJobs] = useState([]);
   const { jobs, selectedJob, setSelectedJob } = useJobs(activeCategory);
-  const filteredJobs = useJobFilters(
-    jobs,
-    titleFilter,
-    locationFilter,
-    jobTypeFilter
-  );
+  const filteredJobs = useJobFilters(jobs, titleFilter, locationFilter, jobTypeFilter);
 
   const categories = [
     { id: "all", label: "All Opportunities", icon: Layers, gradient: "from-green-500 to-teal-500" },
@@ -54,15 +46,63 @@ export default function JobView() {
     { id: "fyp", label: "FYP Ideas", icon: Lightbulb, gradient: "from-green-600 to-teal-600" },
   ];
 
-  // Role check helper
   const canApply = user && ["student", "employee"].includes(user.role);
 
-  const handleApply = () => {
-    if (!user) return router.push("/login"); // redirect if not logged in
-    if (!canApply) return toast.error("Only students and employees can apply");
-    toast.success("Applied successfully!");
-    // Here you can call your API to submit the application
-  };
+  // ✅ Fetch user's applied jobs
+  useEffect(() => {
+    if (!user) return;
+
+    const fetchAppliedJobs = async () => {
+      try {
+        const res = await axios.get(`http://localhost:3001/api/applicants?userId=${user._id}`);
+        if (res.data.success) {
+          setAppliedJobs(res.data.applicants.map(a => a.jobId));
+        }
+      } catch (err) {
+        console.error("Error fetching applied jobs:", err);
+      }
+    };
+    fetchAppliedJobs();
+  }, [user]);
+
+const { resume, fetchResume, loading: loadingResume } = useResume(user?._id);
+
+useEffect(() => {
+  if (user?._id) {
+    fetchResume(); // Fetch the resume for this user
+  }
+}, [user?._id]);
+
+const handleApply = async () => {
+  console.log("Resume on apply:", resume);
+
+  if (!user) return router.push("/login");
+  if (!canApply) return toast.error("Only students and employees can apply");
+  if (!selectedJob) return toast.error("No job selected");
+  if (!resume?.exists || !resume?.resume?._id) 
+    return toast.error("No resume found. Please create a resume first.");
+  if (appliedJobs.includes(selectedJob._id)) return toast.error("You already applied for this job");
+
+  try {
+    const response = await axios.post("http://localhost:3001/api/applicants", {
+      userId: user._id,
+      jobId: selectedJob._id,
+      resumeId: resume.resume._id, // ✅ Correct resumeId
+    });
+
+    if (response.data.success) {
+      toast.success("Applied successfully!");
+      setAppliedJobs(prev => [...prev, selectedJob._id]);
+    } else {
+      toast.error(response.data.message || "Failed to apply");
+    }
+  } catch (error) {
+    toast.error(error.response?.data?.message || "Something went wrong while applying");
+    console.error("Apply error:", error);
+  }
+};
+
+
 
   const handleSave = () => {
     if (!user) return router.push("/login");
@@ -103,14 +143,9 @@ export default function JobView() {
           return (
             <button
               key={cat.id}
-              onClick={() => {
-                setActiveCategory(cat.id);
-                setJobTypeFilter("");
-              }}
+              onClick={() => { setActiveCategory(cat.id); setJobTypeFilter(""); }}
               className={`flex items-center gap-2 px-6 py-3 rounded-2xl font-semibold text-sm transition-all duration-300 transform hover:scale-105 shadow-md ${
-                isActive
-                  ? `bg-gradient-to-r ${cat.gradient} text-white shadow-lg`
-                  : "bg-white text-gray-700 hover:shadow-lg"
+                isActive ? `bg-gradient-to-r ${cat.gradient} text-white shadow-lg` : "bg-white text-gray-700 hover:shadow-lg"
               }`}
             >
               <Icon className="w-5 h-5" /> {cat.label}
@@ -150,12 +185,10 @@ export default function JobView() {
                       {badge.label}
                     </div>
                   </div>
-
                   <div className="flex items-center gap-2 text-sm text-gray-600 mb-3">
                     <MapPin className="w-4 h-4 text-green-500 shrink-0" />
                     <span className="truncate">{job.location}</span>
                   </div>
-
                   <div className="flex items-center justify-between gap-3">
                     <div className="flex items-center gap-2 text-sm text-gray-500">
                       <Calendar className="w-4 h-4 text-teal-500 shrink-0" />
@@ -230,29 +263,30 @@ export default function JobView() {
               )}
 
               {/* Apply & Save */}
-             {/* Apply & Save */}
-<div className="flex gap-4 pt-6 border-t border-gray-200">
-  <button
-    onClick={handleApply}
-    className={`flex-1 px-6 py-3 rounded-xl font-semibold flex items-center justify-center gap-2 transition-all duration-300 ${
-      !user
-        ? "bg-gray-300 text-gray-500 cursor-not-allowed"
-        : "bg-gradient-to-r from-green-500 to-teal-500 text-white hover:shadow-lg hover:scale-[1.02]"
-    }`}
-  >
-    <CheckCircle2 className="w-5 h-5" />
-    {!user ? "Easy Apply" : "Apply Now"}
-  </button>
+              <div className="flex gap-4 pt-6 border-t border-gray-200">
+                <button
+                  onClick={handleApply}
+                  disabled={appliedJobs.includes(selectedJob._id)}
+                  className={`flex-1 px-6 py-3 rounded-xl font-semibold flex items-center justify-center gap-2 transition-all duration-300 ${
+                    !user
+                      ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+                      : appliedJobs.includes(selectedJob._id)
+                        ? "bg-gray-400 text-white cursor-not-allowed"
+                        : "bg-gradient-to-r from-green-500 to-teal-500 text-white hover:shadow-lg hover:scale-[1.02]"
+                  }`}
+                >
+                  <CheckCircle2 className="w-5 h-5" />
+                  {!user ? "Easy Apply" : appliedJobs.includes(selectedJob._id) ? "Applied" : "Apply Now"}
+                </button>
 
-  <button
-    onClick={handleSave}
-    className="flex-1 bg-white border-2 border-green-500 text-green-600 px-6 py-3 rounded-xl font-semibold hover:shadow-lg transition-all duration-300 transform hover:scale-[1.02] flex items-center justify-center gap-2"
-  >
-    <Briefcase className="w-5 h-5" />
-    Save for Later
-  </button>
-</div>
-
+                <button
+                  onClick={handleSave}
+                  className="flex-1 bg-white border-2 border-green-500 text-green-600 px-6 py-3 rounded-xl font-semibold hover:shadow-lg transition-all duration-300 transform hover:scale-[1.02] flex items-center justify-center gap-2"
+                >
+                  <Briefcase className="w-5 h-5" />
+                  Save for Later
+                </button>
+              </div>
             </div>
           ) : (
             <div className="flex flex-col items-center justify-center h-full text-center py-20">
