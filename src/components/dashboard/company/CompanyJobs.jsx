@@ -5,32 +5,15 @@ import { Plus, X, Eye, Users, Loader2 } from "lucide-react";
 import { useAuth } from "@/auth/AuthContext";
 import toast from "react-hot-toast";
 const API = "http://localhost:3001";
-
-/*
-  Modular CompanyJobs component
-  - JobTable: shows company jobs and allows selecting a job
-  - ApplicantsModal: shows applicants for one job (correctly maps backend shape)
-  - JobFormModal: create a new job (2-step UI preserved)
-  - JobDetailsModal: view + update single job
-
-  Notes about backend/shape expectations:
-  - Applicant returned by backend is expected to include:
-      { _id, status, userId: { _id, email, name? }, resumeId: { _id, name, title, experience, ... }, appliedAt }
-  - Job object expected: { _id, title, postedBy: { _id }, ... }
-*/
-
 export default function CompanyJobs() {
   const { user } = useAuth();
-
   // jobs & loading
   const [jobs, setJobs] = useState([]);
   const [loadingJobs, setLoadingJobs] = useState(true);
-
   // modal state
   const [showCreate, setShowCreate] = useState(false);
   const [showDetails, setShowDetails] = useState(false);
   const [showApplicants, setShowApplicants] = useState(false);
-
   // selected job and applicants
   const [selectedJob, setSelectedJob] = useState(null);
   const [applicants, setApplicants] = useState([]);
@@ -108,8 +91,9 @@ export default function CompanyJobs() {
 
   // update job status (from details modal)
   const updateJobStatus = async (jobId, status) => {
+    console.log("Updating job status:", jobId, status);
     try {
-      const res = await axios.put(`${API}/api/jobs/${jobId}`, { status });
+      const res = await axios.put(`${API}/api/jobs/jobs/${jobId}`, { status });
       if (res.data?.success) {
         setJobs((prev) => prev.map((j) => (j._id === jobId ? { ...j, status } : j)));
         toast.success("Job status updated");
@@ -360,7 +344,8 @@ function JobDetailsModal({ job, onClose, onUpdateStatus }) {
           <select value={status} onChange={(e) => setStatus(e.target.value)} className="border rounded-md px-2 py-1 text-sm">
             <option value="Active">Active</option>
             <option value="Closed">Closed</option>
-            <option value="Pending">Pending</option>
+            <option value="Draft">Draft</option>
+            <option value="In-Active">Draft</option>
           </select>
         </div>
 
