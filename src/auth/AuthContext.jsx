@@ -90,10 +90,12 @@ export const AuthProvider = ({ children }) => {
 
   // 🔹 Register
   const register = async (role, data) => {
-    const endpoint =
-      role === "student" || role === "employee"
-        ? "/auth/register/user"
-        : "/auth/register/company";
+     const endpoint =
+        role === "student" || role === "employee"
+          ? "/api/user/register"
+          : role === "employer"
+          ? "/api/employer/register"
+          : "/api/company/register";
 
     const res = await api.post(endpoint, data);
     return res.data;

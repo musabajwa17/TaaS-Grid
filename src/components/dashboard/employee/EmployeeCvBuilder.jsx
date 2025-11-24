@@ -4,7 +4,7 @@ import { Plus } from "lucide-react";
 import FinalizedEmployeeResume from "./FinalizedEmployeeResume";
 // NewResume Form Component
 const EmployeeCvBuilder = () => {
-  const [formData, setFormData] = useState<ResumeFormData>({
+  const [formData, setFormData] = useState({
     name: "",
     email: "",
     phone: "",
@@ -70,6 +70,9 @@ const EmployeeCvBuilder = () => {
   };
 
   const renderSectionHeader = (
+    title,
+    onAdd,
+    addText
   ) => (
     <div className="flex items-center justify-between mb-3 border-b border-black pb-1">
       <h2 className="text-xl font-semibold">{title}</h2>

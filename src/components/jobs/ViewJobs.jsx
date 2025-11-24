@@ -302,3 +302,93 @@ const handleApply = async () => {
     </div>
   );
 }
+
+
+
+
+
+// "use client";
+
+// import { useState } from "react";
+// import { useAuth } from "@/auth/AuthContext";
+// import useActiveJobs from "@/hooks/useActiveJobs";
+// import useAppliedJobs from "@/hooks/useAppliedJobs";
+// import { useResume } from "@/hooks/useResume";
+
+// import Filters from "@/components/ui/Job/Filters";
+// import Categories from "@/components/ui/Job/Categories";
+// import JobList from "@/components/ui/Job/JobList";
+// import JobDetails from "@/components/ui/Job/JobDetails";
+// import ApplyButton from "@/components/ui/Job/ApplyButton";
+
+// import axios from "axios";
+// import toast from "react-hot-toast";
+
+// export default function JobView() {
+//   const { user } = useAuth();
+
+//   const [title, setTitle] = useState("");
+//   const [location, setLocation] = useState("");
+//   const [category, setCategory] = useState("all");
+
+//   const allJobs = useActiveJobs(category);
+//   const applied = useAppliedJobs();
+//   const { resume } = useResume();
+
+//   const [selected, setSelected] = useState(null);
+
+//   const filtered = allJobs.filter((job) => {
+//     return (
+//       job.title.toLowerCase().includes(title.toLowerCase()) &&
+//       job.location.toLowerCase().includes(location.toLowerCase())
+//     );
+//   });
+
+//   const handleApply = async () => {
+//     if (!user) return toast.error("Please login first");
+//     if (!resume) return toast.error("Create a resume first");
+
+//     try {
+//       const res = await axios.post(
+//         "http://localhost:3001/api/applicants",
+//         { jobId: selected._id, resumeId: resume._id },
+//         { withCredentials: true }
+//       );
+
+//       if (res.data.success) toast.success("Applied successfully!");
+//     } catch (err) {
+//       toast.error("Failed to apply");
+//     }
+//   };
+
+//   return (
+//     <div className="p-6 my-10">
+//       <Filters
+//         title={title}
+//         setTitle={setTitle}
+//         location={location}
+//         setLocation={setLocation}
+//       />
+
+//       <Categories active={category} setActive={setCategory} />
+
+//       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+//         <JobList jobs={filtered} selected={selected} setSelected={setSelected} />
+
+//         <div className="col-span-2 bg-white shadow p-6 rounded-xl">
+//           <JobDetails job={selected} />
+
+//           {selected && (
+//             <ApplyButton
+//               user={user}
+//               selectedJob={selected}
+//               applied={applied}
+//               resume={resume}
+//               onApply={handleApply}
+//             />
+//           )}
+//         </div>
+//       </div>
+//     </div>
+//   );
+// }

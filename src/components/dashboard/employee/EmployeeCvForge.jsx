@@ -252,8 +252,13 @@ import { useUploadResume } from "@/hooks/useUploadResume";
 import { useUploadCV } from "@/hooks/useUploadCV";
 import EmployeeCvTemplate from "./EmployeeCvTemplate";
 import EnrichEmployeeResume from "./EnrichEmployeeResume";
+import { useAuth } from "@/auth/AuthContext";
 
 export default function EmployeeCvForge() {
+  const {user} = useAuth();
+  console.log(user)
+  const userID = user._id;
+  const { uploadCV, loading: cvLoading } = useUploadCV(userID);
   const [showFinalized, setShowFinalized] = useState(false);
   const [, setFile] = useState(null);
   const [dragActive, setDragActive] = useState(false);
@@ -266,10 +271,6 @@ const {
   setParsedData,
   setError,
 } = useUploadResume();
-
-const { uploadCV, loading: cvLoading } = useUploadCV();
-
-
   // ✅ File validation helper
   const validateFile = (file) => {
     const maxSize = 2 * 1024 * 1024; // 2MB

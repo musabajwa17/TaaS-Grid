@@ -2,20 +2,20 @@ import { useState } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
 
-export const useUploadCV = () => {
+export const useUploadCV = (userID) => {
   const [loading, setLoading] = useState(false);
 
   const uploadCV = async (formData = {}) => {
     setLoading(true);
     try {
       const parsedUser = JSON.parse(localStorage.getItem("user") || "null");
-      const userId = parsedUser?._id;
-      if (!userId) throw new Error("User ID not found. Please log in again.");
+      const userId = userID;
+      if (!userID) throw new Error("User ID not found. Please log in again.");
 
       const payload = { ...formData, userId };
       console.log("Payload for CV upload:", payload);
 
-      const baseURL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001";
+      const baseURL = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3001";
       const response = await axios.post(`${baseURL}/api/employee/resume`, payload, {
         headers: { "Content-Type": "application/json" },
       });

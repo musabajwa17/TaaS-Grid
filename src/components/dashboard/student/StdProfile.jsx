@@ -58,7 +58,6 @@ useEffect(() => {
   };
   if (userId) loadResume();
 }, [userId]);
-
 console.log("Form Data:", resume);
   // --------------------------
   // Handle top-level input
@@ -67,7 +66,6 @@ console.log("Form Data:", resume);
     const { name, value } = e.target;
     setForm((prev) => ({ ...prev, [name]: value }));
   };
-
   // --------------------------
   // Handle array input (skills, etc.)
   // --------------------------

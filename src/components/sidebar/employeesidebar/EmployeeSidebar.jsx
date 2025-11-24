@@ -10,36 +10,24 @@ import {
   LogOut,
   Settings,
   User,
+  Edit,
 } from "lucide-react";
 import Link from "next/link";
-import { useAuth } from "@/context/AuthContext";
+import { useAuth } from "@/auth/AuthContext";
 import EmployeeDashboard from "@/components/dashboard/employee/Dashboard";
 import BookMarkJobs from "@/components/dashboard/employee/BookMarkJobs";
 import Image from "next/image";
 import EmployeeCvForge from "@/components/dashboard/employee/EmployeeCvForge";
 import EmployeeCvBuilder from "@/components/dashboard/employee/EmployeeCvBuilder";
+import CVEditor from "@/components/dashboard/employee/EmpProfile";
 
 export default function EmployeeSidebar() {
-  const { logout } = useAuth();
+  const { logout, user } = useAuth();
+  const userEmail = user.email;
   const [selected, setSelected] = useState("Dashboard Overview");
   const [menuOpen, setMenuOpen] = useState(false);
-  const [userEmail, setUserEmail] = useState(null);
   const menuRef = useRef(null);
   const router = useRouter();
-
-  // ✅ Load user from localStorage on mount
-  useEffect(() => {
-    const user = localStorage.getItem("user");
-    if (user) {
-      try {
-        const parsed = JSON.parse(user);
-        setUserEmail(parsed.email);
-      } catch {
-        setUserEmail(null);
-      }
-    }
-  }, []);
-
   // ✅ Handle outside click for profile menu
   useEffect(() => {
     const handleClickOutside = () => {
@@ -66,8 +54,8 @@ export default function EmployeeSidebar() {
     { name: "Resume Forge", icon: FileText, color: "emerald" },
     { name: "Resume Builder", icon: MapPin, color: "emerald" },
     { name: "Saved Opportunities", icon: Droplet, color: "emerald" },
+    { name: "Resume Editor", icon: Edit, color: "emerald" },
   ];
-
   return (
     <div className="flex w-full h-screen overflow-hidden bg-white">
       {/* ✅ Sidebar - fixed height and scrollable independently */}
@@ -166,6 +154,8 @@ export default function EmployeeSidebar() {
                 ? "Build and manage your resume"
                 : selected === "Resume Builder"
                 ? "Enhance your CV using AI"
+                : selected === "Resume Editor"
+                ? "Edit Resume Details"
                 : "Save and manage your opportunities"}
             </p>
           </div>
@@ -209,6 +199,7 @@ export default function EmployeeSidebar() {
           {selected === "Resume Forge" && <EmployeeCvForge />}
           {selected === "Resume Builder" && <EmployeeCvBuilder />}
           {selected === "Saved Opportunities" && <BookMarkJobs />}
+          {selected === "Resume Editor" && <CVEditor userId={user._id} />}
         </div>
       </main>
     </div>

@@ -14,10 +14,12 @@ import {
   Lightbulb,
 } from "lucide-react";
 import Link from "next/link";
+import { useAuth } from "@/auth/AuthContext";
 
 export default function EmployeeDashboard() {
   const plan = "Basic";
-
+  const {user} = useAuth();
+  console.log("Authenticated User:", user);
   // Dummy Data
   const jobs = [
     { title: "Frontend Developer (React)", company: "Techify Labs", status: "open" },
