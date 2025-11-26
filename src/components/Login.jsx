@@ -216,6 +216,7 @@ import { Mail, Lock, LayoutGrid, Zap, TrendingUp, CheckCircle } from "lucide-rea
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useLogin } from "@/hooks/useLoginUser";
+import { useAuth } from "@/auth/AuthContext";
 
 const features = [
   { icon: LayoutGrid, title: "Modular Ecosystem", text: "Navigate through specialized modules like HireConnect and FYP Bridge." },
@@ -231,7 +232,7 @@ const roles = [
 ];
 
 export default function Login() {
-  const { loginUser, loginData, logoutUser, loading } = useLogin();
+  const { login ,loading } = useAuth();
   const [role, setRole] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");

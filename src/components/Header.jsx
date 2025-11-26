@@ -15,9 +15,7 @@ const Header = () => {
   const handleScroll = () => {
     setIsScrolled(window.scrollY > 20);
   };
-
   window.addEventListener("scroll", handleScroll);
-
   // Check logged-in user from server session
   const checkLogin = async () => {
     try {

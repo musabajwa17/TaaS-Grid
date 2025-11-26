@@ -20,7 +20,7 @@ export default function Home() {
   if (!user) return null;
 
   const renderSidebar = () => {
-    switch (user.role) {
+    switch (user?.role) {
       case "student":
         return <UserSidebar />;
       case "employee":

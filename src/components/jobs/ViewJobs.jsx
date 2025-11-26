@@ -27,7 +27,6 @@ import {
   Home,
   Sparkles,
 } from "lucide-react";
-
 export default function JobView() {
   const router = useRouter();
   const { user } = useAuth(); 
@@ -38,6 +37,7 @@ export default function JobView() {
   const [appliedJobs, setAppliedJobs] = useState([]);
   const { jobs, selectedJob, setSelectedJob } = useJobs(activeCategory);
   const filteredJobs = useJobFilters(jobs, titleFilter, locationFilter, jobTypeFilter);
+  const [resume, setResume] = useState(null);
 
   const categories = [
     { id: "all", label: "All Opportunities", icon: Layers, gradient: "from-green-500 to-teal-500" },
@@ -47,14 +47,14 @@ export default function JobView() {
   ];
 
   const canApply = user && ["student", "employee"].includes(user.role);
-
   // ✅ Fetch user's applied jobs
   useEffect(() => {
     if (!user) return;
-
+    console.log("User for applied jobs fetch:", user);
     const fetchAppliedJobs = async () => {
       try {
         const res = await axios.get(`http://localhost:3001/api/applicants?userId=${user._id}`);
+        console.log("Applied Jobs Response:", res.data);
         if (res.data.success) {
           setAppliedJobs(res.data.applicants.map(a => a.jobId));
         }
@@ -65,42 +65,57 @@ export default function JobView() {
     fetchAppliedJobs();
   }, [user]);
 
-const { resume, fetchResume, loading: loadingResume } = useResume(user?._id);
+  // --- Fetch resume per role ---
+  useEffect(() => {
+    if (!user?._id) return;
 
-useEffect(() => {
-  if (user?._id) {
-    fetchResume(); // Fetch the resume for this user
-  }
-}, [user?._id]);
+    const fetchResume = async () => {
+      try {
+        const route =
+          user.role === "student"
+            ? `http://localhost:3001/api/student/stdresume/${user._id}`
+            : `http://localhost:3001/api/employee/resume/${user._id}`;
 
-const handleApply = async () => {
-  console.log("Resume on apply:", resume);
+        const res = await axios.get(route);
+        console.log("Resume fetch response:", res.data);
+        setResume(res.data.resume || null);
+      } catch {
+        setResume(null);
+      }
+    };
 
-  if (!user) return router.push("/login");
-  if (!canApply) return toast.error("Only students and employees can apply");
-  if (!selectedJob) return toast.error("No job selected");
-  if (!resume?.exists || !resume?.resume?._id) 
-    return toast.error("No resume found. Please create a resume first.");
-  if (appliedJobs.includes(selectedJob._id)) return toast.error("You already applied for this job");
+    fetchResume();
+  }, [user?._id, user?.role]);
+//   // --- Apply handler ---
+  const handleApply = async () => {
+    console.log("Handle Apply Invoked", resume);
+    if (!user) return router.push("/login");
+    if (!canApply) return toast.error("Only students and employees can apply");
+    if (!selectedJob) return toast.error("No job selected");
 
-  try {
-    const response = await axios.post("http://localhost:3001/api/applicants", {
-      userId: user._id,
-      jobId: selectedJob._id,
-      resumeId: resume.resume._id, // ✅ Correct resumeId
-    });
+    if (!resume?._id)
+      return toast.error("No resume found. Please create a resume first.");
 
-    if (response.data.success) {
-      toast.success("Applied successfully!");
-      setAppliedJobs(prev => [...prev, selectedJob._id]);
-    } else {
-      toast.error(response.data.message || "Failed to apply");
+    if (appliedJobs.includes(String(selectedJob._id)))
+      return toast.error("You already applied");
+
+    try {
+      const res = await axios.post("http://localhost:3001/api/applicants", {
+        userId: user._id,
+        jobId: selectedJob._id,
+        resumeId: resume?._id || null,
+        resumeModel: user.role === "student" ? "StdResume" : "EmployeeResume"
+      });
+
+      if (res.data.success) {
+        setAppliedJobs(prev => [...prev, String(selectedJob._id)]);
+        toast.success("Applied successfully!");
+      }
+    } catch (err) {
+      toast.error(err.response?.data?.message || "Failed to apply");
+      console.error(err);
     }
-  } catch (error) {
-    toast.error(error.response?.data?.message || "Something went wrong while applying");
-    console.error("Apply error:", error);
-  }
-};
+  };
 
 
 
@@ -276,7 +291,8 @@ const handleApply = async () => {
                   }`}
                 >
                   <CheckCircle2 className="w-5 h-5" />
-                  {!user ? "Easy Apply" : appliedJobs.includes(selectedJob._id) ? "Applied" : "Apply Now"}
+                  { appliedJobs.includes(selectedJob._id) ? "Applied" : "Apply Now" }
+
                 </button>
 
                 <button
@@ -302,93 +318,3 @@ const handleApply = async () => {
     </div>
   );
 }
-
-
-
-
-
-// "use client";
-
-// import { useState } from "react";
-// import { useAuth } from "@/auth/AuthContext";
-// import useActiveJobs from "@/hooks/useActiveJobs";
-// import useAppliedJobs from "@/hooks/useAppliedJobs";
-// import { useResume } from "@/hooks/useResume";
-
-// import Filters from "@/components/ui/Job/Filters";
-// import Categories from "@/components/ui/Job/Categories";
-// import JobList from "@/components/ui/Job/JobList";
-// import JobDetails from "@/components/ui/Job/JobDetails";
-// import ApplyButton from "@/components/ui/Job/ApplyButton";
-
-// import axios from "axios";
-// import toast from "react-hot-toast";
-
-// export default function JobView() {
-//   const { user } = useAuth();
-
-//   const [title, setTitle] = useState("");
-//   const [location, setLocation] = useState("");
-//   const [category, setCategory] = useState("all");
-
-//   const allJobs = useActiveJobs(category);
-//   const applied = useAppliedJobs();
-//   const { resume } = useResume();
-
-//   const [selected, setSelected] = useState(null);
-
-//   const filtered = allJobs.filter((job) => {
-//     return (
-//       job.title.toLowerCase().includes(title.toLowerCase()) &&
-//       job.location.toLowerCase().includes(location.toLowerCase())
-//     );
-//   });
-
-//   const handleApply = async () => {
-//     if (!user) return toast.error("Please login first");
-//     if (!resume) return toast.error("Create a resume first");
-
-//     try {
-//       const res = await axios.post(
-//         "http://localhost:3001/api/applicants",
-//         { jobId: selected._id, resumeId: resume._id },
-//         { withCredentials: true }
-//       );
-
-//       if (res.data.success) toast.success("Applied successfully!");
-//     } catch (err) {
-//       toast.error("Failed to apply");
-//     }
-//   };
-
-//   return (
-//     <div className="p-6 my-10">
-//       <Filters
-//         title={title}
-//         setTitle={setTitle}
-//         location={location}
-//         setLocation={setLocation}
-//       />
-
-//       <Categories active={category} setActive={setCategory} />
-
-//       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-//         <JobList jobs={filtered} selected={selected} setSelected={setSelected} />
-
-//         <div className="col-span-2 bg-white shadow p-6 rounded-xl">
-//           <JobDetails job={selected} />
-
-//           {selected && (
-//             <ApplyButton
-//               user={user}
-//               selectedJob={selected}
-//               applied={applied}
-//               resume={resume}
-//               onApply={handleApply}
-//             />
-//           )}
-//         </div>
-//       </div>
-//     </div>
-//   );
-// }

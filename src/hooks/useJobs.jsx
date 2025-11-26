@@ -30,12 +30,13 @@ export default function useJobs(activeCategory) {
         const data = await getFyps();
         fetched = data.fyps.map((f) => normalizeJob(f, "fyp"));
       } else {
-        // activeCategory === "all"
+        // all categories
         const [jobsData, internsData, fypsData] = await Promise.all([
           getJobs(),
           getInternships(),
           getFyps(),
         ]);
+
         fetched = [
           ...jobsData.jobs
             .filter((j) => (j.jobType || "").toLowerCase() !== "internship")
@@ -47,8 +48,11 @@ export default function useJobs(activeCategory) {
 
       if (!mounted.current) return;
 
-      setJobs(fetched);
-      setSelectedJob(fetched[0] || null);
+      // 🔥 Only keep Active opportunities
+      const activeFetched = fetched.filter((item) => item.status === "Active");
+
+      setJobs(activeFetched);
+      setSelectedJob(activeFetched[0] || null);
     } catch (err) {
       console.error("useJobs: fetch error", err);
       toast.error("Failed to fetch opportunities");

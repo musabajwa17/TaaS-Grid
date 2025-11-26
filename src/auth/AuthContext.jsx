@@ -19,21 +19,25 @@ api.interceptors.response.use(
   async (error) => {
     const originalRequest = error.config;
 
+    // ⛔ Prevent refresh attempt on logout request
+    if (originalRequest.url.includes("/auth/logout")) {
+      return Promise.reject(error);
+    }
+
     if (error.response?.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
       try {
-        await api.post("/api/auth/refresh"); // refresh access token
-        return api(originalRequest); // retry original request
+        await api.post("/api/auth/refresh");
+        return api(originalRequest);
       } catch (err) {
-        console.log("Refresh token failed → logging out");
-        window.location.href = "/login"; // force logout
+        window.location.href = "/login";
         return Promise.reject(err);
       }
     }
-
     return Promise.reject(error);
   }
 );
+
 
 // -------------------- AuthProvider -------------------- //
 export const AuthProvider = ({ children }) => {
@@ -78,7 +82,7 @@ export const AuthProvider = ({ children }) => {
 
     setLoading(true);
     try {
-      await api.post("/auth/logout");
+      await api.post("/api/auth/logout");
       setUser(null);
       router.push("/login");
     } catch (err) {

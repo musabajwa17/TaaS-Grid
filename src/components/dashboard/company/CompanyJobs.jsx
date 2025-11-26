@@ -46,27 +46,31 @@ export default function CompanyJobs() {
   }, [fetchJobs]);
 
   // open applicants modal and fetch applicants for a specific job
-  const handleViewApplicants = async (job) => {
-    if (!job) return toast.error("No job selected");
-    setSelectedJob(job);
-    setShowApplicants(true);
-    setLoadingApplicants(true);
-    try {
-      const res = await axios.get(`${API}/api/applicants`, {
-        params: { jobId: job._id },
-      });
-      if (res.data?.success) {
-        setApplicants(res.data.applicants || []);
-      } else {
-        toast.error(res.data?.message || "Failed to fetch applicants");
-      }
-    } catch (err) {
-      console.error(err);
-      toast.error("Error fetching applicants");
-    } finally {
-      setLoadingApplicants(false);
+ const handleViewApplicants = async (job) => {
+  if (!job) return toast.error("No job selected");
+
+  setSelectedJob(job);
+  setShowApplicants(true);
+  setLoadingApplicants(true);
+
+  try {
+    // Updated to use the jobId in the URL path
+    const res = await axios.get(`${API}/api/applicants/job/${job._id}`);
+    console.log("Applicants Response:", res.data);
+
+    if (res.data?.success) {
+      setApplicants(res.data.applicants || []);
+    } else {
+      toast.error(res.data?.message || "Failed to fetch applicants");
     }
-  };
+  } catch (err) {
+    console.error(err);
+    toast.error("Error fetching applicants");
+  } finally {
+    setLoadingApplicants(false);
+  }
+};
+
 
   // update applicant status (optimistic)
   const updateApplicantStatus = async (applicantId, newStatus) => {
@@ -88,7 +92,6 @@ export default function CompanyJobs() {
       toast.error("Error updating status");
     }
   };
-
   // update job status (from details modal)
   const updateJobStatus = async (jobId, status) => {
     console.log("Updating job status:", jobId, status);
@@ -234,6 +237,7 @@ function JobTable({ jobs, loading, onViewApplicants, onViewDetails }) {
 }
 
 function ApplicantsModal({ job, applicants, loading, onClose, onUpdateStatus }) {
+  console.log("ApplicantsModal Props:", applicants);
   return (
     <div className="fixed inset-0 bg-black/30 flex items-center justify-center z-50">
       <div className="bg-white rounded-2xl p-6 w-full max-w-lg max-h-[80vh] overflow-y-auto relative">
@@ -345,7 +349,7 @@ function JobDetailsModal({ job, onClose, onUpdateStatus }) {
             <option value="Active">Active</option>
             <option value="Closed">Closed</option>
             <option value="Draft">Draft</option>
-            <option value="In-Active">Draft</option>
+            <option value="Inactive">In-Active</option>
           </select>
         </div>
 
