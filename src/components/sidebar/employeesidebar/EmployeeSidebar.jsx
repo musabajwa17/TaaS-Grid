@@ -13,7 +13,7 @@ import {
   Edit,
 } from "lucide-react";
 import Link from "next/link";
-import { useAuth } from "@/auth/AuthContext";
+import { useAuth } from "../../../auth/AuthContext";
 import EmployeeDashboard from "@/components/dashboard/employee/Dashboard";
 import BookMarkJobs from "@/components/dashboard/employee/BookMarkJobs";
 import Image from "next/image";

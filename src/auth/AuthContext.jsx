@@ -1,43 +1,10 @@
 "use client";
 import { createContext, useContext, useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import axios from "axios";
+import api from "../lib/api"; // <-- Clean Axios instance
 
+// -------------------- Create Context -------------------- //
 const AuthContext = createContext(undefined);
-
-const API_URL = process.env.NEXT_PUBLIC_BASE_URL; // backend base URL
-
-// -------------------- Axios Instance -------------------- //
-const api = axios.create({
-  baseURL: API_URL,
-  withCredentials: true, // send cookies automatically
-});
-
-// -------------------- Axios Interceptor for Token Refresh -------------------- //
-api.interceptors.response.use(
-  (response) => response,
-  async (error) => {
-    const originalRequest = error.config;
-
-    // ⛔ Prevent refresh attempt on logout request
-    if (originalRequest.url.includes("/auth/logout")) {
-      return Promise.reject(error);
-    }
-
-    if (error.response?.status === 401 && !originalRequest._retry) {
-      originalRequest._retry = true;
-      try {
-        await api.post("/api/auth/refresh");
-        return api(originalRequest);
-      } catch (err) {
-        window.location.href = "/login";
-        return Promise.reject(err);
-      }
-    }
-    return Promise.reject(error);
-  }
-);
-
 
 // -------------------- AuthProvider -------------------- //
 export const AuthProvider = ({ children }) => {
@@ -46,20 +13,31 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   // 🔹 Auto-login on mount
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const res = await api.get("/api/auth/me");
-        setUser(res.data.user);
-      } catch (err) {
-        setUser(null);
-      } finally {
-        setLoading(false);
-      }
-    };
+useEffect(() => {
+  let isMounted = true; // prevent updates if component unmounts
 
-    fetchUser();
-  }, []);
+  const fetchUser = async () => {
+    try {
+      const res = await api.get("/api/auth/me");
+      if (isMounted) setUser(res.data.user);
+    } catch (err) {
+      if (isMounted) {
+        setUser(null);
+        // DON'T automatically push to /login here
+        // Let the page or component handle redirect
+      }
+    } finally {
+      if (isMounted) setLoading(false);
+    }
+  };
+
+  fetchUser();
+
+  return () => {
+    isMounted = false;
+  };
+}, []);
+
 
   // 🔹 Login
   const login = async (email, password) => {
@@ -94,12 +72,12 @@ export const AuthProvider = ({ children }) => {
 
   // 🔹 Register
   const register = async (role, data) => {
-     const endpoint =
-        role === "student" || role === "employee"
-          ? "/api/user/register"
-          : role === "employer"
-          ? "/api/employer/register"
-          : "/api/company/register";
+    const endpoint =
+      role === "student" || role === "employee"
+        ? "/api/user/register"
+        : role === "employer"
+        ? "/api/employer/register"
+        : "/api/company/register";
 
     const res = await api.post(endpoint, data);
     return res.data;
@@ -115,7 +93,6 @@ export const AuthProvider = ({ children }) => {
 // -------------------- Hook -------------------- //
 export const useAuth = () => {
   const context = useContext(AuthContext);
-  if (!context)
-    throw new Error("useAuth must be used within an AuthProvider");
+  if (!context) throw new Error("useAuth must be used within an AuthProvider");
   return context;
 };

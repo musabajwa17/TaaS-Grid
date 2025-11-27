@@ -15,7 +15,7 @@ import Link from "next/link";
 import StudentDashboard from "@/components/dashboard/student/Dashboard";
 import CvForge from "@/components/dashboard/student/CvForge";
 import NewResume from "@/components/dashboard/student/CvBuilder";
-import { useAuth } from "@/context/AuthContext";
+import { useAuth } from "../../../auth/AuthContext";
 import BookMarks from "@/components/dashboard/student/BookMarks";
 import Image from "next/image";
 import EmployerDashboard from "@/components/dashboard/employer/EmployerDashboard";
@@ -25,7 +25,7 @@ import Applicants from "@/components/dashboard/employer/Applicants";
 
 
 export default function UserSidebar() {
-  const { logout } = useAuth();
+  const { logout, user } = useAuth();
   const [selected, setSelected] = useState("Dashboard Overview");
   const [menuOpen, setMenuOpen] = useState(false);
   const [userEmail, setUserEmail] = useState(null);

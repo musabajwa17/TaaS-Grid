@@ -30,7 +30,7 @@ import CompanyProfile from "@/components/dashboard/company/Profile";
 
 
 export default function UserSidebar() {
-  const { logout } = useAuth();
+  const { logout, user } = useAuth();
   const [selected, setSelected] = useState("Dashboard Overview");
   const [menuOpen, setMenuOpen] = useState(false);
   const [userEmail, setUserEmail] = useState(null);
