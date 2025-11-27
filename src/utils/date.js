@@ -6,6 +6,6 @@ day: "numeric",
 year: "numeric",
 });
 } catch (e) {
-return date;
+return console.error("Invalid date:", e);
 }
 };
