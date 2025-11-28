@@ -46,30 +46,30 @@ export default function CompanyJobs() {
   }, [fetchJobs]);
 
   // open applicants modal and fetch applicants for a specific job
- const handleViewApplicants = async (job) => {
-  if (!job) return toast.error("No job selected");
+  const handleViewApplicants = async (job) => {
+    if (!job) return toast.error("No job selected");
 
-  setSelectedJob(job);
-  setShowApplicants(true);
-  setLoadingApplicants(true);
+    setSelectedJob(job);
+    setShowApplicants(true);
+    setLoadingApplicants(true);
 
-  try {
-    // Updated to use the jobId in the URL path
-    const res = await axios.get(`${API}/api/applicants/job/${job._id}`);
-    console.log("Applicants Response:", res.data);
+    try {
+      // Updated to use the jobId in the URL path
+      const res = await axios.get(`${API}/api/applicants/job/${job._id}`);
+      console.log("Applicants Response:", res.data);
 
-    if (res.data?.success) {
-      setApplicants(res.data.applicants || []);
-    } else {
-      toast.error(res.data?.message || "Failed to fetch applicants");
+      if (res.data?.success) {
+        setApplicants(res.data.applicants || []);
+      } else {
+        toast.error(res.data?.message || "Failed to fetch applicants");
+      }
+    } catch (err) {
+      console.error(err);
+      toast.error("Error fetching applicants");
+    } finally {
+      setLoadingApplicants(false);
     }
-  } catch (err) {
-    console.error(err);
-    toast.error("Error fetching applicants");
-  } finally {
-    setLoadingApplicants(false);
-  }
-};
+  };
 
 
   // update applicant status (optimistic)
@@ -109,8 +109,8 @@ export default function CompanyJobs() {
       toast.error("Error updating job");
     }
   };
- console.log("Jobs Data:", selectedJob);
- console.log("Applicants Data:", applicants);
+  console.log("Jobs Data:", selectedJob);
+  console.log("Applicants Data:", applicants);
   return (
     <div className="min-h-screen bg-gray-50 px-6 py-10">
       <div className="flex justify-between items-center mb-8">
@@ -305,11 +305,10 @@ function ApplicantsModal({ job, applicants, loading, onClose, onUpdateStatus }) 
 
                     <button
                       onClick={() => onUpdateStatus(app._id, "Shortlisted")}
-                      className={`px-3 py-1 rounded-lg font-semibold text-white ${
-                        app.status === "Shortlisted"
-                          ? "bg-gray-400 cursor-not-allowed"
-                          : "bg-green-500 hover:bg-green-600"
-                      }`}
+                      className={`px-3 py-1 rounded-lg font-semibold text-white ${app.status === "Shortlisted"
+                        ? "bg-gray-400 cursor-not-allowed"
+                        : "bg-green-500 hover:bg-green-600"
+                        }`}
                       disabled={app.status === "Shortlisted"}
                     >
                       {app.status === "Shortlisted" ? "Shortlisted" : "Shortlist"}
@@ -363,10 +362,10 @@ function JobDetailsModal({ job, onClose, onUpdateStatus }) {
 }
 
 
- function JobFormModal({ onClose, onCreated, postedBy }) {
+function JobFormModal({ onClose, onCreated, postedBy }) {
   const experienceOptions = ["Fresher", "1-2 years", "3-4 years", "5-6 years", "6+ years"];
   const qualificationOptions = ["High School", "Diploma", "Bachelor's", "Master's", "Doctorate"];
-  const salaryOptions = ["30-40k", "40-60k", "60-80k", "80-100k", "100-200k", "200-300k", "300-400k", "400-500k"];
+  const salaryOptions = ["$100-$300", "$300-$500", "$500-$800", "$800-$1000", "$1000-$1500", "$1500-$2000", "$2000-$2500", "$2500-$3000", "$3000+"];
   const jobTypeOptions = ["Full-time", "Part-time", "Contract", "Internship", "Other"];
   const workTypeOptions = ["On-Site", "Hybrid", "Remote"];
   const statusOptions = ["Active", "Draft", "Inactive"];

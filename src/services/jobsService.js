@@ -1,12 +1,12 @@
-import axios from "axios";
+import api from "../lib/api";
 
-const baseURL = process.env.NEXT_PUBLIC_BASE_URL;
+// const baseURL = process.env.NEXT_PUBLIC_BASE_URL;
 
-if (!baseURL) {
-  console.error("❌ NEXT_PUBLIC_BASE_URL is missing! Check your .env file.");
-}
+// if (!baseURL) {
+//   console.error("❌ NEXT_PUBLIC_BASE_URL is missing! Check your .env file.");
+// }
 
-const api = axios.create({ baseURL });
+// const api = axios.create({ baseURL });
 
 // ========== JOBS ==========
 export const getJobs = async () => {

@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Save, Edit3 } from "lucide-react";
 import toast from "react-hot-toast";
+import api from "../../../lib/api";
 
 export default function CompanyProfile() {
   const [companyId, setCompanyId] = useState(null);
@@ -12,32 +13,32 @@ export default function CompanyProfile() {
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState(null);
 
-useEffect(() => {
-  const fetchCurrentUser = async () => {
-    try {
-      setLoading(true);
+  useEffect(() => {
+    const fetchCurrentUser = async () => {
+      try {
+        setLoading(true);
 
-      const res = await axios.get("http://localhost:3001/api/auth/me", {
-        withCredentials: true, // send cookies
-      });
+        const res = await axios.get("http://localhost:3001/api/auth/me", {
+          withCredentials: true, // send cookies
+        });
 
-      const user = res.data.user;
+        const user = res.data.user;
 
-      if (user && user._id) {
-        setCompanyId(user._id);
-      } else {
-        setError("You are not logged in as a company.");
+        if (user && user._id) {
+          setCompanyId(user._id);
+        } else {
+          setError("You are not logged in as a company.");
+        }
+      } catch (err) {
+        console.error("Failed to fetch current user:", err);
+        setError("Failed to fetch logged-in company.");
+      } finally {
+        setLoading(false);
       }
-    } catch (err) {
-      console.error("Failed to fetch current user:", err);
-      setError("Failed to fetch logged-in company.");
-    } finally {
-      setLoading(false);
-    }
-  };
+    };
 
-  fetchCurrentUser();
-}, []);
+    fetchCurrentUser();
+  }, []);
 
 
   // Fetch company data when companyId is available
@@ -89,15 +90,17 @@ useEffect(() => {
   };
 
   const handleSave = async () => {
-    console.log("Hello")
+    console.log("Hello");
+
     if (!companyId) {
       setError("Company ID is missing.");
       return;
     }
+
     setSaving(true);
     setError(null);
+
     try {
-      // prepare payload: only send allowed fields
       const payload = {
         companyName: company.companyName,
         email: company.email,
@@ -110,15 +113,16 @@ useEffect(() => {
         plan: company.plan
       };
 
-      const res = await axios.put(`http://localhost:3001/api/company/${companyId}`, payload);
-      console.log(res)
+      const res = await api.put(`/api/company/${companyId}`, payload); // 👈 FIXED
+
       if (res.data?.success) {
-        toast.success(res.data?.message)
+        toast.success(res.data?.message);
         setCompany((prev) => ({ ...prev, ...res.data.company }));
         setIsEditing(false);
       } else {
         setError(res.data?.message || "Failed to update company");
       }
+
     } catch (err) {
       console.error("Error updating company:", err);
       setError(err.response?.data?.message || "Server error while updating company");
