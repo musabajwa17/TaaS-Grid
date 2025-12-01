@@ -74,12 +74,11 @@ useEffect(() => {
   const register = async (role, data) => {
     const endpoint =
       role === "student" || role === "employee"
-        ? "/api/user/register"
-        : role === "employer"
-        ? "/api/employer/register"
-        : "/api/company/register";
-
+        ? "/api/auth/register/user"
+        : "/api/auth/register/company";
+     console.log("Registering at endpoint:", endpoint, "with data:", data);
     const res = await api.post(endpoint, data);
+    console.log("Registration successful:", res.data);
     return res.data;
   };
 

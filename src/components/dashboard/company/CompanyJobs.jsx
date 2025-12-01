@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState, useCallback } from "react";
 import axios from "axios";
-import { Plus, X, Eye, Users, Loader2 } from "lucide-react";
+import { Plus, X, Eye, Users, Loader2, ChevronLeft, ChevronRight } from "lucide-react";
 import { useAuth } from "@/auth/AuthContext";
 import toast from "react-hot-toast";
 const API = "http://localhost:3001";
@@ -18,6 +18,8 @@ export default function CompanyJobs() {
   const [selectedJob, setSelectedJob] = useState(null);
   const [applicants, setApplicants] = useState([]);
   const [loadingApplicants, setLoadingApplicants] = useState(false);
+  const [currentApplicantIndex, setCurrentApplicantIndex] = useState(0);
+  const [applicantCounts, setApplicantCounts] = useState({});
 
   // fetch company jobs (postedBy === user._id)
   const fetchJobs = useCallback(async () => {
@@ -30,6 +32,8 @@ export default function CompanyJobs() {
           (j) => j.postedBy && j.postedBy._id === user._id
         );
         setJobs(posted);
+        // Fetch applicant counts for all jobs
+        posted.forEach(job => fetchApplicantCount(job._id));
       } else {
         toast.error(res.data?.message || "Failed to fetch jobs");
       }
@@ -41,6 +45,21 @@ export default function CompanyJobs() {
     }
   }, [user]);
 
+  // fetch applicant count for a job
+  const fetchApplicantCount = async (jobId) => {
+    try {
+      const res = await axios.get(`${API}/api/applicants/job/${jobId}`);
+      if (res.data?.success) {
+        setApplicantCounts(prev => ({
+          ...prev,
+          [jobId]: res.data.applicants?.length || 0
+        }));
+      }
+    } catch (err) {
+      console.error("Error fetching applicant count:", err);
+    }
+  };
+
   useEffect(() => {
     fetchJobs();
   }, [fetchJobs]);
@@ -50,11 +69,11 @@ export default function CompanyJobs() {
     if (!job) return toast.error("No job selected");
 
     setSelectedJob(job);
+    setCurrentApplicantIndex(0);
     setShowApplicants(true);
     setLoadingApplicants(true);
 
     try {
-      // Updated to use the jobId in the URL path
       const res = await axios.get(`${API}/api/applicants/job/${job._id}`);
       console.log("Applicants Response:", res.data);
 
@@ -70,7 +89,6 @@ export default function CompanyJobs() {
       setLoadingApplicants(false);
     }
   };
-
 
   // update applicant status (optimistic)
   const updateApplicantStatus = async (applicantId, newStatus) => {
@@ -128,6 +146,7 @@ export default function CompanyJobs() {
       <JobTable
         jobs={jobs}
         loading={loadingJobs}
+        applicantCounts={applicantCounts}
         onViewApplicants={(job) => handleViewApplicants(job)}
         onViewDetails={(job) => {
           setSelectedJob(job);
@@ -140,6 +159,8 @@ export default function CompanyJobs() {
           job={selectedJob}
           applicants={applicants}
           loading={loadingApplicants}
+          currentIndex={currentApplicantIndex}
+          onIndexChange={setCurrentApplicantIndex}
           onClose={() => setShowApplicants(false)}
           onUpdateStatus={updateApplicantStatus}
         />
@@ -148,7 +169,13 @@ export default function CompanyJobs() {
       {showCreate && (
         <JobFormModal
           onClose={() => setShowCreate(false)}
-          onCreated={(newJob) => setJobs((p) => [...p, newJob])}
+          onCreated={(newJob) => {
+            setJobs((p) => [...p, newJob]);
+            setApplicantCounts(prev => ({
+              ...prev,
+              [newJob._id]: 0
+            }));
+          }}
           postedBy={user?._id}
         />
       )}
@@ -169,7 +196,7 @@ export default function CompanyJobs() {
 /* ---------- Presentational pieces -------- */
 /* ----------------------------------------- */
 
-function JobTable({ jobs, loading, onViewApplicants, onViewDetails }) {
+function JobTable({ jobs, loading, applicantCounts, onViewApplicants, onViewDetails }) {
   if (loading)
     return (
       <div className="flex justify-center py-20">
@@ -193,6 +220,7 @@ function JobTable({ jobs, loading, onViewApplicants, onViewDetails }) {
             <th className="py-3 px-4 font-semibold">Salary</th>
             <th className="py-3 px-4 font-semibold">Type</th>
             <th className="py-3 px-4 font-semibold">Status</th>
+            <th className="py-3 px-4 font-semibold text-center">Applicants</th>
             <th className="py-3 px-4 font-semibold text-center">Actions</th>
           </tr>
         </thead>
@@ -209,6 +237,11 @@ function JobTable({ jobs, loading, onViewApplicants, onViewDetails }) {
               <td className="py-3 px-4">
                 <span className={`px-2 py-1 text-xs rounded-full ${job.status === 'Open' || job.status === 'Active' ? 'bg-emerald-100 text-emerald-700' : 'bg-red-100 text-red-600'}`}>
                   {job.status}
+                </span>
+              </td>
+              <td className="py-3 px-4 text-center">
+                <span className="inline-block bg-blue-50 text-blue-700 px-3 py-1 rounded-full text-sm font-semibold">
+                  {applicantCounts[job._id] || 0}
                 </span>
               </td>
               <td className="py-3 px-4 flex justify-center gap-2">
@@ -236,45 +269,104 @@ function JobTable({ jobs, loading, onViewApplicants, onViewDetails }) {
   );
 }
 
-function ApplicantsModal({ job, applicants, loading, onClose, onUpdateStatus }) {
+function ApplicantsModal({ job, applicants, loading, currentIndex, onIndexChange, onClose, onUpdateStatus }) {
+  const totalApplicants = applicants.length;
+  const currentApplicant = applicants[currentIndex];
+
+  const handlePrevious = () => {
+    if (currentIndex > 0) {
+      onIndexChange(currentIndex - 1);
+    }
+  };
+
+  const handleNext = () => {
+    if (currentIndex < totalApplicants - 1) {
+      onIndexChange(currentIndex + 1);
+    }
+  };
+
+  const handleGoToApplicant = (index) => {
+    onIndexChange(index);
+  };
+
   console.log("ApplicantsModal Props:", applicants);
   return (
     <div className="fixed inset-0 bg-black/30 flex items-center justify-center z-50">
-      <div className="bg-white rounded-2xl p-6 w-full max-w-lg max-h-[80vh] overflow-y-auto relative">
+      <div className="bg-white rounded-2xl p-6 w-full max-w-2xl max-h-[80vh] overflow-y-auto relative">
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 text-gray-500 hover:text-gray-700 font-bold"
+          className="absolute top-4 right-4 text-gray-500 hover:text-gray-700 font-bold text-xl"
         >
           ✕
         </button>
 
-        <h2 className="text-xl font-bold mb-4">Applicants for {job.title}</h2>
+        <h2 className="text-xl font-bold mb-6">Applicants for {job.title}</h2>
 
         {loading ? (
-          <p>Loading...</p>
+          <p className="text-center py-10">Loading...</p>
         ) : applicants.length === 0 ? (
-          <p className="text-gray-500">No applicants yet</p>
+          <p className="text-gray-500 text-center py-10">No applicants yet</p>
         ) : (
-          <ul className="space-y-4">
-            {applicants.map((app) => {
-              const resume = app.resumeId;
-
-              return (
-                <li
-                  key={app._id}
-                  className="flex flex-col md:flex-row items-start justify-between bg-gray-50 p-4 rounded-lg border border-gray-200"
+          <>
+            {/* Pagination Header */}
+            <div className="flex items-center justify-between mb-6 bg-gray-50 p-4 rounded-lg">
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={handlePrevious}
+                  disabled={currentIndex === 0}
+                  className="p-2 rounded-lg bg-white border border-gray-300 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition"
+                  title="Previous"
                 >
+                  <ChevronLeft className="w-5 h-5 text-gray-600" />
+                </button>
+
+                <span className="font-semibold text-gray-700 min-w-20 text-center">
+                  {currentIndex + 1}/{totalApplicants}
+                </span>
+
+                <button
+                  onClick={handleNext}
+                  disabled={currentIndex === totalApplicants - 1}
+                  className="p-2 rounded-lg bg-white border border-gray-300 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition"
+                  title="Next"
+                >
+                  <ChevronRight className="w-5 h-5 text-gray-600" />
+                </button>
+              </div>
+
+              {/* Quick Navigation */}
+              <div className="flex gap-2 flex-wrap justify-end max-w-xs">
+                {applicants.map((_, idx) => (
+                  <button
+                    key={idx}
+                    onClick={() => handleGoToApplicant(idx)}
+                    className={`px-2 py-1 rounded text-sm font-semibold transition ${
+                      idx === currentIndex
+                        ? "bg-emerald-600 text-white"
+                        : "bg-white border border-gray-300 text-gray-700 hover:bg-gray-100"
+                    }`}
+                  >
+                    {idx + 1}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Current Applicant Card */}
+            {currentApplicant && (
+              <div className="bg-gray-50 p-6 rounded-lg border border-gray-200">
+                <div className="flex flex-col md:flex-row items-start justify-between">
                   {/* Left Section: Resume Info */}
                   <div className="flex-1">
-                    <p className="font-semibold text-gray-800">
-                      {resume?.name || app.userId?.email || "Unknown"}
+                    <p className="font-semibold text-gray-800 text-lg">
+                      {currentApplicant.resumeId?.name || currentApplicant.userId?.email || "Unknown"}
                     </p>
-                    <p className="text-gray-600 text-sm">{resume?.title || "—"}</p>
+                    <p className="text-gray-600">{currentApplicant.resumeId?.title || "—"}</p>
 
                     {/* Experience */}
-                    {resume?.experience?.length > 0 ? (
+                    {currentApplicant.resumeId?.experience?.length > 0 ? (
                       <div className="text-gray-500 text-xs mt-1 space-y-1">
-                        {resume.experience.map((exp) => (
+                        {currentApplicant.resumeId.experience.map((exp) => (
                           <p key={exp._id}>
                             {exp.role} at {exp.company} ({exp.years})
                           </p>
@@ -285,44 +377,45 @@ function ApplicantsModal({ job, applicants, loading, onClose, onUpdateStatus }) 
                     )}
 
                     {/* Skills */}
-                    {resume?.skills?.length > 0 && (
+                    {currentApplicant.resumeId?.skills?.length > 0 && (
                       <p className="text-gray-500 text-xs mt-1">
-                        Skills: {resume.skills.join(", ")}
+                        Skills: {currentApplicant.resumeId.skills.join(", ")}
                       </p>
                     )}
 
                     {/* Applied date */}
                     <p className="text-xs text-gray-400 mt-1">
-                      Applied: {new Date(app.appliedAt || app.createdAt).toLocaleString()}
+                      Applied: {new Date(currentApplicant.appliedAt || currentApplicant.createdAt).toLocaleString()}
                     </p>
                   </div>
 
                   {/* Right Section: Status and Actions */}
                   <div className="flex flex-col gap-2 mt-4 md:mt-0 md:ml-4">
                     <span className="text-sm px-3 py-1 rounded-full bg-gray-100">
-                      {app.status || "Applied"}
+                      {currentApplicant.status || "Applied"}
                     </span>
 
                     <button
-                      onClick={() => onUpdateStatus(app._id, "Shortlisted")}
-                      className={`px-3 py-1 rounded-lg font-semibold text-white ${app.status === "Shortlisted"
+                      onClick={() => onUpdateStatus(currentApplicant._id, "Shortlisted")}
+                      className={`px-3 py-1 rounded-lg font-semibold text-white ${currentApplicant.status === "Shortlisted"
                         ? "bg-gray-400 cursor-not-allowed"
                         : "bg-green-500 hover:bg-green-600"
                         }`}
-                      disabled={app.status === "Shortlisted"}
+                      disabled={currentApplicant.status === "Shortlisted"}
                     >
-                      {app.status === "Shortlisted" ? "Shortlisted" : "Shortlist"}
+                      {currentApplicant.status === "Shortlisted" ? "Shortlisted" : "Shortlist"}
                     </button>
                   </div>
-                </li>
-              );
-            })}
-          </ul>
+                </div>
+              </div>
+            )}
+          </>
         )}
       </div>
     </div>
   );
 }
+
 function JobDetailsModal({ job, onClose, onUpdateStatus }) {
   const [status, setStatus] = useState(job.status || 'Active');
 
@@ -504,4 +597,3 @@ function JobFormModal({ onClose, onCreated, postedBy }) {
     </div>
   );
 }
-

@@ -297,9 +297,7 @@ export default function SignUp() {
       const endpoint =
         role === "student" || role === "employee"
           ? "/api/user/register"
-          : role === "employer"
-          ? "/api/employer/register"
-          : "/api/company/register";
+          : "/api/auth/register/company";
 
       const res = await axios.post(`http://localhost:3001${endpoint}`, formData);
       toast.success("Register Successful")
