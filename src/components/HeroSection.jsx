@@ -954,4 +954,174 @@ export default HeroSection;
 
 
 
+// import { useState } from 'react';
+// import { ArrowRight, Zap } from 'lucide-react';
+
+// export default function HeroSection() {
+//   const [activeModule, setActiveModule] = useState(0);
+
+//   const modules = [
+//     {
+//       id: 0,
+//       icon: '📊',
+//       title: 'Analytics Insights',
+//       heading: ['Real-time', 'Data Tracking'],
+//       description: 'Track every customer interaction with precision. Understand user behavior patterns and optimize your digital strategy with actionable insights.',
+//       buttons: ['Start Free', 'View Demo'],
+//       color: 'from-green-600 to-emerald-600'
+//     },
+//     {
+//       id: 1,
+//       icon: '🎯',
+//       title: 'Conversion Optimization',
+//       heading: ['Boost Your', 'Conversions'],
+//       description: 'Identify friction points in your customer journey. Deploy targeted strategies to increase conversion rates and revenue growth exponentially.',
+//       buttons: ['Explore Tools', 'Schedule Call'],
+//       color: 'from-green-600 to-teal-600'
+//     },
+//     {
+//       id: 2,
+//       icon: '🚀',
+//       title: 'Growth Management',
+//       heading: ['Scale Your', 'Business Fast'],
+//       description: 'Leverage data-driven strategies to accelerate growth. Make informed decisions that drive customer acquisition and retention at scale.',
+//       buttons: ['Get Started', 'Learn More'],
+//       color: 'from-emerald-600 to-green-600'
+//     },
+//     {
+//       id: 3,
+//       icon: '💡',
+//       title: 'Feature Rollout',
+//       heading: ['Deploy with', 'Confidence'],
+//       description: 'Test features before full rollout. Minimize risks with feature flags and cohort analysis for seamless product releases.',
+//       buttons: ['Try Features', 'View Docs'],
+//       color: 'from-teal-600 to-green-600'
+//     },
+//     {
+//       id: 4,
+//       icon: '🔐',
+//       title: 'Data Security',
+//       heading: ['Protect Your', 'Customer Data'],
+//       description: 'Enterprise-grade security with full data governance. Ensure compliance and build trust with robust data management protocols.',
+//       buttons: ['Security Info', 'Certifications'],
+//       color: 'from-green-600 to-lime-600'
+//     }
+//   ];
+
+//   const active = modules[activeModule];
+
+//   return (
+//     <div className="relative w-full min-h-screen bg-off-white overflow-hidden">
+//       {/* Curved Background */}
+//       <div className="absolute inset-0">
+//         <svg
+//           className="absolute top-0 right-0 w-full h-full"
+//           viewBox="0 0 1440 800"
+//           preserveAspectRatio="none"
+//           xmlns="http://www.w3.org/2000/svg"
+//         >
+//           <defs>
+//             <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+//               <stop offset="0%" style={{ stopColor: '#16a34a', stopOpacity: 0.1 }} />
+//               <stop offset="100%" style={{ stopColor: '#059669', stopOpacity: 0.05 }} />
+//             </linearGradient>
+//           </defs>
+//           <path
+//             d="M 0,300 Q 360,150 720,200 T 1440,100 L 1440,0 L 0,0 Z"
+//             fill="url(#bgGradient)"
+//           />
+//           <path
+//             d="M 0,400 Q 360,250 720,320 T 1440,250 L 1440,800 L 0,800 Z"
+//             fill="rgba(22, 163, 74, 0.04)"
+//           />
+//         </svg>
+//       </div>
+
+//       {/* Main Content */}
+//       <div className="relative z-10 max-w-7xl mx-auto px-6 py-20 lg:py-32">
+//         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          
+//           {/* Left Side - Modules */}
+//           <div className="space-y-6">
+//             <div className="text-sm font-semibold text-green-600 tracking-wide uppercase">
+//               {active.icon} {active.title}
+//             </div>
+            
+//             <div className="space-y-4">
+//               {modules.map((module) => (
+//                 <button
+//                   key={module.id}
+//                   onClick={() => setActiveModule(module.id)}
+//                   className={`w-full p-4 rounded-xl text-left transition-all duration-300 ${
+//                     activeModule === module.id
+//                       ? 'bg-green-600 text-off-white shadow-lg scale-105'
+//                       : 'bg-white bg-opacity-60 text-gray-800 hover:bg-opacity-100 border border-green-200'
+//                   }`}
+//                 >
+//                   <div className="flex items-center space-x-3">
+//                     <span className="text-2xl">{module.icon}</span>
+//                     <span className="font-semibold text-sm lg:text-base">{module.title}</span>
+//                   </div>
+//                 </button>
+//               ))}
+//             </div>
+//           </div>
+
+//           {/* Right Side - Content */}
+//           <div className="space-y-8">
+//             {/* Description */}
+//             <div className="space-y-4">
+//               <p className="text-gray-600 text-base leading-relaxed">
+//                 {active.description}
+//               </p>
+//             </div>
+
+//             {/* Headings */}
+//             <div className="space-y-3">
+//               {active.heading.map((text, idx) => (
+//                 <h2
+//                   key={idx}
+//                   className={`text-4xl lg:text-5xl font-bold leading-tight transition-all duration-500 ${
+//                     activeModule === activeModule
+//                       ? 'text-gray-900 opacity-100'
+//                       : 'text-gray-700'
+//                   }`}
+//                 >
+//                   {text}
+//                 </h2>
+//               ))}
+//             </div>
+
+//             {/* Buttons */}
+//             <div className="flex flex-wrap gap-4 pt-4">
+//               <button className="px-8 py-3 bg-green-600 text-off-white font-semibold rounded-lg hover:bg-green-700 transition-all duration-300 flex items-center space-x-2 shadow-md hover:shadow-lg">
+//                 <span>{active.buttons[0]}</span>
+//                 <ArrowRight size={18} />
+//               </button>
+//               <button className="px-8 py-3 bg-off-white text-green-600 font-semibold rounded-lg border-2 border-green-600 hover:bg-green-50 transition-all duration-300 flex items-center space-x-2">
+//                 <span>{active.buttons[1]}</span>
+//               </button>
+//             </div>
+
+//             {/* Progress Indicator */}
+//             <div className="flex space-x-2 pt-8">
+//               {modules.map((_, idx) => (
+//                 <div
+//                   key={idx}
+//                   className={`h-1 rounded-full transition-all duration-300 ${
+//                     idx === activeModule ? 'bg-green-600 w-8' : 'bg-green-200 w-2'
+//                   }`}
+//                 />
+//               ))}
+//             </div>
+//           </div>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// }
+
+
+
+
 

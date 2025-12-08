@@ -26,6 +26,7 @@ import CompanyJobs from "@/components/dashboard/company/CompanyJobs";
 import CompanyInternships from "@/components/dashboard/company/CompanyInternship";
 import FypPosting from "@/components/dashboard/company/FypPosting";
 import CompanyProfile from "@/components/dashboard/company/Profile";
+import ShortlistedApplicants from "@/components/dashboard/company/Shortlisted";
 
 
 
@@ -75,7 +76,8 @@ export default function UserSidebar() {
     { name: "Dashboard Overview", icon: Layers, color: "emerald" },
     { name: "Job Post", icon: FileText, color: "emerald" },
     { name: "Fyp Posting", icon: Droplet, color: "emerald" },
-    { name: "Profile", icon: User, color: "emerald" }
+    { name: "Profile", icon: User, color: "emerald" },
+    { name: "Shortlisted", icon: User, color: "emerald" },
   ];
 
   return (
@@ -86,12 +88,12 @@ export default function UserSidebar() {
         <div className="px-6 py-4 border-b border-slate-200 bg-white">
           <Link href="/" className="flex justify-center">
             <Image
-  src="/logo5.png"
-  alt="Logo"
-  width={200}   // you can adjust this
-  height={52}   // roughly equals h-13 (~52px)
-  className="h-[52px] w-auto object-contain transition-transform duration-300 hover:scale-105"
-/>
+              src="/logo5.png"
+              alt="Logo"
+              width={200}   // you can adjust this
+              height={52}   // roughly equals h-13 (~52px)
+              className="h-[52px] w-auto object-contain transition-transform duration-300 hover:scale-105"
+            />
           </Link>
         </div>
 
@@ -108,27 +110,24 @@ export default function UserSidebar() {
                   key={index}
                   onClick={() => !isLocked && setSelected(stage.name)}
                   disabled={isLocked}
-                  className={`group w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all duration-300 ${
-                    isLocked
-                      ? "opacity-50 cursor-not-allowed bg-slate-100"
-                      : isSelected
+                  className={`group w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all duration-300 ${isLocked
+                    ? "opacity-50 cursor-not-allowed bg-slate-100"
+                    : isSelected
                       ? "bg-gradient-to-r from-emerald-500 to-teal-600 text-white shadow-md"
                       : "hover:bg-slate-100 text-slate-700"
-                  }`}
+                    }`}
                 >
                   <div
-                    className={`p-2 rounded-lg ${
-                      isSelected
-                        ? "bg-white/20"
-                        : "bg-slate-200 group-hover:bg-emerald-100"
-                    }`}
+                    className={`p-2 rounded-lg ${isSelected
+                      ? "bg-white/20"
+                      : "bg-slate-200 group-hover:bg-emerald-100"
+                      }`}
                   >
                     <StageIcon
-                      className={`w-4 h-4 ${
-                        isSelected
-                          ? "text-white"
-                          : "text-slate-600 group-hover:text-emerald-600"
-                      }`}
+                      className={`w-4 h-4 ${isSelected
+                        ? "text-white"
+                        : "text-slate-600 group-hover:text-emerald-600"
+                        }`}
                     />
                   </div>
                   <span>{stage.name}</span>
@@ -173,12 +172,14 @@ export default function UserSidebar() {
               {selected === "Dashboard Overview"
                 ? "Overview and insights"
                 : selected === "Job Post"
-                ? "Post and manage job listings"
-                : selected === "Fyp Posting"
-                ? "Post and manage FYP opportunities"
-                : selected === "Profile"
-                ? "View and Manage your profile"
-                : "Save and manage your opportunities"}
+                  ? "Post and manage job listings"
+                  : selected === "Fyp Posting"
+                    ? "Post and manage FYP opportunities"
+                    : selected === "Shortlisted"
+                      ? "View and Manage your shortlisted candidates"
+                      : selected === "Profile"
+                        ? "View and Manage your profile"
+                        : "Save and manage your opportunities"}
             </p>
           </div>
 
@@ -222,6 +223,7 @@ export default function UserSidebar() {
           {/* {selected === "Internships" && <CompanyInternships />} */}
           {selected === "Fyp Posting" && <FypPosting />}
           {selected === "Profile" && <CompanyProfile />}
+          {selected === "Shortlisted" && <ShortlistedApplicants />}
         </div>
       </main>
     </div>

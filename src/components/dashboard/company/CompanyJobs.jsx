@@ -309,7 +309,7 @@ function ApplicantsModal({ job, applicants, loading, currentIndex, onIndexChange
         ) : (
           <>
             {/* Pagination Header */}
-            <div className="flex items-center justify-between mb-6 bg-gray-50 p-4 rounded-lg">
+            <div className="flex items-center justify-end mb-6 p-4 rounded-lg">
               <div className="flex items-center gap-2">
                 <button
                   onClick={handlePrevious}
@@ -320,7 +320,7 @@ function ApplicantsModal({ job, applicants, loading, currentIndex, onIndexChange
                   <ChevronLeft className="w-5 h-5 text-gray-600" />
                 </button>
 
-                <span className="font-semibold text-gray-700 min-w-20 text-center">
+                <span className="font-semibold text-gray-700 min-w-10 text-center">
                   {currentIndex + 1}/{totalApplicants}
                 </span>
 
@@ -335,7 +335,7 @@ function ApplicantsModal({ job, applicants, loading, currentIndex, onIndexChange
               </div>
 
               {/* Quick Navigation */}
-              <div className="flex gap-2 flex-wrap justify-end max-w-xs">
+              {/* <div className="flex gap-2 flex-wrap justify-end max-w-xs">
                 {applicants.map((_, idx) => (
                   <button
                     key={idx}
@@ -349,7 +349,7 @@ function ApplicantsModal({ job, applicants, loading, currentIndex, onIndexChange
                     {idx + 1}
                   </button>
                 ))}
-              </div>
+              </div> */}
             </div>
 
             {/* Current Applicant Card */}
