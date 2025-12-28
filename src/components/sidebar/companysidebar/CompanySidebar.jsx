@@ -27,6 +27,7 @@ import CompanyInternships from "@/components/dashboard/company/CompanyInternship
 import FypPosting from "@/components/dashboard/company/FypPosting";
 import CompanyProfile from "@/components/dashboard/company/Profile";
 import ShortlistedApplicants from "@/components/dashboard/company/Shortlisted";
+import BundleAnalyzer from "@/components/dashboard/company/BundleAnalyzer";
 
 
 
@@ -78,6 +79,7 @@ export default function UserSidebar() {
     { name: "Fyp Posting", icon: Droplet, color: "emerald" },
     { name: "Profile", icon: User, color: "emerald" },
     { name: "Shortlisted", icon: User, color: "emerald" },
+    { name: "Bundle Analyzer", icon: MapPin, color: "emerald" },
   ];
 
   return (
@@ -179,6 +181,8 @@ export default function UserSidebar() {
                       ? "View and Manage your shortlisted candidates"
                       : selected === "Profile"
                         ? "View and Manage your profile"
+                        : selected === "Bundle Analyzer"
+                          ? "Analyze your application bundles"
                         : "Save and manage your opportunities"}
             </p>
           </div>
@@ -220,7 +224,7 @@ export default function UserSidebar() {
         <div className="flex-1 overflow-y-auto bg-white">
           {selected === "Dashboard Overview" && <CompanyDashboard />}
           {selected === "Job Post" && <CompanyJobs />}
-          {/* {selected === "Internships" && <CompanyInternships />} */}
+          {selected === "Bundle Analyzer" && <BundleAnalyzer />}
           {selected === "Fyp Posting" && <FypPosting />}
           {selected === "Profile" && <CompanyProfile />}
           {selected === "Shortlisted" && <ShortlistedApplicants />}
